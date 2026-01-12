@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Contact Friends of Children Ministries - Get in touch with our team for questions, support, or feedback">
+    <title>Contact Us | Friends of Children Ministries</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="index.css">
+
+    <style>
+        /* Contact Page Specific Styles */
+        .contact-hero {
+            /* Background with fading gradient overlay */
+            background: linear-gradient(180deg, rgba(26, 10, 46, 0.7) 0%, rgba(26, 10, 46, 0.5) 100%), url('card-contact.png');
+            background-size: cover;
+            background-position: center;
+            padding: 6rem var(--spacing-md) 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, var(--bg-secondary), transparent);
+            pointer-events: none;
+        }
+
+        .contact-hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .contact-hero h1 {
+            color: white;
+            font-size: 3.5rem;
+            margin-bottom: var(--spacing-md);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-hero p {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.25rem;
+            line-height: 1.8;
+        }
+
+        .contact-main {
+            padding: 5rem var(--spacing-md);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 3rem;
+        }
+
+        /* Contact Info Cards */
+        .contact-info-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            padding: 1.75rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            gap: 1.25rem;
+            transition: all var(--transition-base);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .contact-card-icon {
+            width: 4px;
+            height: 40px;
+            background: var(--gradient-button);
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .contact-card-content h3 {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-card-content p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-card-content a {
+            color: var(--primary-color);
+            font-weight: 500;
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+
+        .contact-card-content a:hover {
+            color: var(--primary-dark);
+        }
+
+        /* Contact Form */
+        .contact-form-section {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .contact-form-section h2 {
+            color: var(--text-primary);
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-form-section>p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group label span {
+            color: #dc2626;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-family: var(--font-primary);
+            transition: all var(--transition-base);
+            background: var(--bg-secondary);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: var(--bg-primary);
+            box-shadow: 0 0 0 3px rgba(74, 109, 140, 0.15);
+        }
+
+        .form-control::placeholder {
+            color: var(--text-muted);
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.75rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+
+        .btn-submit {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: var(--gradient-button);
+            color: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background: var(--bg-tertiary);
+            padding: 5rem var(--spacing-md);
+        }
+
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-container h2 {
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-container>p {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .faq-item {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .faq-item h3 {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .faq-item h3::before {
+            content: '';
+            display: inline-block;
+            width: 3px;
+            height: 16px;
+            background: var(--primary-color);
+            border-radius: 2px;
+            margin-right: 8px;
+        }
+
+        .faq-item p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            padding-left: 1.75rem;
+        }
+
+        /* Social Links */
+        .social-section {
+            padding: 4rem var(--spacing-md);
+            text-align: center;
+        }
+
+        .social-section h2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .social-section>p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-full);
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all var(--transition-base);
+        }
+
+        .social-link:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .social-link span {
+            font-size: 1.25rem;
+        }
+
+        /* Response Time Box */
+        .response-info {
+            background: linear-gradient(135deg, rgba(74, 109, 140, 0.1) 0%, rgba(90, 138, 138, 0.05) 100%);
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+            margin-top: 2rem;
+        }
+
+        .response-info h4 {
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .response-info p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 900px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info-section {
+                order: 2;
+            }
+
+            .contact-form-section {
+                order: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .contact-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .contact-hero h1 {
+                font-size: 2rem;
+            }
+
+            .contact-form-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo"></div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="lessons.html">Lessons</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Contact Hero Section -->
+    <section class="contact-hero">
+        <div class="contact-hero-content">
+            <h1>Get in Touch</h1>
+            <p>We'd love to hear from you! Whether you have questions, feedback, or need support,
+                our team is here to help you on your teaching journey.</p>
+        </div>
+    </section>
+
+    <!-- Main Contact Section -->
+    <section class="contact-main">
+        <div class="contact-grid">
+            <!-- Contact Info Cards -->
+            <div class="contact-info-section">
+                <div class="contact-card">
+                    <div class="contact-card-icon"></div>
+                    <div class="contact-card-content">
+                        <h3>Email Us</h3>
+                        <p><a href="mailto:info@sundayschoollessons.org">info@sundayschoollessons.org</a></p>
+                        <p>General inquiries & support</p>
+                    </div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-card-icon"></div>
+                    <div class="contact-card-content">
+                        <h3>Call Us</h3>
+                        <p><a href="tel: 07xxxxxxx">+254 7xxxxxx</a></p>
+                        <p>Mon - Fri, 9:00 AM - 5:00 PM EST</p>
+                    </div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-card-icon"></div>
+                    <div class="contact-card-content">
+                        <h3>Office Hours</h3>
+                        <p>Monday - Friday: 9:00 AM - 5:00 PM</p>
+                        <p>Saturday - Sunday</p>
+                    </div>
+                </div>
+
+                <div class="response-info">
+                    <h4> Quick Response Time</h4>
+                    <p>We typically respond to all inquiries within 24-48 hours during business days.
+                        For urgent matters, please call us directly.</p>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="contact-form-section">
+                <h2>Send Us a Message</h2>
+                <p>Fill out the form below and we'll get back to you as soon as possible.</p>
+
+                <form id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name <span>*</span></label>
+                            <input type="text" id="firstName" class="form-control" placeholder="First name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name <span>*</span></label>
+                            <input type="text" id="lastName" class="form-control" placeholder="Last name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address <span>*</span></label>
+                        <input type="email" id="email" class="form-control" placeholder="example@gmail.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" class="form-control" placeholder="07xxxxxxx">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Subject <span>*</span></label>
+                        <select id="subject" class="form-control form-select" required>
+                            <option value="">Select a subject...</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="lessons">Question About Lessons</option>
+                            <option value="technical">Technical Support</option>
+                            <option value="feedback">Feedback & Suggestions</option>
+                            <option value="partnership">Partnership Opportunities</option>
+                            <option value="volunteer">Volunteer with Us</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="church">Church/Organization Name</label>
+                        <input type="text" id="church" class="form-control" placeholder="Your church or organization">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Your Message <span>*</span></label>
+                        <textarea id="message" class="form-control" placeholder="How can we help you today?"
+                            required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="faq-container">
+            <h2>Frequently Asked Questions</h2>
+            <p>Quick answers to common questions about our Sunday School resources.</p>
+
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h3>How do I access the lesson materials?</h3>
+                    <p>All our lesson materials are available through the Lessons page. Simply browse by topic
+                        or age group, select a lesson, and you'll have access to teaching guides, activities,
+                        and multimedia resources.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Are the lessons suitable for all age groups?</h3>
+                    <p>Yes! We provide age-appropriate content for different groups including preschool,
+                        elementary, pre-teen, and teen levels. Each lesson is designed with specific
+                        developmental stages in mind.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Can I suggest a new lesson topic?</h3>
+                    <p>Absolutely! We welcome suggestions from teachers. Use the contact form above and
+                        select "Feedback & Suggestions" to share your ideas. We regularly develop new
+                        content based on community input.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>How often are new lessons added?</h3>
+                    <p>We add new lessons regularly, typically 2-4 new lessons per month. Subscribe to
+                        our newsletter to stay updated on new content releases and teaching resources.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Do you offer training for Sunday School teachers?</h3>
+                    <p>Yes, we provide resources and guides for teacher training. We also host occasional
+                        online workshops. Contact us to learn more about training opportunities in your area.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Media Section -->
+    <section class="social-section">
+        <h2>Connect With Us</h2>
+        <p>Follow us on social media for daily inspiration, teaching tips, and community updates.</p>
+
+        <div class="social-links">
+            <a href="#" class="social-link">Facebook</a>
+            <a href="#" class="social-link">Instagram</a>
+            <a href="#" class="social-link">Twitter</a>
+            <a href="#" class="social-link">YouTube</a>
+            <a href="#" class="social-link">Pinterest</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3 style="color: white; margin-bottom: var(--spacing-md);">Friends of Children Ministries</h3>
+            <p>Empowering teachers to inspire the next generation</p>
+            <p style="margin-top: var(--spacing-md); font-size: 0.875rem;">
+                &copy; 2025 Friends of Children Ministries. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="app.js"></script>
+    <script>
+        // Contact Form Handler
+        document.getElementById('contactForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Get form data
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                subject: document.getElementById('subject').value,
+                church: document.getElementById('church').value,
+                message: document.getElementById('message').value
+            };
+
+            // Show success message (in a real app, this would send to a server)
+            alert('Thank you for your message, ' + formData.firstName + '! We will get back to you within 24-48 hours.');
+
+            // Reset form
+            this.reset();
+        });
+    </script>
+
+</body>
+
+</html>

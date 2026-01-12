@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Add a new Lesson">
+    <title>Add New Lesson | Friends of Children Ministries</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="index.css">
+    <style>
+        .add-lesson-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: var(--spacing-xl) var(--spacing-md);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .page-header h1 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+        }
+
+        .lesson-form {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: var(--spacing-xl);
+        }
+
+        .form-section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .form-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-section h2 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xs);
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: var(--spacing-sm);
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .submit-section {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            margin-top: var(--spacing-xl);
+            padding-top: var(--spacing-xl);
+            border-top: 2px solid var(--border-color);
+        }
+
+        .btn {
+            padding: var(--spacing-sm) var(--spacing-xl);
+            border: none;
+            border-radius: var(--border-radius-md);
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-light);
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        .form-hint {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: var(--spacing-xs);
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .lesson-form {
+                padding: var(--spacing-md);
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .submit-section {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Admin Header -->
+    <header class="header" style="background: var(--gradient-primary);">
+        <nav class="nav-container">
+            <div class="logo" style="color: white;">Friends of Children Ministries <span
+                    style="background: rgba(255,255,255,0.2); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; margin-left: 0.5rem;">ADMIN</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="admin.html" style="color: rgba(255,255,255,0.9);">← Back to Dashboard</a></li>
+                <li><a href="#" onclick="logout()" style="color: rgba(255,255,255,0.9);">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="add-lesson-container">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Add New Lesson</h1>
+            <p>Create a new lesson with all the required information</p>
+        </div>
+
+        <!-- Lesson Form -->
+        <form class="lesson-form" id="addLessonForm">
+
+            <!-- Basic Information Section -->
+            <div class="form-section">
+                <h2>Basic Information</h2>
+
+                <div class="form-group">
+                    <label for="lessonTitle">Lesson Title <span class="required">*</span></label>
+                    <input type="text" id="lessonTitle" name="lessonTitle" required
+                        placeholder="e.g., God's Amazing Creation">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="scripture">Scripture Reference <span class="required">*</span></label>
+                        <input type="text" id="scripture" name="scripture" required placeholder="e.g., Genesis 1:1-31">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category <span class="required">*</span></label>
+                        <select id="category" name="category" required>
+                            <option value="">Select a category</option>
+                            <option value="creation">Creation Stories</option>
+                            <option value="parables">Parables</option>
+                            <option value="faith">Faith & Purpose</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date">Lesson Date <span class="required">*</span></label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duration">Duration (minutes)</label>
+                        <input type="number" id="duration" name="duration" min="15" max="120" placeholder="e.g., 45">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ageGroup">Age Group</label>
+                        <input type="text" id="ageGroup" name="ageGroup" placeholder="e.g., Elementary (6-11)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="overview">Lesson Overview <span class="required">*</span></label>
+                    <textarea id="overview" name="overview" required
+                        placeholder="Provide a brief overview of what this lesson covers..."></textarea>
+                    <p class="form-hint">A concise summary of the lesson's main focus and goals</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="objectives">Learning Objectives</label>
+                    <textarea id="objectives" name="objectives"
+                        placeholder="List the key learning objectives (one per line)..."></textarea>
+                    <p class="form-hint">What students should learn or be able to do after this lesson</p>
+                </div>
+            </div>
+
+            <!-- Lesson Content Section -->
+            <div class="form-section">
+                <h2>Lesson Content</h2>
+
+                <div class="form-group">
+                    <label for="lessonContent">Lesson Content <span class="required">*</span></label>
+                    <textarea id="lessonContent" name="lessonContent" required style="min-height: 200px;"
+                        placeholder="Enter the main lesson content, teaching points, and activities..."></textarea>
+                    <p class="form-hint">Include teaching instructions, discussion points, and activities</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="materials">Materials Needed</label>
+                    <textarea id="materials" name="materials"
+                        placeholder="List required materials (one per line)..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="discussionQuestions">Discussion Questions</label>
+                    <textarea id="discussionQuestions" name="discussionQuestions"
+                        placeholder="Enter discussion questions (one per line)..."></textarea>
+                </div>
+            </div>
+
+            <!-- Article/Blog Information Section -->
+            <div class="form-section">
+                <h2>Related Article/Blog Information</h2>
+
+                <div class="form-group">
+                    <label for="articleTitle">Article Title</label>
+                    <input type="text" id="articleTitle" name="articleTitle"
+                        placeholder="e.g., Teaching Creation to Children: Best Practices">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="articleAuthor">Author</label>
+                        <input type="text" id="articleAuthor" name="articleAuthor" placeholder="e.g., Sarah Johnson">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="articleDate">Publication Date</label>
+                        <input type="date" id="articleDate" name="articleDate">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="articleContent">Article Content/Excerpt</label>
+                    <textarea id="articleContent" name="articleContent"
+                        placeholder="Enter article content or a brief excerpt..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="articleLink">Article Link (URL)</label>
+                    <input type="url" id="articleLink" name="articleLink" placeholder="https://example.com/article">
+                    <p class="form-hint">Optional: Link to full article if hosted elsewhere</p>
+                </div>
+            </div>
+
+            <!-- Media Resources Section -->
+            <div class="form-section">
+                <h2>Media Resources (Optional)</h2>
+
+                <div class="form-group">
+                    <label for="videoUrl">Video URL</label>
+                    <input type="url" id="videoUrl" name="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
+                    <p class="form-hint">YouTube or other video platform URL</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="audioUrl">Audio URL</label>
+                    <input type="url" id="audioUrl" name="audioUrl" placeholder="https://example.com/audio.mp3">
+                    <p class="form-hint">Link to audio file or podcast</p>
+                </div>
+            </div>
+
+            <!-- Submit Section -->
+            <div class="submit-section">
+                <button type="submit" class="btn btn-primary">Add Lesson</button>
+                <a href="admin.html" class="btn btn-secondary">Cancel</a>
+            </div>
+
+        </form>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3 style="color: white; margin-bottom: var(--spacing-md);">Friends of Children Ministries</h3>
+            <p>Empowering teachers to inspire the next generation</p>
+            <p style="margin-top: var(--spacing-md); font-size: 0.875rem;">
+                &copy; 2025 Friends of Children Ministries. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Check authentication on page load
+        if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
+            alert('Access denied. Please login as admin.');
+            window.location.href = 'admin-login.html';
+        }
+
+        // Logout function
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                sessionStorage.removeItem('adminLoggedIn');
+                sessionStorage.removeItem('adminUsername');
+                window.location.href = 'admin-login.html';
+            }
+        }
+    </script>
+    <script src="app.js"></script>
+
+</body>
+
+</html>

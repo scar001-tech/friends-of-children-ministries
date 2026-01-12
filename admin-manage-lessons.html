@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin - Manage Lessons">
+    <title>Manage Lessons | Admin Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+
+    <style>
+        .admin-header {
+            background: var(--gradient-primary);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .admin-nav {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-logo {
+            color: white;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .admin-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+        }
+
+        .admin-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-nav {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all var(--transition-base);
+        }
+
+        .btn-nav:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .admin-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem var(--spacing-md);
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            color: var(--text-primary);
+            font-size: 2rem;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-button);
+            color: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .lessons-table {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 150px;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            background: var(--bg-tertiary);
+            font-weight: 600;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 150px;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            transition: background var(--transition-fast);
+        }
+
+        .table-row:hover {
+            background: var(--bg-secondary);
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .lesson-title {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .lesson-scripture {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-published {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-draft {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-action {
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius-md);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: none;
+        }
+
+        .btn-edit {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .btn-edit:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-delete {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            color: var(--text-primary);
+            font-size: 1.5rem;
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            transition: all var(--transition-base);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 109, 140, 0.15);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-secondary {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .alert-success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+
+        .alert-danger {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fca5a5;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        @media (max-width: 900px) {
+
+            .table-header,
+            .table-row {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .table-header {
+                display: none;
+            }
+
+            .table-row {
+                padding: 1.5rem;
+            }
+
+            .action-buttons {
+                margin-top: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <nav class="admin-nav">
+            <div class="admin-logo">
+                <span>Friends of Children Ministries</span>
+                <span class="admin-badge">ADMIN</span>
+            </div>
+            <div class="admin-actions">
+                <a href="admin.html" class="btn-nav">← Dashboard</a>
+                <button class="btn-nav" onclick="logout()">Logout</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="admin-container">
+        <div class="page-header">
+            <h1>Manage Lessons</h1>
+            <a href="add-lesson.html" class="btn-primary">Add New Lesson</a>
+        </div>
+
+        <div id="alertBox" class="alert"></div>
+
+        <div class="search-bar">
+            <input type="text" class="search-input" id="searchLessons"
+                placeholder="Search lessons by title, scripture, or category...">
+        </div>
+
+        <div class="lessons-table">
+            <div class="table-header">
+                <div>Title</div>
+                <div>Scripture</div>
+                <div>Category</div>
+                <div>Status</div>
+                <div>Actions</div>
+            </div>
+            <div id="lessonsTableBody">
+                <!-- Lessons will be loaded here dynamically -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Edit Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Edit Lesson</h2>
+                <button class="btn-close" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="editForm">
+                <input type="hidden" id="editId">
+                <div class="form-group">
+                    <label for="editTitle">Lesson Title</label>
+                    <input type="text" id="editTitle" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="editScripture">Scripture Reference</label>
+                    <input type="text" id="editScripture" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="editCategory">Category</label>
+                    <select id="editCategory" class="form-control">
+                        <option value="creation">Creation Stories</option>
+                        <option value="parables">Parables</option>
+                        <option value="faith">Faith & Purpose</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editDescription">Description</label>
+                    <textarea id="editDescription" class="form-control" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editStatus">Status</label>
+                    <select id="editStatus" class="form-control">
+                        <option value="published">Published</option>
+                        <option value="draft">Draft</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2>Delete Lesson</h2>
+                <button class="btn-close" onclick="closeDeleteModal()">&times;</button>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                Are you sure you want to delete "<strong id="deleteTitle"></strong>"? This action cannot be undone.
+            </p>
+            <input type="hidden" id="deleteId">
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                <button type="button" class="btn-action btn-delete" onclick="confirmDelete()"
+                    style="padding: 0.75rem 1.5rem;">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Authentication check
+        if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = 'admin-login.html';
+        }
+
+        // Lessons data (simulating database)
+        let lessons = [
+            { id: 1, title: "God's Amazing Creation", scripture: "Genesis 1:1-31", category: "creation", description: "Explore the wonder of God's creation with hands-on activities.", status: "published", link: "lesson1.html" },
+            { id: 2, title: "Jesus Loves the Little Children", scripture: "Mark 10:13-16", category: "faith", description: "A gentle introduction to Jesus' love for children.", status: "published", link: "lesson2.html" },
+            { id: 3, title: "Living with Purpose", scripture: "Jeremiah 29:11", category: "faith", description: "Discover God's plan for your life through interactive discussions.", status: "published", link: "lesson3.html" },
+            { id: 4, title: "The Good Samaritan", scripture: "Luke 10:25-37", category: "parables", description: "Learn about showing kindness to everyone.", status: "published", link: "lesson4.html" },
+            { id: 5, title: "Noah's Ark Adventure", scripture: "Genesis 6-9", category: "creation", description: "Join Noah on his amazing adventure.", status: "published", link: "lesson5.html" },
+            { id: 6, title: "Faith in Action", scripture: "James 2:14-26", category: "faith", description: "Put your faith into action with practical service projects.", status: "draft", link: "lesson6.html" }
+        ];
+
+        // Render lessons table
+        function renderLessons(data = lessons) {
+            const tbody = document.getElementById('lessonsTableBody');
+
+            if (data.length === 0) {
+                tbody.innerHTML = '<div style="padding: 2rem; text-align: center; color: var(--text-muted);">No lessons found</div>';
+                return;
+            }
+
+            tbody.innerHTML = data.map(lesson => `
+                <div class="table-row" data-id="${lesson.id}">
+                    <div>
+                        <div class="lesson-title">${lesson.title}</div>
+                    </div>
+                    <div class="lesson-scripture">${lesson.scripture}</div>
+                    <div><span class="category-badge">${formatCategory(lesson.category)}</span></div>
+                    <div><span class="status-badge ${lesson.status === 'published' ? 'status-published' : 'status-draft'}">${lesson.status}</span></div>
+                    <div class="action-buttons">
+                        <button class="btn-action btn-edit" onclick="openEditModal(${lesson.id})">Edit</button>
+                        <button class="btn-action btn-delete" onclick="openDeleteModal(${lesson.id})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function formatCategory(cat) {
+            const names = { creation: 'Creation', parables: 'Parables', faith: 'Faith & Purpose' };
+            return names[cat] || cat;
+        }
+
+        // Search functionality
+        document.getElementById('searchLessons').addEventListener('input', function () {
+            const term = this.value.toLowerCase();
+            const filtered = lessons.filter(l =>
+                l.title.toLowerCase().includes(term) ||
+                l.scripture.toLowerCase().includes(term) ||
+                l.category.toLowerCase().includes(term)
+            );
+            renderLessons(filtered);
+        });
+
+        // Edit Modal
+        function openEditModal(id) {
+            const lesson = lessons.find(l => l.id === id);
+            if (!lesson) return;
+
+            document.getElementById('editId').value = lesson.id;
+            document.getElementById('editTitle').value = lesson.title;
+            document.getElementById('editScripture').value = lesson.scripture;
+            document.getElementById('editCategory').value = lesson.category;
+            document.getElementById('editDescription').value = lesson.description;
+            document.getElementById('editStatus').value = lesson.status;
+
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').classList.remove('active');
+        }
+
+        // Save changes
+        document.getElementById('editForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const id = parseInt(document.getElementById('editId').value);
+            const lessonIndex = lessons.findIndex(l => l.id === id);
+
+            if (lessonIndex !== -1) {
+                lessons[lessonIndex] = {
+                    ...lessons[lessonIndex],
+                    title: document.getElementById('editTitle').value,
+                    scripture: document.getElementById('editScripture').value,
+                    category: document.getElementById('editCategory').value,
+                    description: document.getElementById('editDescription').value,
+                    status: document.getElementById('editStatus').value
+                };
+
+                showAlert('Lesson updated successfully!', 'success');
+                renderLessons();
+                closeModal();
+            }
+        });
+
+        // Delete Modal
+        function openDeleteModal(id) {
+            const lesson = lessons.find(l => l.id === id);
+            if (!lesson) return;
+
+            document.getElementById('deleteId').value = lesson.id;
+            document.getElementById('deleteTitle').textContent = lesson.title;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+        }
+
+        function confirmDelete() {
+            const id = parseInt(document.getElementById('deleteId').value);
+            lessons = lessons.filter(l => l.id !== id);
+
+            showAlert('Lesson deleted successfully!', 'danger');
+            renderLessons();
+            closeDeleteModal();
+        }
+
+        // Alert function
+        function showAlert(message, type) {
+            const alert = document.getElementById('alertBox');
+            alert.textContent = message;
+            alert.className = `alert alert-${type} show`;
+
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 3000);
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                sessionStorage.removeItem('adminLoggedIn');
+                sessionStorage.removeItem('adminUsername');
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        // Initialize
+        renderLessons();
+    </script>
+</body>
+
+</html>

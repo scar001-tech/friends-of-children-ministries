@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin Dashboard - Friends of Children Ministries">
+    <title>Admin Dashboard | Friends of Children Ministries</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="index.css">
+
+    <style>
+        .admin-header {
+            background: var(--gradient-primary);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .admin-nav {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-logo {
+            color: white;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .admin-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: white;
+        }
+
+        .admin-user-info {
+            text-align: right;
+        }
+
+        .admin-user-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .admin-user-role {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .btn-logout {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .admin-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem var(--spacing-md);
+        }
+
+        .admin-welcome {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .admin-welcome h1 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-welcome p {
+            color: var(--text-secondary);
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .admin-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-base);
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+
+        .admin-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .admin-card-icon {
+            width: 4px;
+            height: 50px;
+            background: var(--gradient-button);
+            border-radius: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .admin-card h3 {
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .quick-links {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .quick-links h2 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .quick-links-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .quick-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-full);
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all var(--transition-base);
+        }
+
+        .quick-link:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .admin-user-info {
+                display: none;
+            }
+
+            .admin-logo span {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <nav class="admin-nav">
+            <div class="admin-logo">
+                <span>Friends of Children Ministries</span>
+                <span class="admin-badge">ADMIN</span>
+            </div>
+            <div class="admin-user">
+                <div class="admin-user-info">
+                    <div class="admin-user-name" id="adminName">Administrator</div>
+                    <div class="admin-user-role">Admin Panel</div>
+                </div>
+                <button class="btn-logout" onclick="logout()">
+                    Logout
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Admin Content -->
+    <main class="admin-container">
+        <!-- Welcome Section -->
+        <div class="admin-welcome">
+            <h1>Welcome back, <span id="welcomeName">Admin</span>!</h1>
+            <p>Manage your website and keep your contents up to date.</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="admin-stats">
+            <div class="stat-card">
+                <h3>6</h3>
+                <p>Total Lessons</p>
+            </div>
+            <div class="stat-card">
+                <h3>3</h3>
+                <p>Categories</p>
+            </div>
+            <div class="stat-card">
+                <h3>55</h3>
+                <p>Page Views</p>
+            </div>
+            <div class="stat-card">
+                <h3>33</h3>
+                <p>Downloads</p>
+            </div>
+        </div>
+
+        <!-- Admin Actions -->
+        <div class="admin-grid">
+            <a href="add-lesson.html" class="admin-card">
+                <div class="admin-card-icon"></div>
+                <h3>Add New Lesson</h3>
+                <p>Create a new Sunday School lesson with teaching materials, activities, and multimedia resources.</p>
+            </a>
+
+            <a href="admin-manage-lessons.html" class="admin-card">
+                <div class="admin-card-icon"></div>
+                <h3>Manage Lessons</h3>
+                <p>View, edit, or delete existing lessons. Update content and organize your lesson library.</p>
+            </a>
+
+            <a href="admin-media-library.html" class="admin-card">
+                <div class="admin-card-icon"></div>
+                <h3>Media Library</h3>
+                <p>Upload and manage videos, audio files, and images for your lessons.</p>
+            </a>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="quick-links">
+            <h2>Quick Links</h2>
+            <div class="quick-links-list">
+                <a href="index.html" class="quick-link">View Website</a>
+                <a href="lessons.html" class="quick-link">Browse Lessons</a>
+                <a href="about.html" class="quick-link">About Page</a>
+                <a href="contact.html" class="quick-link">Contact Page</a>
+                <a href="add-lesson.html" class="quick-link">Add Lesson</a>
+            </div>
+        </div>
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <h3 style="color: white; margin-bottom: var(--spacing-md);">Friends of Children Ministries</h3>
+                <p>Empowering teachers to inspire the next generation</p>
+                <p style="margin-top: var(--spacing-md); font-size: 0.875rem;">
+                    &copy; 2025 Friends of Children Ministries. All rights reserved.
+                </p>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        // Check authentication
+        function checkAuth() {
+            if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
+                window.location.href = 'admin-login.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Initialize page
+        if (checkAuth()) {
+            const username = sessionStorage.getItem('adminUsername') || 'Admin';
+            document.getElementById('adminName').textContent = username;
+            document.getElementById('welcomeName').textContent = username;
+        }
+
+        // Logout function
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                sessionStorage.removeItem('adminLoggedIn');
+                sessionStorage.removeItem('adminUsername');
+                localStorage.removeItem('adminRemember');
+                window.location.href = 'admin-login.html';
+            }
+        }
+    </script>
+</body>
+
+</html>

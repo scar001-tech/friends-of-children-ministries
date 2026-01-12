@@ -1,0 +1,906 @@
+/* ============================================
+   Friends of Children Ministries CMS - DESIGN SYSTEM
+   Biblical Theme: Old & New Testament Inspired
+   ============================================ */
+
+/* ========== CSS VARIABLES & DESIGN TOKENS ========== */
+:root {
+    /* ==============================================
+       COLOR PALETTE - BIBLICAL INSPIRATION
+       
+       OLD TESTAMENT:
+       - Sacrificial Crimson: Blood of the covenant
+       - Temple Gold: The Ark, Tabernacle glory
+       - Royal Purple: Priestly garments, royalty
+       - Desert Sand: Wilderness journey
+       
+       NEW TESTAMENT:
+       - Living Water Blue: Baptism, Holy Spirit
+       - Olive Green: Mount of Olives, peace
+       - Pure White/Cream: Righteousness, Light
+       - Dove Silver: Holy Spirit, grace
+       ============================================== */
+
+    /* Primary - Muted Slate Blue (Calming & Spiritual) */
+    --primary-color: #4a6d8c;
+    --primary-dark: #3a566e;
+    --primary-light: #6a8dac;
+
+    /* Secondary - Soft Teal (New Testament Spirit) */
+    --secondary-color: #5a8a8a;
+    --secondary-dark: #4a7070;
+    --secondary-light: #7aaaaa;
+
+    /* Old Testament Accent Colors - Blue Tones */
+    --ot-crimson: #5a4a6a;
+    --ot-crimson-light: #6a5a7a;
+    --ot-purple: #4a4a6a;
+    --ot-purple-light: #5a5a7a;
+    --ot-sand: #8a9aaa;
+    --ot-bronze: #5a6a7a;
+
+    /* New Testament Accent Colors - Blue Tones */
+    --nt-olive: #5a7a7a;
+    --nt-olive-light: #7a9a9a;
+    --nt-dove: #b8c4ce;
+    --nt-silver: #9ca8b8;
+    --nt-wine: #4a5a6a;
+    --nt-bread: #c8d0d8;
+
+    /* Accent Colors - Blue Theme */
+    --accent-purple: #5a5a7a;
+    --accent-gold: #6a8a9a;
+    --accent-teal: #5a8a8a;
+    --accent-green: #5a7a7a;
+    --accent-pink: #6a7a8a;
+    --accent-orange: #4a6d8c;
+
+    /* Neutral Colors - Cool Gray Tones */
+    --bg-primary: #f8fafc;
+    --bg-secondary: #f1f5f9;
+    --bg-tertiary: #e8eef4;
+    --text-primary: #1e293b;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --border-color: #cbd5e1;
+
+    /* Biblical Gradients - Blue Theme */
+    --gradient-primary: linear-gradient(135deg, #6a8dac 0%, #4a6d8c 25%, #3a566e 75%, #2a4054 100%);
+    --gradient-button: linear-gradient(135deg, #7a9dbc 0%, #5a7d9c 35%, #4a6d8c 65%, #3a566e 100%);
+    --gradient-button-hover: linear-gradient(135deg, #8aadcc 0%, #6a8dac 35%, #5a7d9c 65%, #4a6d8c 100%);
+    --gradient-sunset: linear-gradient(180deg, #1a2a3a 0%, #2a3a4a 15%, #3a4a5a 30%, #4a5a6a 50%, #5a7a8a 70%, #7a9aaa 85%, #9abaca 100%);
+    --gradient-testament: linear-gradient(135deg, #4a5a7a 0%, #5a8a8a 100%);
+    --gradient-spirit: linear-gradient(135deg, #5a8a8a 0%, #5a7a7a 100%);
+    --gradient-glory: linear-gradient(135deg, #7a9aaa 0%, #5a7a8a 50%, #4a5a7a 100%);
+    --gradient-sanctuary: linear-gradient(135deg, #4a5a7a 0%, #5a6a8a 100%);
+    --gradient-dawn: linear-gradient(135deg, #b8c8d8 0%, #8aaabc 50%, #5a8a9c 100%);
+    --gradient-redemption: linear-gradient(135deg, #3a4a5a 0%, #4a6a7a 50%, #5a8a9a 100%);
+
+    /* Legacy gradient support - Blue */
+    --gradient-warm: linear-gradient(135deg, #7a9dbc 0%, #5a7d9c 50%, #4a6d8c 100%);
+    --gradient-cool: linear-gradient(135deg, #5a8a8a 0%, #5a7a7a 100%);
+    --gradient-ocean: linear-gradient(135deg, #a8b8c8 0%, #c8d8e8 100%);
+
+    /* Shadows with cool blue tones */
+    --shadow-sm: 0 1px 2px 0 rgba(30, 41, 59, 0.06);
+    --shadow-md: 0 4px 6px -1px rgba(30, 41, 59, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(30, 41, 59, 0.12);
+    --shadow-xl: 0 20px 25px -5px rgba(30, 41, 59, 0.15);
+    --shadow-2xl: 0 25px 50px -12px rgba(30, 41, 59, 0.25);
+    --shadow-gold: 0 4px 20px rgba(74, 109, 140, 0.25);
+    --shadow-crimson: 0 4px 20px rgba(90, 90, 122, 0.2);
+
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    --spacing-2xl: 4rem;
+
+    /* Border Radius */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-full: 9999px;
+
+    /* Typography - Classic & Reverent */
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-display: 'Outfit', sans-serif;
+
+    /* Transitions */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========== GLOBAL RESET & BASE STYLES ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: var(--font-primary);
+    color: var(--text-primary);
+    background-color: var(--bg-secondary);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* ========== TYPOGRAPHY ========== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: var(--spacing-md);
+}
+
+h1 {
+    font-size: 3.5rem;
+}
+
+h2 {
+    font-size: 2.5rem;
+}
+
+h3 {
+    font-size: 2rem;
+}
+
+h4 {
+    font-size: 1.5rem;
+}
+
+h5 {
+    font-size: 1.25rem;
+}
+
+h6 {
+    font-size: 1rem;
+}
+
+p {
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-secondary);
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+    transition: color var(--transition-fast);
+}
+
+a:hover {
+    color: var(--primary-dark);
+}
+
+/* ========== HEADER & NAVIGATION ========== */
+.header {
+    background: var(--bg-primary);
+    padding: var(--spacing-md) 0;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 254, 248, 0.95);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.nav-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.nav-links {
+    display: flex;
+    gap: var(--spacing-lg);
+    list-style: none;
+    align-items: center;
+}
+
+.nav-links a {
+    color: var(--text-primary);
+    font-weight: 500;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+    position: relative;
+}
+
+.nav-links a:hover {
+    color: var(--primary-color);
+}
+
+.nav-links a.active {
+    color: var(--primary-color);
+}
+
+.nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background: var(--primary-color);
+    border-radius: 1px;
+}
+
+/* ========== HERO SECTION - DESERT SUNSET WITH BACKGROUND IMAGE ========== */
+.hero {
+    /* Background image with gradient overlay for dramatic desert sunset effect */
+    background:
+        /* Gradient overlay for color enhancement and text readability */
+        linear-gradient(180deg,
+            rgba(26, 10, 46, 0.6) 0%,
+            rgba(61, 26, 61, 0.4) 10%,
+            rgba(92, 35, 69, 0.3) 20%,
+            rgba(139, 41, 66, 0.25) 35%,
+            rgba(212, 101, 42, 0.15) 50%,
+            rgba(245, 158, 11, 0.1) 70%,
+            rgba(251, 191, 36, 0.15) 85%,
+            rgba(212, 165, 116, 0.2) 100%),
+        /* Desert sunset background image */
+        url('hero-background.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    padding: var(--spacing-2xl) var(--spacing-md);
+    padding-bottom: calc(var(--spacing-2xl) + 120px);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    min-height: 550px;
+}
+
+/* Desert Sand Dunes - Layered silhouettes at the bottom */
+.hero::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 250px;
+    background:
+        /* Front dune - darkest, closest */
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 200" preserveAspectRatio="none"><path fill="%238b6b4a" d="M0,200 L0,100 Q120,40 280,90 Q440,140 600,80 Q760,20 920,70 Q1080,120 1240,60 Q1340,30 1440,80 L1440,200 Z"/></svg>') bottom center / 100% 100px no-repeat,
+        /* Middle dune - medium brown */
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 200" preserveAspectRatio="none"><path fill="%23a67c52" d="M0,200 L0,130 Q200,60 400,110 Q600,160 800,90 Q1000,20 1200,80 Q1320,110 1440,70 L1440,200 Z"/></svg>') bottom center / 100% 140px no-repeat,
+        /* Back dune - lightest, horizon glow */
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 200" preserveAspectRatio="none"><path fill="%23c49a6c" fill-opacity="0.8" d="M0,200 L0,150 Q240,90 480,130 Q720,170 960,110 Q1200,50 1440,120 L1440,200 Z"/></svg>') bottom center / 100% 180px no-repeat;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Subtle Cross - Refined spiritual accent */
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2px;
+    height: 180px;
+    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.08), transparent);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.hero::before {
+    z-index: 2;
+}
+
+/* Sun glow on the horizon */
+.hero .hero-content::before {
+    content: '';
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 500px;
+    height: 250px;
+    background: radial-gradient(ellipse 60% 40% at center bottom,
+            rgba(255, 200, 80, 0.5) 0%,
+            rgba(255, 160, 50, 0.3) 25%,
+            rgba(255, 100, 30, 0.15) 50%,
+            transparent 75%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.hero-content {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+}
+
+.hero h1 {
+    color: white;
+    font-size: 4rem;
+    margin-bottom: var(--spacing-md);
+    text-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.4),
+        0 4px 20px rgba(139, 41, 66, 0.4);
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.hero p {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-xl);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========== SEARCH BAR ========== */
+.search-section {
+    max-width: 1280px;
+    margin: calc(var(--spacing-xl) * -1) auto var(--spacing-xl);
+    padding: 0 var(--spacing-md);
+    position: relative;
+    z-index: 10;
+}
+
+.search-container {
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    padding: var(--spacing-lg);
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+    border: 1px solid var(--border-color);
+}
+
+.search-input {
+    flex: 1;
+    padding: var(--spacing-md);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    font-size: 1rem;
+    font-family: var(--font-primary);
+    transition: all var(--transition-base);
+    background: var(--bg-secondary);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+    background: var(--bg-primary);
+}
+
+.search-button {
+    background: var(--gradient-button);
+    color: white;
+    border: none;
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow:
+        0 4px 15px rgba(74, 109, 140, 0.3),
+        0 2px 4px rgba(58, 86, 110, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.search-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.search-button:hover {
+    background: var(--gradient-button-hover);
+    transform: translateY(-3px);
+    box-shadow:
+        0 8px 25px rgba(74, 109, 140, 0.35),
+        0 4px 10px rgba(58, 86, 110, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.search-button:hover::before {
+    left: 100%;
+}
+
+.search-button:active {
+    transform: translateY(-1px);
+    box-shadow:
+        0 2px 10px rgba(74, 109, 140, 0.3),
+        0 1px 3px rgba(58, 86, 110, 0.2);
+}
+
+/* ========== FILTER TABS ========== */
+.filter-section {
+    max-width: 1280px;
+    margin: 0 auto var(--spacing-xl);
+    padding: 0 var(--spacing-md);
+}
+
+.filter-tabs {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    justify-content: center;
+    list-style: none;
+}
+
+.filter-tab {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all var(--transition-base);
+    color: var(--text-secondary);
+}
+
+.filter-tab:hover {
+    border-color: var(--primary-light);
+    color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.filter-tab.active {
+    background: var(--gradient-button);
+    border-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 15px rgba(74, 109, 140, 0.3), 0 2px 4px rgba(58, 86, 110, 0.2);
+}
+
+/* Testament-specific tab styling */
+.filter-tab[data-testament="old"] {
+    border-left: 3px solid var(--ot-crimson);
+}
+
+.filter-tab[data-testament="new"] {
+    border-left: 3px solid var(--secondary-color);
+}
+
+/* ========== LESSON CARDS GRID ========== */
+.lessons-section {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md) var(--spacing-2xl);
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.lessons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--spacing-lg);
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ========== LESSON CARD COMPONENT ========== */
+.lesson-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+    cursor: pointer;
+    position: relative;
+    animation: fadeInUp 0.6s ease-out both;
+    border: 1px solid var(--border-color);
+}
+
+.lesson-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-2xl);
+}
+
+.card-header {
+    height: 160px;
+    /* Increased height to show off images better */
+    background: var(--gradient-primary);
+    position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    transition: transform var(--transition-base);
+    /* Smooth zoom effect potential */
+}
+
+/* Card Background Variants */
+.card-header-lessons {
+    background-image: url('card-lessons.png');
+}
+
+.card-header-about {
+    background-image: url('card-about.png');
+}
+
+.card-header-admin {
+    background-image: url('card-admin.png');
+}
+
+.card-header-contact {
+    background-image: url('card-contact.png');
+}
+
+/* Lesson Card Backgrounds */
+.lesson-header-creation {
+    /* Using generic lesson bible image as fallback due to generation ref limits, but refined */
+    background-image: url('card-lessons.png');
+    background-position: center bottom;
+}
+
+.lesson-header-children {
+    /* Using spiritual stained glass image as fallback */
+    background-image: url('card-about.png');
+}
+
+.lesson-header-purpose {
+    background-image: url('card-lessons.png');
+}
+
+.lesson-header-samaritan {
+    background-image: url('card-about.png');
+    background-position: center top;
+}
+
+.lesson-header-noah {
+    background-image: url('lesson-noah.png');
+}
+
+.lesson-header-faith {
+    background-image: url('lesson-faith.png');
+}
+
+/* Old Testament card header variant */
+.lesson-card[data-testament="old"] .card-header {
+    background: var(--gradient-sanctuary);
+}
+
+/* New Testament card header variant */
+.lesson-card[data-testament="new"] .card-header {
+    background: var(--gradient-spirit);
+}
+
+.card-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 60%);
+    /* Subtle gradient for depth */
+}
+
+.card-category {
+    position: absolute;
+    top: var(--spacing-sm);
+    left: var(--spacing-sm);
+    background: rgba(255, 254, 248, 0.95);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    backdrop-filter: blur(10px);
+}
+
+.card-date {
+    position: absolute;
+    bottom: var(--spacing-sm);
+    right: var(--spacing-sm);
+    background: rgba(255, 254, 248, 0.95);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    backdrop-filter: blur(10px);
+}
+
+.card-body {
+    padding: var(--spacing-lg);
+}
+
+.card-title {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+    font-family: var(--font-display);
+}
+
+.card-scripture {
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-md);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+
+.card-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-md);
+}
+
+.card-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+}
+
+.card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--primary-color);
+    font-weight: 600;
+    transition: all var(--transition-base);
+}
+
+.card-link:hover {
+    gap: var(--spacing-sm);
+}
+
+.card-link::after {
+    content: '→';
+    font-size: 1.2rem;
+}
+
+/* ========== TESTAMENT BADGE STYLES ========== */
+.testament-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.testament-badge.old-testament {
+    background: linear-gradient(135deg, var(--ot-crimson) 0%, var(--ot-purple) 100%);
+    color: white;
+}
+
+.testament-badge.new-testament {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--nt-olive) 100%);
+    color: white;
+}
+
+/* ========== FOOTER ========== */
+.footer {
+    background: var(--text-primary);
+    color: white;
+    padding: var(--spacing-xl) var(--spacing-md);
+    margin-top: var(--spacing-2xl);
+    position: relative;
+    overflow: hidden;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+}
+
+.footer-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-content p {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    .hero {
+        min-height: 450px;
+        padding-bottom: calc(var(--spacing-2xl) + 80px);
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero p {
+        font-size: 1.125rem;
+    }
+
+    .hero::after {
+        font-size: 8rem;
+        top: 40%;
+    }
+
+    .search-container {
+        flex-direction: column;
+    }
+
+    .lessons-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nav-links {
+        gap: var(--spacing-sm);
+        font-size: 0.875rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .hero {
+        padding: var(--spacing-xl) var(--spacing-md);
+        padding-bottom: calc(var(--spacing-xl) + 60px);
+        min-height: 400px;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero::after {
+        font-size: 6rem;
+    }
+}
+
+/* ========== UTILITY CLASSES ========== */
+.text-center {
+    text-align: center;
+}
+
+.text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Testament-specific text colors */
+.text-old-testament {
+    color: var(--ot-crimson);
+}
+
+.text-new-testament {
+    color: var(--secondary-color);
+}
+
+.mt-xl {
+    margin-top: var(--spacing-xl);
+}
+
+.mb-xl {
+    margin-bottom: var(--spacing-xl);
+}
+
+/* ========== SPECIAL BIBLICAL ELEMENTS ========== */
+
+/* Scripture verse highlight box */
+.scripture-highlight {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(139, 41, 66, 0.05) 100%);
+    border-left: 4px solid var(--primary-color);
+    padding: var(--spacing-md);
+    margin: var(--spacing-md) 0;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    font-style: italic;
+}
+
+/* Cross divider */
+.cross-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin: var(--spacing-xl) 0;
+    color: var(--text-muted);
+}
+
+.cross-divider::before,
+.cross-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+}
+
+.cross-divider span {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+/* Covenant connection visual */
+.covenant-link {
+    background: var(--gradient-testament);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+}

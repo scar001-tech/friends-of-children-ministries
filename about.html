@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="About Friends of Children Ministries - Learn more about our mission to equip teachers and inspire young hearts through Bible-based education">
+    <title>About Us | Friends of Children Ministries</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="index.css">
+
+    <style>
+        /* About Page Specific Styles */
+        .about-hero {
+            background: var(--gradient-primary);
+            padding: 6rem var(--spacing-md) 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('about-background.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+        }
+
+        .about-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background: linear-gradient(to top, var(--bg-secondary), transparent);
+            pointer-events: none;
+        }
+
+        .about-hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about-hero h1 {
+            color: white;
+            font-size: 3.5rem;
+            margin-bottom: var(--spacing-md);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .about-hero p {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.25rem;
+            line-height: 1.8;
+        }
+
+        .about-section {
+            padding: 5rem var(--spacing-md);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .about-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-base);
+        }
+
+        .about-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .about-card-icon {
+            width: 4px;
+            height: 40px;
+            background: var(--gradient-button);
+            border-radius: 2px;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-card h3 {
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .about-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .mission-section {
+            background: var(--bg-tertiary);
+            padding: 5rem var(--spacing-md);
+        }
+
+        .mission-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .mission-content h2 {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .mission-verse {
+            background: var(--bg-primary);
+            border-left: 4px solid var(--primary-color);
+            padding: 2rem;
+            margin: 2.5rem 0;
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+            text-align: left;
+        }
+
+        .mission-verse blockquote {
+            font-style: italic;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .mission-verse cite {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        .values-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            text-align: left;
+        }
+
+        .value-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .value-icon {
+            width: 3px;
+            height: 24px;
+            background: var(--gradient-button);
+            border-radius: 2px;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+
+        .value-content h4 {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .value-content p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .team-section {
+            padding: 5rem var(--spacing-md);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .team-section h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .team-section>p {
+            text-align: center;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .stats-section {
+            background: var(--gradient-primary);
+            padding: 4rem var(--spacing-md);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-item p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .cta-section {
+            background: var(--bg-secondary);
+            padding: 5rem var(--spacing-md);
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .cta-content p {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-button);
+            color: white;
+            border: none;
+            box-shadow: var(--shadow-gold);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stat-item h3 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .about-hero h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">Friends of Children Ministries</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="lessons.html">Lessons</a></li>
+                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- About Hero Section -->
+    <section class="about-hero">
+        <div class="about-hero-content">
+            <h1>About Our Ministry</h1>
+            <p>Dedicated to equipping Sunday School teachers with comprehensive, Bible-based curriculum
+                that transforms young hearts and minds for Christ.</p>
+        </div>
+    </section>
+
+    <!-- What We Do Section -->
+    <section class="about-section">
+        <h2 class="section-title">What We Offer</h2>
+        <p style="text-align: center; color: var(--text-secondary); max-width: 700px; margin: 0 auto;">
+            Our resources are designed to make teaching easier and learning more engaging for children of all ages.
+        </p>
+
+        <div class="about-grid">
+            <div class="about-card">
+                <div class="about-card-icon"></div>
+                <h3>Comprehensive Lesson Plans</h3>
+                <p>Each lesson includes detailed teaching outlines, Scripture references, key themes,
+                    and step-by-step instructions. We cover both Old and New Testament studies,
+                    helping students understand the complete narrative of God's Word.</p>
+            </div>
+
+            <div class="about-card">
+                <div class="about-card-icon"></div>
+                <h3>Clear Learning Objectives</h3>
+                <p>Every lesson comes with specific, measurable objectives so you know exactly
+                    what students should understand and take away. Our objectives align with
+                    spiritual growth milestones for each age group.</p>
+            </div>
+
+            <div class="about-card">
+                <div class="about-card-icon"></div>
+                <h3>Discussion Questions</h3>
+                <p>Thought-provoking questions designed to spark meaningful conversations.
+                    These questions help students connect Biblical truths to their everyday lives
+                    and encourage deeper reflection on Scripture.</p>
+            </div>
+
+            <div class="about-card">
+                <div class="about-card-icon"></div>
+                <h3>Multimedia Resources</h3>
+                <p>Enhance your teaching with supporting videos, audio content, and visual aids.
+                    Our multimedia library includes animated Bible stories, worship songs,
+                    and interactive presentations.</p>
+            </div>
+
+            <div class="about-card">
+                <div class="about-card-icon"></div>
+                <h3>Activities & Crafts</h3>
+                <p>Hands-on activities that reinforce lesson themes. From creative crafts to
+                    interactive games, these activities help kinesthetic learners engage with
+                    Biblical concepts in memorable ways.</p>
+            </div>
+
+            <div class="about-card">
+                <div class="about-card-icon"></div>
+                <h3>Teacher Resources</h3>
+                <p>Additional blog posts, articles, and guides to help you grow as a teacher.
+                    Access tips on classroom management, age-appropriate teaching strategies,
+                    and ways to connect with parents.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section with Scripture -->
+    <section class="mission-section">
+        <div class="mission-content">
+            <h2>Our Mission & Vision</h2>
+            <p style="color: var(--text-secondary); font-size: 1.125rem; line-height: 1.8;">
+                We believe that teaching children about God's Word is one of the most important
+                responsibilities in the Church. Our mission is to equip Sunday School teachers
+                with resources that are Biblically sound, educationally effective, and practically
+                applicable to young lives.
+            </p>
+
+            <div class="mission-verse">
+                <blockquote>
+                    "Train up a child in the way he should go: and when he is old,
+                    he will not depart from it."
+                </blockquote>
+                <cite>— Proverbs 22:6 (KJV)</cite>
+            </div>
+
+            <div class="values-list">
+                <div class="value-item">
+                    <div class="value-icon"></div>
+                    <div class="value-content">
+                        <h4>Biblical Authority</h4>
+                        <p>Every lesson is grounded in Scripture, teaching children the unchanging truth of God's Word.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="value-item">
+                    <div class="value-icon"></div>
+                    <div class="value-content">
+                        <h4>Love for Children</h4>
+                        <p>We design age-appropriate content that meets children where they are spiritually and
+                            developmentally.</p>
+                    </div>
+                </div>
+
+                <div class="value-item">
+                    <div class="value-icon"></div>
+                    <div class="value-content">
+                        <h4>Excellence in Teaching</h4>
+                        <p>We strive for the highest quality in our materials, making teaching preparation easier for
+                            you.</p>
+                    </div>
+                </div>
+
+                <div class="value-item">
+                    <div class="value-icon"></div>
+                    <div class="value-content">
+                        <h4>Community Support</h4>
+                        <p>We're here to support teachers with ongoing resources, training, and encouragement.</p>
+                    </div>
+                </div>
+
+                <div class="value-item">
+                    <div class="value-icon"></div>
+                    <div class="value-content">
+                        <h4>Complete Scripture Coverage</h4>
+                        <p>Our curriculum covers both Old and New Testament, revealing the complete story of redemption.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="value-item">
+                    <div class="value-icon"></div>
+                    <div class="value-content">
+                        <h4>Prayer-Centered Ministry</h4>
+                        <p>Every lesson is developed with prayer, seeking God's guidance in reaching young hearts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3>50+</h3>
+                <p>Lessons Available</p>
+            </div>
+            <div class="stat-item">
+                <h3>1000+</h3>
+                <p>Teachers Equipped</p>
+            </div>
+            <div class="stat-item">
+                <h3>66</h3>
+                <p>Books of the Bible</p>
+            </div>
+            <div class="stat-item">
+                <h3>∞</h3>
+                <p>Lives Transformed</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- For Teachers Section -->
+    <section class="team-section">
+        <h2>Built for Teachers, By Teachers</h2>
+        <p>Our curriculum is developed by experienced Sunday School teachers and ministry leaders
+            who understand the challenges and joys of teaching children about faith.</p>
+
+        <div class="about-grid">
+            <div class="about-card">
+                <h3> Easy to Prepare</h3>
+                <p>We know your time is valuable. Our lessons are designed to be easy to prepare,
+                    even on busy weeks. Clear instructions and organized materials mean less prep time
+                    and more confidence in the classroom.</p>
+            </div>
+
+            <div class="about-card">
+                <h3> Age-Appropriate</h3>
+                <p>From toddlers to teens, our lessons are tailored for different developmental stages.
+                    Each age group has content designed for their unique learning styles and
+                    spiritual understanding.</p>
+            </div>
+
+            <div class="about-card">
+                <h3> Regular Updates</h3>
+                <p>We continuously add new lessons, resources, and teaching materials.
+                    Our curriculum grows with your needs, ensuring you always have fresh content
+                    to engage your students.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Transform Your Sunday School?</h2>
+            <p>Join thousands of teachers who are using our resources to make a lasting
+                impact on the next generation of believers.</p>
+            <div class="cta-buttons">
+                <a href="lessons.html" class="btn btn-primary">
+                    Browse Lessons
+                </a>
+                <a href="contact.html" class="btn btn-secondary">
+                    Contact Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3 style="color: white; margin-bottom: var(--spacing-md);">Friends of Children Ministries</h3>
+            <p>Empowering teachers to inspire the next generation</p>
+            <p style="margin-top: var(--spacing-md); font-size: 0.875rem;">
+                &copy; 2025 Friends of Children Ministries. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="app.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+{
+    "name": "church-website",
+    "version": "1.0.0",
+    "description": "Friends of Children Ministries website",
+    "main": "api/index.js",
+    "scripts": {
+        "start": "node server/server.js",
+        "dev": "node server/server.js"
+    },
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.18.2",
+        "multer": "^1.4.5-lts.1"
+    },
+    "keywords": [
+        "church",
+        "sunday-school",
+        "lessons"
+    ],
+    "author": "Friends of Children Ministries",
+    "license": "MIT"
+}

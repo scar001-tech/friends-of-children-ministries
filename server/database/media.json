@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "name": "creation-banner.jpg",
+    "type": "image",
+    "size": "2.4 MB",
+    "date": "Dec 1, 2024",
+    "icon": "IMG",
+    "url": "/uploads/creation-banner.jpg",
+    "createdAt": "2026-01-07T11:08:35.049Z"
+  },
+  {
+    "id": 2,
+    "name": "jesus-loves-children.jpg",
+    "type": "image",
+    "size": "1.8 MB",
+    "date": "Nov 28, 2024",
+    "icon": "IMG",
+    "url": "/uploads/jesus-loves-children.jpg",
+    "createdAt": "2026-01-07T11:08:35.061Z"
+  },
+  {
+    "id": 3,
+    "name": "bible-story-intro.mp4",
+    "type": "video",
+    "size": "45.2 MB",
+    "date": "Nov 25, 2024",
+    "icon": "VID",
+    "url": "/uploads/bible-story-intro.mp4",
+    "createdAt": "2026-01-07T11:08:35.062Z"
+  },
+  {
+    "id": 4,
+    "name": "worship-song.mp3",
+    "type": "audio",
+    "size": "5.6 MB",
+    "date": "Nov 20, 2024",
+    "icon": "AUD",
+    "url": "/uploads/worship-song.mp3",
+    "createdAt": "2026-01-07T11:08:35.063Z"
+  },
+  {
+    "id": 5,
+    "name": "noahs-ark.png",
+    "type": "image",
+    "size": "3.1 MB",
+    "date": "Nov 15, 2024",
+    "icon": "IMG",
+    "url": "/uploads/noahs-ark.png",
+    "createdAt": "2026-01-07T11:08:35.064Z"
+  },
+  {
+    "id": 6,
+    "name": "good-samaritan.mp4",
+    "type": "video",
+    "size": "52.8 MB",
+    "date": "Nov 10, 2024",
+    "icon": "VID",
+    "url": "/uploads/good-samaritan.mp4",
+    "createdAt": "2026-01-07T11:08:35.065Z"
+  },
+  {
+    "id": 7,
+    "name": "prayer-background.mp3",
+    "type": "audio",
+    "size": "4.2 MB",
+    "date": "Nov 5, 2024",
+    "icon": "AUD",
+    "url": "/uploads/prayer-background.mp3",
+    "createdAt": "2026-01-07T11:08:35.066Z"
+  },
+  {
+    "id": 8,
+    "name": "lesson-thumbnail.jpg",
+    "type": "image",
+    "size": "890 KB",
+    "date": "Nov 1, 2024",
+    "icon": "IMG",
+    "url": "/uploads/lesson-thumbnail.jpg",
+    "createdAt": "2026-01-07T11:08:35.067Z"
+  }
+]

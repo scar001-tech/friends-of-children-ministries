@@ -1,0 +1,11 @@
+node_modules/
+.vscode/
+*.backup
+server/node_modules/
+server/uploads/*
+!server/uploads/.gitkeep
+server/database/*.json
+!server/database/lessons.json
+!server/database/media.json
+.DS_Store
+.env
