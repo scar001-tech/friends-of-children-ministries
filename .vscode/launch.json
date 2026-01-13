@@ -1,0 +1,52 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Start Backend Server",
+            "program": "${workspaceFolder}/server/server.js",
+            "cwd": "${workspaceFolder}/server",
+            "console": "integratedTerminal",
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Website (Chrome)",
+            "url": "http://localhost:3000/index.html",
+            "webRoot": "${workspaceFolder}",
+            "timeout": 30000,
+            "sourceMaps": true,
+            "smartStep": true
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Main Website (index.html)",
+            "file": "${workspaceFolder}/index.html",
+            "webRoot": "${workspaceFolder}",
+            "sourceMaps": true,
+            "smartStep": true
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Current HTML File",
+            "file": "${file}",
+            "webRoot": "${workspaceFolder}"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Run Full Website (Server + Browser)",
+            "configurations": [
+                "Start Backend Server",
+                "Launch Website (Chrome)"
+            ],
+            "stopAll": true
+        }
+    ]
+}
