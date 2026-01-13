@@ -787,6 +787,7 @@
 @media (max-width: 1024px) {
     .lesson-content-wrapper {
         grid-template-columns: 1fr;
+        padding: var(--spacing-lg) var(--spacing-md);
     }
 
     .lesson-sidebar {
@@ -794,6 +795,7 @@
         top: 0;
         margin-bottom: var(--spacing-lg);
         max-height: none;
+        padding: var(--spacing-md);
     }
 
     .sidebar-title {
@@ -805,11 +807,21 @@
         flex-direction: row;
         gap: var(--spacing-xs);
         flex-wrap: wrap;
+        overflow-x: auto;
+        padding-bottom: var(--spacing-xs);
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .lesson-nav::-webkit-scrollbar {
+        display: none;
     }
 
     .lesson-nav-link {
         padding: var(--spacing-xs) var(--spacing-md);
         font-size: 0.875rem;
+        flex-shrink: 0;
+        white-space: nowrap;
     }
 
     .nav-icon {
@@ -818,8 +830,14 @@
 }
 
 @media (max-width: 768px) {
+    /* Header adjustments */
+    .lesson-header {
+        padding: var(--spacing-xl) var(--spacing-sm);
+    }
+
     .lesson-title {
         font-size: 2rem;
+        line-height: 1.1;
     }
 
     .lesson-meta {
@@ -827,40 +845,232 @@
         gap: var(--spacing-sm);
     }
 
-    .content-section {
-        padding: var(--spacing-lg);
+    .breadcrumb {
+        font-size: 0.875rem;
     }
 
+    /* Content wrapper */
+    .lesson-content-wrapper {
+        padding: var(--spacing-md) var(--spacing-sm);
+        gap: var(--spacing-md);
+    }
+
+    /* Content sections */
+    .content-section {
+        padding: var(--spacing-lg);
+        margin-bottom: var(--spacing-md);
+    }
+
+    .content-section h2 {
+        font-size: 1.5rem;
+        margin-bottom: var(--spacing-md);
+    }
+
+    /* Lesson steps mobile */
     .lesson-step {
         gap: var(--spacing-md);
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .lesson-step::before {
+        display: none; /* Remove connecting line on mobile */
     }
 
     .step-number {
         width: 40px;
         height: 40px;
         font-size: 1.25rem;
+        margin-bottom: var(--spacing-sm);
     }
 
-    .lesson-step::before {
-        left: 19px;
+    .step-content {
+        padding-top: 0;
+        width: 100%;
     }
 
+    .step-content h3 {
+        font-size: 1.125rem;
+    }
+
+    /* Materials grid mobile */
     .materials-grid {
         grid-template-columns: 1fr;
+        gap: var(--spacing-xs);
     }
 
+    .material-item {
+        padding: var(--spacing-sm);
+        font-size: 0.875rem;
+    }
+
+    /* Videos grid mobile */
     .videos-grid {
         grid-template-columns: 1fr;
+        gap: var(--spacing-md);
     }
 
+    /* Resources section mobile */
+    .resources-section {
+        padding: var(--spacing-lg);
+    }
+
+    .resources-tabs {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+
+    .resource-tab {
+        padding: var(--spacing-sm);
+        text-align: center;
+        border-bottom: none;
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-md);
+    }
+
+    .resource-tab.active {
+        border-color: var(--primary-color);
+        background: var(--primary-light);
+        color: white;
+    }
+
+    /* Action buttons mobile */
     .action-buttons {
         flex-direction: column;
+        gap: var(--spacing-sm);
     }
 
     .btn-primary,
     .btn-secondary {
         width: 100%;
         justify-content: center;
+        padding: var(--spacing-md);
+    }
+
+    /* Age group selector mobile */
+    .age-group-selector {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-md);
+        margin: -20px auto var(--spacing-md);
+    }
+
+    .age-group-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* PDF cards mobile */
+    .pdf-card {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-sm);
+    }
+
+    .pdf-info {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-sm);
+    }
+
+    .btn-pdf {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra small mobile */
+    .lesson-header {
+        padding: var(--spacing-lg) var(--spacing-xs);
+    }
+
+    .lesson-title {
+        font-size: 1.75rem;
+    }
+
+    .lesson-content-wrapper {
+        padding: var(--spacing-sm) var(--spacing-xs);
+    }
+
+    .content-section {
+        padding: var(--spacing-md);
+    }
+
+    .content-section h2 {
+        font-size: 1.25rem;
+    }
+
+    /* Sidebar mobile */
+    .lesson-sidebar {
+        padding: var(--spacing-sm);
+    }
+
+    .lesson-nav-link {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: 0.8rem;
+    }
+
+    /* Questions and activities */
+    .question-item,
+    .activity-card {
+        padding: var(--spacing-sm);
+    }
+
+    .objectives-list li {
+        padding: var(--spacing-sm);
+        font-size: 0.9rem;
+    }
+
+    /* Teacher notes */
+    .teacher-notes {
+        padding: var(--spacing-md);
+    }
+
+    .note-box {
+        padding: var(--spacing-sm);
+    }
+
+    /* Resources section */
+    .resources-section {
+        padding: var(--spacing-md);
+    }
+
+    .blog-post-card,
+    .video-card,
+    .audio-card {
+        padding: var(--spacing-sm);
+    }
+
+    .video-info {
+        padding: var(--spacing-sm);
+    }
+
+    .video-title {
+        font-size: 1rem;
+    }
+
+    .video-description {
+        font-size: 0.8rem;
+    }
+}
+
+/* Landscape mobile orientation for lesson pages */
+@media (max-width: 768px) and (orientation: landscape) {
+    .lesson-header {
+        padding: var(--spacing-md) var(--spacing-sm);
+    }
+
+    .lesson-title {
+        font-size: 1.75rem;
+    }
+
+    .lesson-content-wrapper {
+        padding: var(--spacing-sm);
+    }
+
+    .content-section {
+        padding: var(--spacing-md);
     }
 }
 

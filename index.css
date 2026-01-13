@@ -255,6 +255,38 @@ a:hover {
     border-radius: 1px;
 }
 
+/* ========== MOBILE MENU TOGGLE ========== */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    border: none;
+    background: transparent;
+    gap: 4px;
+    z-index: 1001;
+}
+
+.mobile-menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transition: all var(--transition-base);
+}
+
+.mobile-menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.mobile-menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
 /* ========== HERO SECTION - DESERT SUNSET WITH BACKGROUND IMAGE ========== */
 .hero {
     /* Background image with gradient overlay for dramatic desert sunset effect */
@@ -770,7 +802,77 @@ a:hover {
 }
 
 /* ========== RESPONSIVE DESIGN ========== */
+
+/* Mobile Navigation Improvements */
+@media (max-width: 1024px) {
+    .nav-container {
+        flex-wrap: wrap;
+        padding: var(--spacing-md);
+    }
+
+    .logo {
+        font-size: 1.5rem;
+    }
+
+    .mobile-menu-toggle {
+        display: flex;
+        order: 3;
+    }
+
+    .nav-links {
+        order: 4;
+        width: 100%;
+        flex-direction: column;
+        background: white;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        box-shadow: var(--shadow-lg);
+        border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        padding: var(--spacing-md);
+        transform: translateY(-10px);
+        opacity: 0;
+        visibility: hidden;
+        transition: all var(--transition-base);
+        z-index: 1000;
+    }
+
+    .nav-links.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .nav-links li {
+        width: 100%;
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .nav-links a {
+        display: block;
+        width: 100%;
+        padding: var(--spacing-md);
+        text-align: center;
+        border-radius: var(--radius-md);
+        background: var(--bg-secondary);
+        transition: all var(--transition-base);
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+        background: var(--primary-color);
+        color: white;
+        transform: translateX(4px);
+    }
+
+    .nav-links a.active::after {
+        display: none;
+    }
+}
+
 @media (max-width: 768px) {
+    /* Typography adjustments */
     h1 {
         font-size: 2.5rem;
     }
@@ -779,56 +881,281 @@ a:hover {
         font-size: 2rem;
     }
 
+    /* Header improvements */
+    .header {
+        padding: var(--spacing-sm) 0;
+    }
+
+    .nav-container {
+        padding: 0 var(--spacing-sm);
+    }
+
+    .nav-links {
+        gap: var(--spacing-xs);
+        font-size: 0.875rem;
+    }
+
+    .nav-links a {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        white-space: nowrap;
+    }
+
+    /* Hero section mobile optimization */
     .hero {
         min-height: 450px;
-        padding-bottom: calc(var(--spacing-2xl) + 80px);
+        padding: var(--spacing-xl) var(--spacing-sm);
+        padding-bottom: calc(var(--spacing-xl) + 80px);
     }
 
     .hero h1 {
         font-size: 2.5rem;
+        line-height: 1.1;
+        margin-bottom: var(--spacing-md);
     }
 
     .hero p {
         font-size: 1.125rem;
+        line-height: 1.5;
+        margin-bottom: var(--spacing-lg);
     }
 
-    .hero::after {
-        font-size: 8rem;
-        top: 40%;
+    /* Search container mobile */
+    .search-section {
+        margin: calc(var(--spacing-lg) * -1) auto var(--spacing-lg);
+        padding: 0 var(--spacing-sm);
     }
 
     .search-container {
         flex-direction: column;
+        padding: var(--spacing-md);
+    }
+
+    .search-input {
+        width: 100%;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .search-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Filter tabs mobile */
+    .filter-tabs {
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: var(--spacing-sm);
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .filter-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .filter-tab {
+        flex-shrink: 0;
+        font-size: 0.875rem;
+        padding: var(--spacing-xs) var(--spacing-md);
+    }
+
+    /* Lessons grid mobile */
+    .lessons-section {
+        padding: 0 var(--spacing-sm) var(--spacing-xl);
     }
 
     .lessons-grid {
         grid-template-columns: 1fr;
+        gap: var(--spacing-md);
     }
 
-    .nav-links {
-        gap: var(--spacing-sm);
-        font-size: 0.875rem;
+    /* Card improvements for mobile */
+    .lesson-card {
+        margin: 0 auto;
+        max-width: 100%;
+    }
+
+    .card-header {
+        height: 140px;
+    }
+
+    .card-body {
+        padding: var(--spacing-md);
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+    }
+
+    .card-description {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    /* Footer mobile */
+    .footer {
+        padding: var(--spacing-lg) var(--spacing-sm);
     }
 }
 
 @media (max-width: 480px) {
-    .nav-links {
-        flex-wrap: wrap;
-        justify-content: center;
+    /* Extra small mobile devices */
+    .nav-container {
+        padding: var(--spacing-xs);
+    }
+
+    .logo {
+        font-size: 1.25rem;
+        line-height: 1.2;
+        text-align: center;
+    }
+
+    .nav-links.active {
+        padding: var(--spacing-sm);
+    }
+
+    .nav-links a {
+        padding: var(--spacing-md);
+        font-size: 1rem;
+        border-radius: var(--radius-lg);
     }
 
     .hero {
-        padding: var(--spacing-xl) var(--spacing-md);
-        padding-bottom: calc(var(--spacing-xl) + 60px);
-        min-height: 400px;
+        padding: var(--spacing-lg) var(--spacing-xs);
+        padding-bottom: calc(var(--spacing-lg) + 60px);
+        min-height: 380px;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+        line-height: 1.1;
+    }
+
+    .hero p {
+        font-size: 1rem;
+        line-height: 1.4;
+    }
+
+    /* Button improvements */
+    .hero a {
+        display: block !important;
+        text-align: center;
+        width: 100%;
+        max-width: 280px;
+        margin: 0 auto;
+        padding: var(--spacing-md) var(--spacing-lg) !important;
+        font-size: 1rem;
+    }
+
+    .search-container {
+        padding: var(--spacing-sm);
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .search-input {
+        font-size: 16px; /* Prevents zoom on iOS */
+        padding: var(--spacing-md);
+    }
+
+    .search-button {
+        width: 100%;
+        padding: var(--spacing-md);
+        font-size: 1rem;
+    }
+
+    .lessons-section {
+        padding: 0 var(--spacing-xs) var(--spacing-lg);
+    }
+
+    .section-title {
+        font-size: 1.75rem;
+        margin-bottom: var(--spacing-lg);
+        text-align: center;
+        padding: 0 var(--spacing-sm);
+    }
+
+    .lessons-grid {
+        gap: var(--spacing-md);
+    }
+
+    .lesson-card {
+        margin: 0;
+        border-radius: var(--radius-lg);
+    }
+
+    .card-header {
+        height: 120px;
+    }
+
+    .card-body {
+        padding: var(--spacing-sm);
+    }
+
+    .card-title {
+        font-size: 1.125rem;
+        margin-bottom: var(--spacing-xs);
+        line-height: 1.3;
+    }
+
+    .card-scripture {
+        font-size: 0.8rem;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .card-description {
+        font-size: 0.875rem;
+        margin-bottom: var(--spacing-sm);
+        line-height: 1.4;
+    }
+
+    .card-category,
+    .card-date {
+        font-size: 0.75rem;
+        padding: 4px var(--spacing-xs);
+    }
+
+    .filter-tabs {
+        padding: 0 var(--spacing-xs);
+        gap: var(--spacing-xs);
+    }
+
+    .filter-tab {
+        font-size: 0.8rem;
+        padding: var(--spacing-xs) var(--spacing-sm);
+        white-space: nowrap;
+    }
+
+    /* Footer mobile improvements */
+    .footer {
+        padding: var(--spacing-md) var(--spacing-xs);
+        text-align: center;
+    }
+
+    .footer h3 {
+        font-size: 1.25rem;
+    }
+
+    .footer p {
+        font-size: 0.875rem;
+        line-height: 1.4;
+    }
+}
+
+/* Landscape mobile orientation */
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero {
+        min-height: 320px;
+        padding: var(--spacing-md) var(--spacing-sm);
+        padding-bottom: calc(var(--spacing-md) + 40px);
     }
 
     .hero h1 {
         font-size: 2rem;
     }
 
-    .hero::after {
-        font-size: 6rem;
+    .hero p {
+        font-size: 1rem;
     }
 }
 

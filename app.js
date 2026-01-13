@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
   initializeSmoothScrolling();
   initializeAddLessonForm();
   initializeScrollAnimations();
+  initializeMobileMenu();
 });
 
 // Initialize search functionality
@@ -407,6 +408,52 @@ function initializeAddLessonForm() {
       addLessonForm.reset();
     });
   }
+}
+
+// ============================================
+// MOBILE MENU FUNCTIONALITY
+// ============================================
+function initializeMobileMenu() {
+  const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+  const navLinks = document.getElementById('navLinks');
+  
+  if (!mobileMenuToggle || !navLinks) return;
+
+  // Toggle mobile menu
+  mobileMenuToggle.addEventListener('click', function() {
+    this.classList.toggle('active');
+    navLinks.classList.toggle('active');
+    
+    // Prevent body scroll when menu is open
+    document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+  });
+
+  // Close menu when clicking on a link
+  navLinks.addEventListener('click', function(e) {
+    if (e.target.tagName === 'A') {
+      mobileMenuToggle.classList.remove('active');
+      navLinks.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!mobileMenuToggle.contains(e.target) && !navLinks.contains(e.target)) {
+      mobileMenuToggle.classList.remove('active');
+      navLinks.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Close menu on window resize if it gets too wide
+  window.addEventListener('resize', function() {
+    if (window.innerWidth > 1024) {
+      mobileMenuToggle.classList.remove('active');
+      navLinks.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
 }
 
 // ============================================
