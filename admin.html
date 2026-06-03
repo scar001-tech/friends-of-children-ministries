@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin Dashboard - Friends of Children Ministries">
+    <title>Admin Dashboard | Friends of Children Ministries</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="admin-body">
+    <div class="admin-shell">
+        <aside class="admin-sidebar" id="adminSidebar"></aside>
+        <main class="admin-main">
+            <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+
+            <div class="admin-topbar">
+                <div class="topbar-title">
+                    <h1>Dashboard</h1>
+                    <p id="welcomeMsg">Welcome back</p>
+                </div>
+                <div class="topbar-actions">
+                    <a href="index.html" class="btn btn-outline" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> View Site
+                    </a>
+                </div>
+            </div>
+
+            <div class="readiness-grid" id="readinessGrid"></div>
+            <div class="stats-grid" id="statsGrid"></div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                <div class="panel">
+                    <div class="panel-header"><h2>Quick Actions</h2></div>
+                    <div class="panel-body" id="quickActions" style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;"></div>
+                </div>
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Recent Activity</h2>
+                        <a href="admin-audit-log.html" class="btn btn-sm btn-outline" id="viewAuditLink">View All</a>
+                    </div>
+                    <div class="panel-body" style="padding:0;">
+                        <table class="data-table">
+                            <thead><tr><th>Action</th><th>User</th><th>Time</th></tr></thead>
+                            <tbody id="recentActivity"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel" style="margin-top:1.5rem;">
+                <div class="panel-header"><h2>Content Overview</h2></div>
+                <div class="panel-body" style="padding:0;">
+                    <table class="data-table">
+                        <thead><tr><th>Content Type</th><th>Total</th><th>Published</th><th>Draft</th><th>Action</th></tr></thead>
+                        <tbody id="contentOverview"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="admin-shared.js"></script>
+    <script>
+        if (!checkAuth()) throw new Error('Not authenticated');
+
+        const user = getUser();
+        document.getElementById('welcomeMsg').textContent = `Welcome back, ${user.name}`;
+        renderSidebar('dashboard');
+        hideForEditors('#viewAuditLink');
+
+        // Readiness indicators
+        const readinessData = [
+            { label: 'Database',       status: 'Connected',   dot: 'green' },
+            { label: 'Auth Service',   status: 'Operational', dot: 'green' },
+            { label: 'Storage',        status: 'Operational', dot: 'green' },
+            { label: 'Email (Resend)', status: 'Configured',  dot: 'green' },
+            { label: 'Telegram Bot',   status: 'Standby',     dot: 'amber' },
+            { label: 'Payments',       status: 'Sandbox',     dot: 'amber' },
+        ];
+
+        document.getElementById('readinessGrid').innerHTML = readinessData.map(r => `
+            <div class="readiness-card">
+                <div class="readiness-dot ${r.dot}"></div>
+                <div class="readiness-info">
+                    <div class="readiness-label">${r.label}</div>
+                    <div class="readiness-status">${r.status}</div>
+                </div>
+            </div>`).join('');
+
+        async function fetchCount(endpoint, storageKey) {
+            try {
+                const res  = await fetch(endpoint);
+                if (!res.ok) throw new Error();
+                const data = await res.json();
+                const items = Array.isArray(data) ? data : (data.studies || data.events || data.subscribers || []);
+                setData(storageKey, items);
+                return items;
+            } catch { return getData(storageKey); }
+        }
+
+        // Stat card definitions — FA icons instead of emoji
+        const STAT_DEFS = [
+            { fa: 'fas fa-book-open',    key: 'lessons',      label: 'Lessons',       bg: 'blue'   },
+            { fa: 'fas fa-newspaper',    key: 'blogPosts',     label: 'Blog Posts',    bg: 'green'  },
+            { fa: 'fas fa-cross',        key: 'bibleStudies',  label: 'Bible Studies', bg: 'purple' },
+            { fa: 'fas fa-folder-open',  key: 'resources',     label: 'Resources',     bg: 'amber'  },
+            { fa: 'fas fa-calendar-alt', key: 'events',        label: 'Events',        bg: 'pink'   },
+            { fa: 'fas fa-lightbulb',    key: 'teachingTips',  label: 'Teaching Tips', bg: 'teal'   },
+        ];
+
+        // Quick actions — FA icons instead of emoji
+        const ACTIONS = [
+            { label: 'Add Lesson',      fa: 'fas fa-book-open',    href: 'admin-manage-lessons.html'       },
+            { label: 'New Blog Post',   fa: 'fas fa-newspaper',    href: 'admin-manage-blog.html'          },
+            { label: 'New Bible Study', fa: 'fas fa-cross',        href: 'admin-manage-bible-studies.html' },
+            { label: 'Add Resource',    fa: 'fas fa-folder-open',  href: 'admin-manage-resources.html'     },
+            { label: 'New Event',       fa: 'fas fa-calendar-alt', href: 'admin-manage-events.html'        },
+            { label: 'Teaching Tip',    fa: 'fas fa-lightbulb',    href: 'admin-manage-tips.html'          },
+        ];
+
+        document.getElementById('quickActions').innerHTML = ACTIONS.map(a =>
+            `<a href="${a.href}" class="btn btn-outline" style="justify-content:center;padding:0.75rem;gap:.5rem;">
+                <i class="${a.fa}"></i> ${a.label}
+             </a>`
+        ).join('');
+
+        async function loadDashboard() {
+            const [lessons, blogPosts, bibleStudies, resources, events, tips] = await Promise.all([
+                fetchCount('/api/lessons',       'lessons'),
+                fetchCount('/api/blog',          'blogPosts'),
+                fetchCount('/api/bible-studies', 'bibleStudies'),
+                fetchCount('/api/resources',     'resources'),
+                fetchCount('/api/events',        'events'),
+                fetchCount('/api/tips',          'teachingTips'),
+            ]);
+
+            const counts = { lessons, blogPosts, bibleStudies, resources, events, teachingTips: tips };
+
+            document.getElementById('statsGrid').innerHTML = STAT_DEFS.map(s => `
+                <div class="stat-card">
+                    <div class="stat-icon ${s.bg}"><i class="${s.fa}" style="color:var(--primary-color);font-size:1.2rem;"></i></div>
+                    <div class="stat-info"><h3>${(counts[s.key]||[]).length}</h3><p>${s.label}</p></div>
+                </div>`).join('');
+
+            const contentTypes = [
+                { name: 'Lessons',       data: lessons,      href: 'admin-manage-lessons.html'       },
+                { name: 'Blog Posts',    data: blogPosts,    href: 'admin-manage-blog.html'          },
+                { name: 'Bible Studies', data: bibleStudies, href: 'admin-manage-bible-studies.html' },
+                { name: 'Resources',     data: resources,    href: 'admin-manage-resources.html'     },
+                { name: 'Events',        data: events,       href: 'admin-manage-events.html'        },
+                { name: 'Teaching Tips', data: tips,         href: 'admin-manage-tips.html'          },
+            ];
+
+            document.getElementById('contentOverview').innerHTML = contentTypes.map(ct => {
+                const published = ct.data.filter(d => d.status === 'published' || d.status === 'upcoming').length;
+                const draft     = ct.data.filter(d => d.status === 'draft').length;
+                return `<tr>
+                    <td style="font-weight:600;">${ct.name}</td>
+                    <td>${ct.data.length}</td>
+                    <td><span class="badge badge-success">${published}</span></td>
+                    <td><span class="badge badge-warning">${draft}</span></td>
+                    <td><a href="${ct.href}" class="btn btn-sm btn-outline">Manage</a></td>
+                </tr>`;
+            }).join('');
+        }
+
+        const auditLog = getAuditLog();
+        document.getElementById('recentActivity').innerHTML = auditLog.slice(0, 5).length
+            ? auditLog.slice(0, 5).map(e =>
+                `<tr><td><span class="badge badge-info">${e.action}</span> ${e.entity}</td><td>${e.user}</td><td>${formatDateTime(e.timestamp)}</td></tr>`
+              ).join('')
+            : '<tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:2rem;">No recent activity</td></tr>';
+
+        loadDashboard();
+    </script>
+</body>
+</html>

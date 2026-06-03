@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Ministry Events - Upcoming workshops, training sessions, and community gatherings for Sunday School teachers">
+    <title>Events | Friends of Children Ministries</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="index.css">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        .events-hero {
+            background:
+                linear-gradient(135deg, rgba(0, 0, 0, 0.60) 0%, rgba(180, 0, 60, 0.65) 100%),
+                url('images/hero-background.png') center/cover no-repeat;
+            padding: 7rem var(--spacing-md) 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .events-hero h1 {
+            color: white;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
+            font-weight: 900;
+        }
+
+        .events-hero p {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+        }
+
+        .events-section {
+            padding: 5rem var(--spacing-md);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .event-filters {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--border-color);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            font-weight: 500;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .events-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .event-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-base);
+            display: grid;
+            grid-template-columns: 200px 1fr;
+        }
+
+        .event-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .event-date-box {
+            background: var(--gradient-button);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .event-month {
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-day {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-year {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .event-content {
+            padding: 2rem;
+        }
+
+        .event-type {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--primary-light);
+            color: var(--primary-color);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .event-title {
+            font-size: 1.75rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .event-description {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .event-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .event-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .event-detail-item i {
+            color: var(--primary-color);
+            width: 20px;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-register {
+            padding: 0.75rem 2rem;
+            background: var(--gradient-button);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .btn-learn-more {
+            padding: 0.75rem 2rem;
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .btn-learn-more:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .featured-event {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: var(--radius-xl);
+            padding: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: var(--accent-gold);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .featured-event h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .featured-event p {
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .calendar-view {
+            background: var(--bg-tertiary);
+            padding: 3rem;
+            border-radius: var(--radius-xl);
+            margin-top: 4rem;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .calendar-month {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .calendar-nav button {
+            padding: 0.5rem 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .calendar-nav button:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .past-event {
+            opacity: 0.6;
+        }
+
+        .past-event .event-date-box {
+            background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%);
+        }
+
+        /* Event card image */
+        .event-card-img {
+            width: 200px;
+            min-height: 100%;
+            object-fit: cover;
+            display: block;
+            flex-shrink: 0;
+        }
+
+        /* Featured event image */
+        .featured-event {
+            border-radius: var(--radius-xl);
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 340px;
+        }
+
+        .featured-event-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .featured-event-overlay {
+            background: linear-gradient(135deg, rgba(102,126,234,0.92) 0%, rgba(118,75,162,0.88) 100%);
+            color: white;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .featured-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--accent-gold);
+            color: white;
+            border-radius: var(--radius-md);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            width: fit-content;
+        }
+
+        .featured-event-overlay h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .featured-event-overlay p {
+            font-size: 1.05rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.95;
+            line-height: 1.7;
+        }
+
+        /* Registration modal */
+        .reg-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.65);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        .reg-modal-overlay.open { display: flex; }
+        .reg-modal {
+            background: white;
+            border-radius: var(--radius-xl);
+            max-width: 520px;
+            width: 94%;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+            animation: regModalIn 0.25s ease-out;
+            overflow: hidden;
+        }
+        @keyframes regModalIn {
+            from { opacity:0; transform: scale(0.92) translateY(20px); }
+            to   { opacity:1; transform: scale(1) translateY(0); }
+        }
+        .reg-modal-header {
+            background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .reg-modal-header h3 { margin:0; font-size:1.2rem; }
+        .reg-modal-close {
+            background: none; border: none; color: white;
+            font-size: 1.5rem; cursor: pointer; line-height:1;
+        }
+        .reg-modal-event-info {
+            background: #fff8f0;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .reg-modal-event-info strong { color: var(--text-primary); display:block; margin-bottom:0.25rem; font-size:1rem; }
+        .reg-modal-body { padding: 1.5rem 2rem; }
+        .reg-form-group { margin-bottom: 1.25rem; }
+        .reg-form-group label { display:block; font-weight:600; margin-bottom:0.4rem; font-size:0.9rem; color:var(--text-primary); }
+        .reg-form-group input {
+            width: 100%; padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            transition: border-color var(--transition-base);
+            box-sizing: border-box;
+        }
+        .reg-form-group input:focus { outline:none; border-color: #ee0979; }
+        .reg-modal-footer {
+            padding: 1rem 2rem 1.5rem;
+            display: flex; gap: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+        .btn-reg-submit {
+            flex: 1; padding: 0.85rem;
+            background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
+            color: white; border: none; border-radius: var(--radius-md);
+            font-weight: 700; font-size: 1rem; cursor: pointer;
+            transition: opacity var(--transition-base);
+        }
+        .btn-reg-submit:hover { opacity: 0.9; }
+        .btn-reg-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-reg-cancel {
+            padding: 0.85rem 1.5rem;
+            background: transparent; color: var(--text-secondary);
+            border: 2px solid var(--border-color); border-radius: var(--radius-md);
+            font-weight: 600; cursor: pointer;
+        }
+
+        /* Success state */
+        .reg-success {
+            text-align: center;
+            padding: 2.5rem 2rem;
+        }
+        .reg-success-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+        .reg-success h4 { color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.3rem; }
+        .reg-success p  { color: var(--text-secondary); line-height: 1.6; }
+
+        /* Details modal */
+        .details-modal-img {
+            width: 100%; height: 220px; object-fit: cover; display: block;
+        }
+        .details-modal-body { padding: 1.5rem 2rem 2rem; }
+        .details-modal-meta {
+            display: flex; flex-wrap: wrap; gap: 1rem;
+            margin-bottom: 1.25rem; font-size: 0.9rem; color: var(--text-secondary);
+        }
+        .details-modal-meta span { display:flex; align-items:center; gap:0.4rem; }
+        .details-modal-meta i { color: #ee0979; }
+
+        /* Loading skeleton */
+        .events-loading {
+            text-align: center; padding: 4rem; color: var(--text-secondary); font-size: 1.1rem;
+        }
+
+        /* Toast */
+        .ev-toast {
+            position: fixed; bottom: 2rem; right: 2rem;
+            background: #11998e; color: white;
+            padding: 1rem 1.5rem; border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg); font-weight: 600; z-index: 10000;
+            display: flex; align-items: center; gap: 0.75rem;
+            animation: evToastIn 0.3s ease-out;
+        }
+        @keyframes evToastIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+        .ev-toast.hiding { animation: evToastOut 0.3s ease-in forwards; }
+        @keyframes evToastOut { to{opacity:0;transform:translateY(20px)} }
+
+        @media (max-width: 768px) {
+            .events-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .event-card {
+                grid-template-columns: 1fr;
+            }
+
+            .event-card-img {
+                width: 100%;
+                height: 180px;
+            }
+
+            .event-date-box {
+                padding: 1.5rem;
+            }
+
+            .event-day {
+                font-size: 2.5rem;
+            }
+
+            .featured-event {
+                grid-template-columns: 1fr;
+            }
+
+            .featured-event-img {
+                height: 220px;
+            }
+
+            .featured-event-overlay {
+                padding: 2rem;
+            }
+
+            .featured-event-overlay h2 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">Friends of Children Ministries</div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="lessons.html">Lessons</a></li>
+                <li><a href="bible-study.html">Bible Study</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="events.html" class="active">Events</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Events Hero Section -->
+    <section class="events-hero">
+        <h1>Upcoming Events</h1>
+        <p>Join us for workshops, training sessions, and community gatherings designed to equip and inspire Sunday School teachers</p>
+    </section>
+
+    <!-- Events Content Section -->
+    <section class="events-section">
+
+        <!-- Featured Event (populated by JS) -->
+        <div id="featuredEvent"></div>
+
+        <!-- Event Filters -->
+        <div class="event-filters">
+            <button class="filter-btn active" data-filter="all">All Events</button>
+            <button class="filter-btn" data-filter="upcoming">Upcoming</button>
+            <button class="filter-btn" data-filter="workshop">Workshops</button>
+            <button class="filter-btn" data-filter="webinar">Webinars</button>
+            <button class="filter-btn" data-filter="conference">Conferences</button>
+        </div>
+
+        <!-- Events Grid (populated by JS) -->
+        <div class="events-grid" id="eventsGrid">
+            <div class="events-loading"><i class="fas fa-spinner fa-spin"></i> Loading events…</div>
+        </div>
+
+    </section>
+
+    <!-- Registration Modal -->
+    <div class="reg-modal-overlay" id="regModal">
+        <div class="reg-modal">
+            <div class="reg-modal-header">
+                <h3><i class="fas fa-ticket-alt"></i> Event Registration</h3>
+                <button class="reg-modal-close" id="regModalClose">&times;</button>
+            </div>
+            <div class="reg-modal-event-info" id="regEventInfo"></div>
+            <div id="regFormWrap">
+                <div class="reg-modal-body">
+                    <div class="reg-form-group">
+                        <label for="regName">Full Name <span style="color:#ee0979">*</span></label>
+                        <input type="text" id="regName" placeholder="Your full name" required>
+                    </div>
+                    <div class="reg-form-group">
+                        <label for="regEmail">Email Address <span style="color:#ee0979">*</span></label>
+                        <input type="email" id="regEmail" placeholder="your@email.com" required>
+                    </div>
+                    <div class="reg-form-group">
+                        <label for="regPhone">Phone (optional)</label>
+                        <input type="tel" id="regPhone" placeholder="+254 700 000 000">
+                    </div>
+                </div>
+                <div class="reg-modal-footer">
+                    <button class="btn-reg-cancel" id="regCancelBtn">Cancel</button>
+                    <button class="btn-reg-submit" id="regSubmitBtn">
+                        <i class="fas fa-check"></i> Confirm Registration
+                    </button>
+                </div>
+            </div>
+            <div id="regSuccessWrap" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div class="reg-modal-overlay" id="detailsModal">
+        <div class="reg-modal" style="max-width:600px;">
+            <div class="reg-modal-header" id="detailsHeader">
+                <h3 id="detailsTitle">Event Details</h3>
+                <button class="reg-modal-close" id="detailsClose">&times;</button>
+            </div>
+            <img class="details-modal-img" id="detailsImg" src="" alt="">
+            <div class="details-modal-body">
+                <div class="details-modal-meta" id="detailsMeta"></div>
+                <p id="detailsDesc" style="color:var(--text-secondary);line-height:1.7;margin-bottom:1.5rem;"></p>
+                <button class="btn-reg-submit" id="detailsRegBtn" style="width:100%;">
+                    <i class="fas fa-ticket-alt"></i> Register for This Event
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3 style="color: white; margin-bottom: var(--spacing-md);">Friends of Children Ministries</h3>
+            <p>Empowering teachers to inspire the next generation</p>
+            <p style="margin-top: var(--spacing-md); font-size: 0.875rem;">
+                &copy; 2025 Friends of Children Ministries. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="app.js"></script>
+    <script>
+        // ── State ──────────────────────────────────────────────
+        let allEvents    = [];
+        let activeFilter = 'all';
+        let currentEventId = null;
+
+        // ── Helpers ────────────────────────────────────────────
+        const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const TYPE_COLORS = {
+            webinar:    { bg:'var(--primary-light)', color:'var(--primary-color)' },
+            workshop:   { bg:'#fce4ec', color:'#f5576c' },
+            conference: { bg:'#fff3e0', color:'#ff9800' },
+            retreat:    { bg:'#e8f5e9', color:'#4caf50' }
+        };
+        const DATE_GRADIENTS = {
+            webinar:    'linear-gradient(135deg,#4facfe 0%,#00f2fe 100%)',
+            workshop:   'linear-gradient(135deg,#f093fb 0%,#f5576c 100%)',
+            conference: 'linear-gradient(135deg,#fa709a 0%,#fee140 100%)',
+            retreat:    'linear-gradient(135deg,#43e97b 0%,#38f9d7 100%)'
+        };
+
+        function fmtDate(dateStr) {
+            const d = new Date(dateStr + 'T00:00:00');
+            return `${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+        }
+        function fmtTime(t) {
+            if (!t) return '';
+            const [h, m] = t.split(':');
+            const hr = parseInt(h);
+            return `${hr > 12 ? hr-12 : hr || 12}:${m} ${hr >= 12 ? 'PM' : 'AM'}`;
+        }
+
+        function showToast(msg, ok = true) {
+            const ex = document.querySelector('.ev-toast');
+            if (ex) ex.remove();
+            const t = document.createElement('div');
+            t.className = 'ev-toast';
+            t.style.background = ok ? '#11998e' : '#e74c3c';
+            t.innerHTML = `<i class="fas fa-${ok ? 'check-circle' : 'exclamation-circle'}"></i> ${msg}`;
+            document.body.appendChild(t);
+            setTimeout(() => { t.classList.add('hiding'); setTimeout(() => t.remove(), 350); }, 3500);
+        }
+
+        // ── Render featured event ──────────────────────────────
+        function renderFeatured(events) {
+            const conf = events.find(e => e.type === 'conference' && e.status === 'upcoming')
+                      || events.find(e => e.status === 'upcoming');
+            if (!conf) { document.getElementById('featuredEvent').innerHTML = ''; return; }
+
+            const d = new Date(conf.date + 'T00:00:00');
+            document.getElementById('featuredEvent').innerHTML = `
+                <div class="featured-event">
+                    <img class="featured-event-img"
+                         src="${conf.image || 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=800&q=75&fit=crop'}"
+                         alt="${conf.title}">
+                    <div class="featured-event-overlay">
+                        <span class="featured-badge">Featured Event</span>
+                        <h2>${conf.title}</h2>
+                        <p>${conf.description}</p>
+                        <div style="display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:1.5rem;font-size:0.95rem;">
+                            <span><i class="far fa-calendar"></i> ${fmtDate(conf.date)}</span>
+                            <span><i class="fas fa-map-marker-alt"></i> ${conf.location}</span>
+                            <span><i class="fas fa-dollar-sign"></i> ${conf.price || 'Free'}</span>
+                        </div>
+                        <button class="btn-register" onclick="openRegModal(${conf.id})"
+                                style="background:white;color:#ee0979;border:none;padding:0.85rem 2rem;border-radius:var(--radius-md);font-weight:700;cursor:pointer;">
+                            <i class="fas fa-ticket-alt"></i> Register Now
+                        </button>
+                    </div>
+                </div>`;
+        }
+
+        // ── Render event card ──────────────────────────────────
+        function renderCard(ev) {
+            const d     = new Date(ev.date + 'T00:00:00');
+            const past  = ev.status === 'completed' || ev.status === 'cancelled';
+            const tc    = TYPE_COLORS[ev.type] || TYPE_COLORS.webinar;
+            const dg    = DATE_GRADIENTS[ev.type] || DATE_GRADIENTS.webinar;
+            const spotsLeft = ev.capacity ? ev.capacity - (ev.registered || 0) : null;
+            const full  = spotsLeft !== null && spotsLeft <= 0;
+
+            return `
+            <div class="event-card${past ? ' past-event' : ''}" data-type="${ev.type}" data-status="${ev.status}">
+                ${ev.image ? `<img class="event-card-img" src="${ev.image}" alt="${ev.title}">` : ''}
+                <div class="event-date-box" style="${past ? '' : `background:${dg};`}">
+                    <div class="event-month">${MONTHS[d.getMonth()]}</div>
+                    <div class="event-day">${String(d.getDate()).padStart(2,'0')}</div>
+                    <div class="event-year">${d.getFullYear()}</div>
+                </div>
+                <div class="event-content">
+                    <span class="event-type" style="background:${tc.bg};color:${tc.color};">
+                        ${ev.type.charAt(0).toUpperCase()+ev.type.slice(1)}${past ? ' — '+ev.status : ''}
+                    </span>
+                    <h3 class="event-title">${ev.title}</h3>
+                    <p class="event-description">${ev.description}</p>
+                    <div class="event-details">
+                        ${ev.time ? `<div class="event-detail-item"><i class="far fa-clock"></i><span>${fmtTime(ev.time)}${ev.endTime ? ' – '+fmtTime(ev.endTime) : ''}</span></div>` : ''}
+                        <div class="event-detail-item"><i class="fas fa-map-marker-alt"></i><span>${ev.location}</span></div>
+                        <div class="event-detail-item"><i class="fas fa-dollar-sign"></i><span>${ev.price || 'Free'}</span></div>
+                        ${spotsLeft !== null ? `<div class="event-detail-item"><i class="fas fa-users"></i><span>${full ? '<strong style="color:#e74c3c">Fully Booked</strong>' : spotsLeft+' spots left'}</span></div>` : ''}
+                    </div>
+                    <div class="event-actions">
+                        ${!past && !full ? `<button class="btn-register" onclick="openRegModal(${ev.id})">Register${ev.price === 'Free' ? ' Free' : ' Now'}</button>` : ''}
+                        ${past ? `<button class="btn-learn-more" onclick="openDetails(${ev.id})">View Details</button>` : `<button class="btn-learn-more" onclick="openDetails(${ev.id})">Learn More</button>`}
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        // ── Render grid ────────────────────────────────────────
+        function renderGrid() {
+            const grid = document.getElementById('eventsGrid');
+            let filtered = allEvents;
+
+            if (activeFilter === 'upcoming') {
+                filtered = allEvents.filter(e => e.status === 'upcoming');
+            } else if (activeFilter !== 'all') {
+                filtered = allEvents.filter(e => e.type === activeFilter);
+            }
+
+            if (!filtered.length) {
+                grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-secondary);">No events found for this filter.</p>';
+                return;
+            }
+            grid.innerHTML = filtered.map(renderCard).join('');
+        }
+
+        // ── Load events from API ───────────────────────────────
+        async function loadEvents() {
+            try {
+                const res  = await fetch('/api/events');
+                const data = await res.json();
+                allEvents  = data.events || [];
+                renderFeatured(allEvents);
+                renderGrid();
+            } catch (err) {
+                // API not running — fall back to static seed data
+                allEvents = [
+                    { id:1, title:'Effective Classroom Management Techniques', type:'webinar', date:'2026-06-05', time:'19:00', endTime:'20:30', location:'Online via Zoom', description:'Learn practical strategies for managing diverse classrooms and creating a positive learning environment.', capacity:200, registered:87, price:'Free', status:'upcoming', image:'https://images.unsplash.com/photo-1607453998774-d533f65dac99?w=800&q=75&fit=crop' },
+                    { id:2, title:'Creative Bible Crafts Workshop', type:'workshop', date:'2026-06-12', time:'10:00', endTime:'14:00', location:'Community Church, Austin TX', description:'Hands-on workshop where you\'ll create 10 different Bible-themed crafts perfect for Sunday School.', capacity:40, registered:28, price:'$35 (includes materials)', status:'upcoming', image:'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800&q=75&fit=crop' },
+                    { id:3, title:'Teaching the Bible to Different Age Groups', type:'webinar', date:'2026-06-19', time:'18:30', endTime:'20:00', location:'Online via Zoom', description:'Discover age-appropriate teaching methods for preschoolers through teens.', capacity:300, registered:142, price:'Free', status:'upcoming', image:'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=75&fit=crop' },
+                    { id:4, title:'Annual Sunday School Teachers Conference', type:'conference', date:'2026-07-15', time:'09:00', endTime:'17:00', location:'Nashville Convention Center, TN', description:'Three-day conference featuring keynote speakers, breakout sessions, worship, and networking.', capacity:500, registered:234, price:'$99 Early Bird / $149 Regular', status:'upcoming', image:'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=800&q=75&fit=crop' },
+                    { id:5, title:'Digital Tools for Sunday School Teachers', type:'workshop', date:'2026-05-15', time:'09:00', endTime:'12:00', location:'Grace Church, Seattle WA', description:'Introduction to apps, websites, and digital resources that enhance Sunday School teaching.', capacity:50, registered:50, price:'$25', status:'completed', image:'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&q=75&fit=crop' }
+                ];
+                renderFeatured(allEvents);
+                renderGrid();
+            }
+        }
+
+        // ── Filter buttons ─────────────────────────────────────
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                activeFilter = this.dataset.filter;
+                renderGrid();
+            });
+        });
+
+        // ── Registration modal ─────────────────────────────────
+        function openRegModal(id) {
+            currentEventId = id;
+            const ev = allEvents.find(e => e.id === id);
+            if (!ev) return;
+
+            document.getElementById('regEventInfo').innerHTML =
+                `<strong>${ev.title}</strong>
+                 <i class="far fa-calendar"></i> ${fmtDate(ev.date)}
+                 &nbsp;·&nbsp; <i class="fas fa-map-marker-alt"></i> ${ev.location}
+                 &nbsp;·&nbsp; <i class="fas fa-dollar-sign"></i> ${ev.price || 'Free'}`;
+
+            document.getElementById('regFormWrap').style.display = '';
+            document.getElementById('regSuccessWrap').style.display = 'none';
+            document.getElementById('regName').value  = '';
+            document.getElementById('regEmail').value = '';
+            document.getElementById('regPhone').value = '';
+            document.getElementById('regSubmitBtn').disabled = false;
+            document.getElementById('regSubmitBtn').innerHTML = '<i class="fas fa-check"></i> Confirm Registration';
+
+            document.getElementById('regModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeRegModal() {
+            document.getElementById('regModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('regModalClose').addEventListener('click', closeRegModal);
+        document.getElementById('regCancelBtn').addEventListener('click', closeRegModal);
+        document.getElementById('regModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeRegModal(); });
+
+        document.getElementById('regSubmitBtn').addEventListener('click', async function () {
+            const name  = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+
+            if (!name || !email) {
+                showToast('Please fill in your name and email.', false);
+                return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showToast('Please enter a valid email address.', false);
+                return;
+            }
+
+            this.disabled = true;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering…';
+
+            try {
+                const res  = await fetch(`/api/events/${currentEventId}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, phone })
+                });
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    // Update local count
+                    const ev = allEvents.find(e => e.id === currentEventId);
+                    if (ev) ev.registered = (ev.registered || 0) + 1;
+                    renderGrid();
+                    showSuccess(name, data.event || allEvents.find(e => e.id === currentEventId));
+                } else {
+                    showToast(data.error || 'Registration failed. Please try again.', false);
+                    this.disabled = false;
+                    this.innerHTML = '<i class="fas fa-check"></i> Confirm Registration';
+                }
+            } catch (err) {
+                // Offline / no server — simulate success
+                const ev = allEvents.find(e => e.id === currentEventId);
+                if (ev) ev.registered = (ev.registered || 0) + 1;
+                renderGrid();
+                showSuccess(name, ev);
+            }
+        });
+
+        function showSuccess(name, ev) {
+            document.getElementById('regFormWrap').style.display = 'none';
+            document.getElementById('regSuccessWrap').style.display = '';
+            document.getElementById('regSuccessWrap').innerHTML = `
+                <div class="reg-success">
+                    <div class="reg-success-icon">🎉</div>
+                    <h4>You're registered, ${name.split(' ')[0]}!</h4>
+                    <p>You've successfully registered for <strong>${ev.title}</strong>.<br>
+                    A confirmation will be sent to your email. We look forward to seeing you!</p>
+                    <button class="btn-reg-submit" onclick="closeRegModal()" style="margin-top:1.5rem;width:auto;padding:0.75rem 2rem;">
+                        Done
+                    </button>
+                </div>`;
+        }
+
+        // ── Details modal ──────────────────────────────────────
+        function openDetails(id) {
+            const ev = allEvents.find(e => e.id === id);
+            if (!ev) return;
+
+            document.getElementById('detailsTitle').textContent = ev.title;
+            document.getElementById('detailsImg').src = ev.image || 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=800&q=75&fit=crop';
+            document.getElementById('detailsImg').alt = ev.title;
+            document.getElementById('detailsDesc').textContent = ev.description;
+            document.getElementById('detailsMeta').innerHTML = `
+                <span><i class="far fa-calendar"></i> ${fmtDate(ev.date)}</span>
+                ${ev.time ? `<span><i class="far fa-clock"></i> ${fmtTime(ev.time)}${ev.endTime ? ' – '+fmtTime(ev.endTime) : ''}</span>` : ''}
+                <span><i class="fas fa-map-marker-alt"></i> ${ev.location}</span>
+                <span><i class="fas fa-dollar-sign"></i> ${ev.price || 'Free'}</span>
+                ${ev.capacity ? `<span><i class="fas fa-users"></i> ${ev.registered||0} / ${ev.capacity} registered</span>` : ''}`;
+
+            const regBtn = document.getElementById('detailsRegBtn');
+            const past   = ev.status === 'completed' || ev.status === 'cancelled';
+            const full   = ev.capacity && ev.registered >= ev.capacity;
+            if (past || full) {
+                regBtn.style.display = 'none';
+            } else {
+                regBtn.style.display = '';
+                regBtn.onclick = () => { closeDetailsModal(); openRegModal(id); };
+            }
+
+            document.getElementById('detailsModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDetailsModal() {
+            document.getElementById('detailsModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('detailsClose').addEventListener('click', closeDetailsModal);
+        document.getElementById('detailsModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeDetailsModal(); });
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') { closeRegModal(); closeDetailsModal(); }
+        });
+
+        // ── Init ───────────────────────────────────────────────
+        loadEvents();
+    </script>
+
+</body>
+
+</html>

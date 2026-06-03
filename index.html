@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Friends of Children Ministries - Your resource for engaging and meaningful Sunday school teaching materials" />
+  <title>
+    Friends of Children Ministries | Teaching Resources for Every Age
+  </title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="index.css" />
+</head>
+
+<body>
+  <!-- Header & Navigation -->
+  <header class="header">
+    <nav class="nav-container">
+      <div class="logo">Friends of Children Ministries</div>
+
+      <!-- Mobile Menu Toggle -->
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="lessons.html">Lessons</a></li>
+        <li><a href="bible-study.html">Bible Study</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="resources.html">Resources</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <img src="ministry-logo.jpg" alt="Friends in the Children Ministry" class="hero-logo" id="heroLogo" />
+      <h1>Inspiring Lessons for Every Sunday</h1>
+      <p>
+        Discover engaging, Bible-based teaching materials designed to help you
+        inspire and educate children of all ages. Access our growing library
+        of carefully crafted in the Sunday school lessons.
+      </p>
+      <div style="margin-top: 2rem">
+        <a href="lessons.html" style="
+              display: inline-block;
+              padding: 1rem 2rem;
+              background: linear-gradient(
+                135deg,
+                var(--primary-color) 0%,
+                var(--secondary-color) 100%
+              );
+              color: white;
+              text-decoration: none;
+              border-radius: var(--radius-lg);
+              font-weight: 600;
+              transition: transform 0.3s ease;
+            ">Browse Lessons</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Links Section -->
+  <section class="lessons-section">
+    <h2 class="section-title">Explore Our Resources</h2>
+    <div class="lessons-grid">
+      <div class="lesson-card">
+        <div class="card-header card-header-lessons"></div>
+        <div class="card-body">
+          <h3 class="card-title">Browse Lessons</h3>
+          <p class="card-description">
+            Explore our collection of Sunday school lessons designed for all
+            ages and learning styles.
+          </p>
+          <div class="card-footer">
+            <a href="lessons.html" class="card-link">View All Lessons</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <div class="card-header card-header-about"></div>
+        <div class="card-body">
+          <h3 class="card-title">About Our Ministry</h3>
+          <p class="card-description">
+            Learn more about our mission to equip teachers and transform young
+            hearts through Scripture.
+          </p>
+          <div class="card-footer">
+            <a href="about.html" class="card-link">Learn More</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <div class="card-header card-header-admin"></div>
+        <div class="card-body">
+          <h3 class="card-title">Teacher Resources</h3>
+          <p class="card-description">
+            Access admin tools to manage lessons and content. Administrator
+            access required.
+          </p>
+          <div class="card-footer">
+            <a href="admin-login.html" class="card-link">Admin Portal</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card">
+        <div class="card-header card-header-contact"></div>
+        <div class="card-body">
+          <h3 class="card-title">Get in Touch</h3>
+          <p class="card-description">
+            Reach out for questions, support, or partnership opportunities
+            with our team.
+          </p>
+          <div class="card-footer">
+            <a href="contact.html" class="card-link">Contact Us</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Statistics Section -->
+  <section style="background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%); padding: 4rem var(--spacing-md);">
+    <div style="max-width: 1000px; margin: 0 auto;">
+      <h2 style="text-align: center; color: #ffffff; margin-bottom: 3rem;">Making an Impact Together</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: center;">
+        <div>
+          <h3 style="color: #ffffff; font-size: 3rem; margin-bottom: 0.5rem;">50+</h3>
+          <p style="color: rgba(255, 255, 255, 0.85); text-transform: uppercase; letter-spacing: 0.1em;">Lessons Available</p>
+        </div>
+        <div>
+          <h3 style="color: #ffffff; font-size: 3rem; margin-bottom: 0.5rem;">1000+</h3>
+          <p style="color: rgba(255, 255, 255, 0.85); text-transform: uppercase; letter-spacing: 0.1em;">Teachers Equipped</p>
+        </div>
+        <div>
+          <h3 style="color: #ffffff; font-size: 3rem; margin-bottom: 0.5rem;">25+</h3>
+          <p style="color: rgba(255, 255, 255, 0.85); text-transform: uppercase; letter-spacing: 0.1em;">Countries Reached</p>
+        </div>
+        <div>
+          <h3 style="color: #ffffff; font-size: 3rem; margin-bottom: 0.5rem;">∞</h3>
+          <p style="color: rgba(255, 255, 255, 0.85); text-transform: uppercase; letter-spacing: 0.1em;">Lives Transformed</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="lessons-section">
+    <h2 class="section-title">What Teachers Are Saying</h2>
+    <p style="text-align: center; color: var(--text-secondary); max-width: 700px; margin: 0 auto 3rem;">
+      Hear from Sunday School teachers who are using our resources to make a difference
+    </p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto;">
+      <div style="background: var(--bg-primary); padding: 2rem; border-radius: var(--radius-xl); box-shadow: var(--shadow-md); border: 1px solid var(--border-color);">
+        <div style="color: var(--accent-gold); font-size: 2rem; margin-bottom: 1rem;">★★★★★</div>
+        <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 1.5rem; font-style: italic;">
+          "These lessons have transformed my Sunday School class! The kids are more engaged than ever, and I spend less time preparing. The resources are comprehensive and easy to follow."
+        </p>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--gradient-button); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">SJ</div>
+          <div>
+            <div style="font-weight: 600; color: var(--text-primary);">Sarah Johnson</div>
+            <div style="font-size: 0.875rem; color: var(--text-secondary);">Children's Ministry Director</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: var(--bg-primary); padding: 2rem; border-radius: var(--radius-xl); box-shadow: var(--shadow-md); border: 1px solid var(--border-color);">
+        <div style="color: var(--accent-gold); font-size: 2rem; margin-bottom: 1rem;">★★★★★</div>
+        <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 1.5rem; font-style: italic;">
+          "As a new Sunday School teacher, I was overwhelmed. These materials gave me the confidence and structure I needed. The discussion questions are particularly helpful!"
+        </p>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--gradient-button); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">MR</div>
+          <div>
+            <div style="font-weight: 600; color: var(--text-primary);">Michael Roberts</div>
+            <div style="font-size: 0.875rem; color: var(--text-secondary);">Sunday School Teacher</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: var(--bg-primary); padding: 2rem; border-radius: var(--radius-xl); box-shadow: var(--shadow-md); border: 1px solid var(--border-color);">
+        <div style="color: var(--accent-gold); font-size: 2rem; margin-bottom: 1rem;">★★★★★</div>
+        <p style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 1.5rem; font-style: italic;">
+          "The variety of activities and multimedia resources keep my students engaged. I love that everything is Biblically sound and age-appropriate. Highly recommend!"
+        </p>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--gradient-button); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">LT</div>
+          <div>
+            <div style="font-weight: 600; color: var(--text-primary);">Lisa Thompson</div>
+            <div style="font-size: 0.875rem; color: var(--text-secondary);">Youth Pastor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Signup Section -->
+  <section style="background: var(--bg-tertiary); padding: 5rem var(--spacing-md); text-align: center;">
+    <div style="max-width: 600px; margin: 0 auto;">
+      <h2 style="margin-bottom: 1rem;">Stay Connected</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+        Subscribe to our newsletter for weekly lesson updates, teaching tips, and exclusive resources delivered to your inbox.
+      </p>
+      <form id="newsletterForm" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <input type="email" id="newsletterEmail" placeholder="Enter your email address" required
+          style="flex: 1; min-width: 250px; padding: 1rem 1.5rem; border: 2px solid var(--border-color); border-radius: var(--radius-lg); font-size: 1rem;">
+        <button type="submit"
+          style="padding: 1rem 2rem; background: var(--gradient-button); color: white; border: none; border-radius: var(--radius-lg); font-weight: 600; cursor: pointer; transition: all var(--transition-base);">
+          Subscribe
+        </button>
+      </form>
+      <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 1rem;">
+        We respect your privacy. Unsubscribe at any time.
+      </p>
+    </div>
+  </section>
+
+  <!-- Social Media Section -->
+  <section style="background: var(--bg-primary); padding: 4rem var(--spacing-md); text-align: center;">
+    <div style="max-width: 800px; margin: 0 auto;">
+      <h2 style="margin-bottom: 1rem;">Connect With Our Community</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 2rem;">Follow us for daily verses, teaching tips, and
+        ministry updates from around the world.</p>
+      <div style="display: flex; justify-content: center; gap: 2rem; font-size: 2rem; color: var(--primary-color);">
+        <a href="https://www.facebook.com/FriendsOfChildrenMinistries" target="_blank" rel="noopener" style="color: inherit;" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/friendsofchildrenministries" target="_blank" rel="noopener" style="color: inherit;" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://twitter.com/FriendsOfChildren" target="_blank" rel="noopener" style="color: inherit;" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.youtube.com/@FriendsOfChildrenMinistries" target="_blank" rel="noopener" style="color: inherit;" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       LIVE SOCIAL MEDIA FEED WIDGET
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <section id="social-feed-section" style="background: var(--bg-tertiary); padding: 5rem var(--spacing-md);">
+    <div style="max-width: 1200px; margin: 0 auto;">
+
+      <!-- Section header -->
+      <div style="text-align:center; margin-bottom: 3rem;">
+        <h2 style="margin-bottom: 0.75rem;">Live from Our Community</h2>
+        <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">
+          Follow along in real time — see our latest posts, stories, and ministry updates straight from our social pages.
+        </p>
+      </div>
+
+      <!-- Platform tab switcher -->
+      <div style="display:flex; justify-content:center; gap:0.75rem; flex-wrap:wrap; margin-bottom:2.5rem;" id="feedTabs">
+        <button class="feed-tab active" data-feed="facebook" onclick="switchFeed('facebook')">
+          <i class="fab fa-facebook-f"></i> Facebook
+        </button>
+        <button class="feed-tab" data-feed="instagram" onclick="switchFeed('instagram')">
+          <i class="fab fa-instagram"></i> Instagram
+        </button>
+        <button class="feed-tab" data-feed="twitter" onclick="switchFeed('twitter')">
+          <i class="fab fa-twitter"></i> Twitter / X
+        </button>
+      </div>
+
+      <!-- Feed panels -->
+      <div id="feedPanels" style="display:flex; justify-content:center;">
+
+        <!-- ── FACEBOOK EMBED ─────────────────────────────────────────────── -->
+        <div id="feed-facebook" class="feed-panel" style="width:100%; max-width:500px;">
+          <div class="social-widget-card">
+            <div class="social-widget-header" style="background:#1877f2;">
+              <i class="fab fa-facebook-f"></i>
+              <span>Friends of Children Ministries</span>
+              <a href="https://www.facebook.com/FriendsOfChildrenMinistries" target="_blank" rel="noopener" class="widget-follow-btn">Follow</a>
+            </div>
+            <div class="social-widget-body" id="fbEmbedWrap">
+              <!-- Facebook Page Plugin embed -->
+              <div id="fb-root"></div>
+              <div class="fb-page"
+                   data-href="https://www.facebook.com/FriendsOfChildrenMinistries"
+                   data-tabs="timeline"
+                   data-width="500"
+                   data-height="500"
+                   data-small-header="true"
+                   data-adapt-container-width="true"
+                   data-hide-cover="false"
+                   data-show-facepile="false">
+              </div>
+              <!-- Fallback shown while SDK loads or if page is not found -->
+              <div id="fbFallback" class="feed-fallback">
+                <div class="feed-fallback-icon" style="color:#1877f2;"><i class="fab fa-facebook-f"></i></div>
+                <p>Loading Facebook feed…</p>
+                <a href="https://www.facebook.com/FriendsOfChildrenMinistries" target="_blank" rel="noopener" class="feed-visit-btn" style="background:#1877f2;">
+                  Visit our Facebook Page
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── INSTAGRAM EMBED ───────────────────────────────────────────── -->
+        <div id="feed-instagram" class="feed-panel" style="width:100%; max-width:500px; display:none;">
+          <div class="social-widget-card">
+            <div class="social-widget-header" style="background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);">
+              <i class="fab fa-instagram"></i>
+              <span>@friendsofchildrenministries</span>
+              <a href="https://www.instagram.com/friendsofchildrenministries" target="_blank" rel="noopener" class="widget-follow-btn">Follow</a>
+            </div>
+            <div class="social-widget-body">
+              <!-- Instagram embed — uses Behold.so free widget (no token needed for public pages) -->
+              <!-- Replace YOUR_BEHOLD_FEED_ID with your actual Behold feed ID after signing up at behold.so -->
+              <div id="igEmbedWrap">
+                <div id="igFallback" class="feed-fallback">
+                  <div class="feed-fallback-icon" style="background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+                    <i class="fab fa-instagram"></i>
+                  </div>
+                  <p style="font-weight:600; margin-bottom:0.5rem;">@friendsofchildrenministries</p>
+                  <p style="font-size:0.875rem; color:var(--text-secondary); margin-bottom:1.5rem;">
+                    Follow us on Instagram for daily verses, behind-the-scenes ministry moments, and teaching inspiration.
+                  </p>
+                  <!-- Instagram oEmbed preview grid (static recent posts placeholder) -->
+                  <div class="ig-preview-grid" id="igPreviewGrid"></div>
+                  <a href="https://www.instagram.com/friendsofchildrenministries" target="_blank" rel="noopener" class="feed-visit-btn" style="background:linear-gradient(45deg,#f09433,#e6683c,#dc2743);">
+                    <i class="fab fa-instagram"></i> View on Instagram
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── TWITTER / X EMBED ─────────────────────────────────────────── -->
+        <div id="feed-twitter" class="feed-panel" style="width:100%; max-width:500px; display:none;">
+          <div class="social-widget-card">
+            <div class="social-widget-header" style="background:#000;">
+              <i class="fab fa-twitter"></i>
+              <span>@FriendsOfChildren</span>
+              <a href="https://twitter.com/FriendsOfChildren" target="_blank" rel="noopener" class="widget-follow-btn">Follow</a>
+            </div>
+            <div class="social-widget-body" id="twitterEmbedWrap">
+              <!-- Twitter Timeline Widget — official embed, loads live tweets -->
+              <a class="twitter-timeline"
+                 data-height="500"
+                 data-theme="light"
+                 data-chrome="noheader nofooter noborders"
+                 href="https://twitter.com/FriendsOfChildren">
+              </a>
+              <div id="twitterFallback" class="feed-fallback">
+                <div class="feed-fallback-icon" style="color:#1da1f2;"><i class="fab fa-twitter"></i></div>
+                <p>Loading Twitter feed…</p>
+                <a href="https://twitter.com/FriendsOfChildren" target="_blank" rel="noopener" class="feed-visit-btn" style="background:#1da1f2;">
+                  Visit our Twitter Page
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /feedPanels -->
+
+      <!-- Follow all platforms CTA -->
+      <div style="text-align:center; margin-top:3rem;">
+        <p style="color:var(--text-secondary); margin-bottom:1.25rem; font-size:0.95rem;">Follow us everywhere to stay connected with the ministry</p>
+        <div style="display:flex; justify-content:center; gap:1rem; flex-wrap:wrap;">
+          <a href="https://www.facebook.com/FriendsOfChildrenMinistries" target="_blank" rel="noopener"
+             style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.65rem 1.25rem;background:#1877f2;color:white;border-radius:var(--radius-md);font-weight:600;text-decoration:none;font-size:0.9rem;transition:opacity 0.2s;"
+             onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+            <i class="fab fa-facebook-f"></i> Facebook
+          </a>
+          <a href="https://www.instagram.com/friendsofchildrenministries" target="_blank" rel="noopener"
+             style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.65rem 1.25rem;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743);color:white;border-radius:var(--radius-md);font-weight:600;text-decoration:none;font-size:0.9rem;transition:opacity 0.2s;"
+             onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+            <i class="fab fa-instagram"></i> Instagram
+          </a>
+          <a href="https://twitter.com/FriendsOfChildren" target="_blank" rel="noopener"
+             style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.65rem 1.25rem;background:#000;color:white;border-radius:var(--radius-md);font-weight:600;text-decoration:none;font-size:0.9rem;transition:opacity 0.2s;"
+             onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+            <i class="fab fa-twitter"></i> Twitter / X
+          </a>
+          <a href="https://www.youtube.com/@FriendsOfChildrenMinistries" target="_blank" rel="noopener"
+             style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.65rem 1.25rem;background:#ff0000;color:white;border-radius:var(--radius-md);font-weight:600;text-decoration:none;font-size:0.9rem;transition:opacity 0.2s;"
+             onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+            <i class="fab fa-youtube"></i> YouTube
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+
+  <!-- Cookie Consent Banner -->
+  <div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#1e293b;color:white;padding:1rem 1.5rem;box-shadow:0 -4px 20px rgba(0,0,0,0.3);">
+    <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;">
+      <div style="flex:1;min-width:260px;">
+        <p id="cookieBannerMsg" style="margin:0;font-size:.875rem;line-height:1.6;opacity:.95;">
+          We use cookies to improve your experience on our site. By continuing, you agree to our use of cookies.
+        </p>
+        <a id="cookiePrivacyLink" href="#" style="font-size:.8rem;color:#93c5fd;margin-top:.25rem;display:inline-block;">Privacy Policy</a>
+      </div>
+      <div style="display:flex;gap:.75rem;flex-shrink:0;">
+        <button id="cookieBtnSettings" style="padding:.55rem 1.1rem;background:transparent;color:white;border:1px solid rgba(255,255,255,.35);border-radius:6px;font-size:.85rem;font-weight:600;cursor:pointer;">Manage</button>
+        <button id="cookieBtnDecline" style="padding:.55rem 1.1rem;background:transparent;color:white;border:1px solid rgba(255,255,255,.35);border-radius:6px;font-size:.85rem;font-weight:600;cursor:pointer;">Decline</button>
+        <button id="cookieBtnAccept" style="padding:.55rem 1.25rem;background:#4A90E2;color:white;border:none;border-radius:6px;font-size:.85rem;font-weight:700;cursor:pointer;">Accept All</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cookie Manage Modal -->
+  <div id="cookieManageModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100000;align-items:center;justify-content:center;">
+    <div style="background:white;border-radius:12px;max-width:480px;width:94%;padding:2rem;box-shadow:0 25px 60px rgba(0,0,0,.35);">
+      <h3 style="margin:0 0 1rem;font-size:1.1rem;">Cookie Preferences</h3>
+      <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.75rem;background:#f8fafc;border-radius:8px;">
+          <div><strong style="font-size:.9rem;">Essential Cookies</strong><p style="margin:.2rem 0 0;font-size:.8rem;color:#64748b;">Required for the site to function. Cannot be disabled.</p></div>
+          <span style="background:#dcfce7;color:#16a34a;padding:.2rem .6rem;border-radius:20px;font-size:.75rem;font-weight:700;">Always On</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.75rem;background:#f8fafc;border-radius:8px;">
+          <div><strong style="font-size:.9rem;">Analytics Cookies</strong><p style="margin:.2rem 0 0;font-size:.8rem;color:#64748b;">Help us understand how visitors use the site.</p></div>
+          <label style="position:relative;display:inline-block;width:40px;height:22px;"><input type="checkbox" id="manageAnalytics" style="opacity:0;width:0;height:0;"><span id="analyticsSlider" style="position:absolute;cursor:pointer;inset:0;background:#cbd5e1;border-radius:22px;transition:.3s;"><span style="position:absolute;width:16px;height:16px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.3s;display:block;" id="analyticsThumb"></span></span></label>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.75rem;background:#f8fafc;border-radius:8px;">
+          <div><strong style="font-size:.9rem;">Marketing Cookies</strong><p style="margin:.2rem 0 0;font-size:.8rem;color:#64748b;">Used for targeted advertising and social media.</p></div>
+          <label style="position:relative;display:inline-block;width:40px;height:22px;"><input type="checkbox" id="manageMarketing" style="opacity:0;width:0;height:0;"><span id="marketingSlider" style="position:absolute;cursor:pointer;inset:0;background:#cbd5e1;border-radius:22px;transition:.3s;"><span style="position:absolute;width:16px;height:16px;left:3px;bottom:3px;background:white;border-radius:50%;transition:.3s;display:block;" id="marketingThumb"></span></span></label>
+        </div>
+      </div>
+      <div style="display:flex;gap:.75rem;justify-content:flex-end;">
+        <button id="cookieManageCancel" style="padding:.6rem 1.25rem;background:transparent;border:1px solid #e2e8f0;border-radius:6px;font-weight:600;cursor:pointer;">Cancel</button>
+        <button id="cookieManageSave" style="padding:.6rem 1.25rem;background:#4A90E2;color:white;border:none;border-radius:6px;font-weight:700;cursor:pointer;">Save Preferences</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    /* ── Social Feed Widget Styles ─────────────────────────────────────── */
+    .feed-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.4rem;
+      border: 2px solid var(--border-color);
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      border-radius: var(--radius-lg);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: var(--font-body, inherit);
+    }
+    .feed-tab:hover { border-color: var(--primary-color); color: var(--primary-color); }
+    .feed-tab.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
+
+    .social-widget-card {
+      background: var(--bg-primary);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+      border: 1px solid var(--border-color);
+    }
+
+    .social-widget-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 1.5rem;
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .social-widget-header i { font-size: 1.25rem; }
+    .social-widget-header span { flex: 1; }
+
+    .widget-follow-btn {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      padding: 0.35rem 0.9rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.4);
+      transition: background 0.2s;
+    }
+    .widget-follow-btn:hover { background: rgba(255,255,255,0.35); }
+
+    .social-widget-body {
+      min-height: 300px;
+      overflow: hidden;
+    }
+
+    .feed-fallback {
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+    .feed-fallback-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .feed-fallback p { color: var(--text-secondary); margin-bottom: 1.5rem; }
+
+    .feed-visit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.75rem;
+      color: white;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: opacity 0.2s;
+    }
+    .feed-visit-btn:hover { opacity: 0.88; }
+
+    /* Instagram preview grid */
+    .ig-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      margin-bottom: 1.5rem;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .ig-preview-grid .ig-cell {
+      aspect-ratio: 1;
+      background: var(--bg-tertiary);
+      overflow: hidden;
+      position: relative;
+    }
+    .ig-preview-grid .ig-cell img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .ig-preview-grid .ig-cell:hover img { transform: scale(1.06); }
+    .ig-preview-grid .ig-cell-placeholder {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, #f09433 0%, #e6683c 33%, #dc2743 66%, #cc2366 100%);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1.5rem; opacity: 0.6;
+    }
+
+    @media (max-width: 600px) {
+      .feed-tab { padding: 0.55rem 1rem; font-size: 0.82rem; }
+    }
+  </style>
+  <footer class="footer">
+    <div class="footer-content">
+      <h3 style="color: white; margin-bottom: var(--spacing-md)">
+        Sunday School Lessons
+      </h3>
+      <p>Empowering teachers to inspire the next generation</p>
+      <p style="margin-top: var(--spacing-md); font-size: 0.875rem">
+        &copy; 2025 Friends of Children Ministries. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="app.js"></script>
+
+  <!-- ── Facebook Page Plugin SDK ──────────────────────────────────────── -->
+  <div id="fb-root"></div>
+  <script async defer crossorigin="anonymous"
+    src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v19.0"
+    nonce="fcm2026">
+  </script>
+
+  <!-- ── Twitter / X Widgets SDK ───────────────────────────────────────── -->
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+  <script>
+    // ── Social feed tab switcher ───────────────────────────────────────────
+    function switchFeed(platform) {
+      // Hide all panels
+      document.querySelectorAll('.feed-panel').forEach(p => p.style.display = 'none');
+      // Deactivate all tabs
+      document.querySelectorAll('.feed-tab').forEach(t => t.classList.remove('active'));
+      // Show selected panel
+      document.getElementById('feed-' + platform).style.display = '';
+      // Activate selected tab
+      document.querySelector('[data-feed="' + platform + '"]').classList.add('active');
+
+      // Re-render Twitter widget when its tab is shown (SDK may need a nudge)
+      if (platform === 'twitter' && window.twttr && window.twttr.widgets) {
+        window.twttr.widgets.load(document.getElementById('twitterEmbedWrap'));
+      }
+    }
+
+    // ── Instagram preview grid (placeholder tiles while real embed loads) ──
+    // These use Unsplash ministry/children photos as stand-ins.
+    // Replace with real Instagram oEmbed URLs once you have API access.
+    const igPlaceholders = [
+      'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=300&q=70&fit=crop',  // children in Sunday school
+      'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=300&q=70&fit=crop',  // teacher with Bible
+      'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=300&q=70&fit=crop',  // creation/earth
+      'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=300&q=70&fit=crop',  // Bible/scripture
+      'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&q=70&fit=crop',  // open Bible
+      'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=300&q=70&fit=crop',     // hands serving
+    ];
+
+    const igGrid = document.getElementById('igPreviewGrid');
+    if (igGrid) {
+      igGrid.innerHTML = igPlaceholders.map((src, i) => `
+        <div class="ig-cell">
+          <a href="https://www.instagram.com/friendsofchildrenministries" target="_blank" rel="noopener">
+            <img src="${src}" alt="Instagram post ${i + 1}" loading="lazy">
+          </a>
+        </div>`).join('');
+    }
+
+    // ── Hide fallback divs once Facebook SDK fires ─────────────────────────
+    window.fbAsyncInit = function () {
+      FB.init({ xfbml: true, version: 'v19.0' });
+      FB.Event.subscribe('xfbml.render', function () {
+        const fb = document.getElementById('fbFallback');
+        if (fb) fb.style.display = 'none';
+      });
+    };
+
+    // ── Hide Twitter fallback once widget renders ──────────────────────────
+    window.twttr = (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {};
+      if (d.getElementById(id)) return t;
+      js = d.createElement(s); js.id = id;
+      js.src = 'https://platform.twitter.com/widgets.js';
+      fjs.parentNode.insertBefore(js, fjs);
+      t._e = [];
+      t.ready = function (f) { t._e.push(f); };
+      return t;
+    }(document, 'script', 'twitter-wjs'));
+
+    if (window.twttr) {
+      twttr.ready(function (twttr) {
+        twttr.events.bind('rendered', function () {
+          const tf = document.getElementById('twitterFallback');
+          if (tf) tf.style.display = 'none';
+        });
+      });
+    }
+
+    // ── Newsletter form submission ─────────────────────────────────────────
+    document.getElementById('newsletterForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const email = document.getElementById('newsletterEmail').value;
+      const btn   = this.querySelector('button[type="submit"]');
+      const orig  = btn.textContent;
+      btn.textContent = 'Subscribing…';
+      btn.disabled = true;
+
+      try {
+        const response = await fetch('/api/system/newsletter/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const result = await response.json();
+
+        if (result.success) {
+          btn.textContent = '✓ Subscribed!';
+          btn.style.background = '#11998e';
+          document.getElementById('newsletterEmail').value = '';
+          setTimeout(() => { btn.textContent = orig; btn.style.background = ''; btn.disabled = false; }, 3000);
+        } else {
+          btn.textContent = 'Try again';
+          btn.disabled = false;
+        }
+      } catch (error) {
+        btn.textContent = 'Try again';
+        btn.disabled = false;
+      }
+    });
+  </script>
+  <!-- ── Cookie Consent Logic ─────────────────────────────────────────── -->
+  <script>
+  (function () {
+      const CONSENT_KEY = 'cookieConsent';
+      const SETTINGS_KEY = 'siteSettings';
+      const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+      const cookieEnabled = settings.cookieEnabled !== false;
+      if (!cookieEnabled) return;
+
+      const banner      = document.getElementById('cookieBanner');
+      const manageModal = document.getElementById('cookieManageModal');
+      const expDays     = settings.cookieExpiry || 365;
+
+      if (settings.cookieMessage)     document.getElementById('cookieBannerMsg').textContent  = settings.cookieMessage;
+      if (settings.cookieAcceptText)  document.getElementById('cookieBtnAccept').textContent  = settings.cookieAcceptText;
+      if (settings.cookieDeclineText) document.getElementById('cookieBtnDecline').textContent = settings.cookieDeclineText;
+      const pl = document.getElementById('cookiePrivacyLink');
+      if (settings.privacyUrl) { pl.href = settings.privacyUrl; pl.style.display = 'inline-block'; }
+      else pl.style.display = 'none';
+      if (settings.primaryColor) {
+          document.getElementById('cookieBtnAccept').style.background  = settings.primaryColor;
+          document.getElementById('cookieManageSave').style.background = settings.primaryColor;
+      }
+
+      function getConsent() { try { return JSON.parse(localStorage.getItem(CONSENT_KEY)); } catch { return null; } }
+
+      function setConsent(analytics, marketing) {
+          const exp = new Date(); exp.setDate(exp.getDate() + expDays);
+          const c = { analytics, marketing, essential:true, timestamp:new Date().toISOString(), expires:exp.toISOString() };
+          localStorage.setItem(CONSENT_KEY, JSON.stringify(c));
+          applyConsent(c);
+      }
+
+      function applyConsent(c) {
+          if (c.analytics && settings.gaId) loadGA(settings.gaId);
+          if (c.marketing && settings.fbPixelId) loadFBPixel(settings.fbPixelId);
+      }
+
+      function loadGA(id) {
+          if (window._gaLoaded) return; window._gaLoaded = true;
+          const s = document.createElement('script'); s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
+          document.head.appendChild(s);
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);} gtag('js',new Date()); gtag('config',id);
+      }
+
+      function loadFBPixel(id) {
+          if (window._fbLoaded) return; window._fbLoaded = true;
+          !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+          fbq('init',id); fbq('track','PageView');
+      }
+
+      function setSlider(cbId, slId, thId) {
+          const cb=document.getElementById(cbId), sl=document.getElementById(slId), th=document.getElementById(thId);
+          function upd(){ sl.style.background=cb.checked?(settings.primaryColor||'#4A90E2'):'#cbd5e1'; th.style.transform=cb.checked?'translateX(18px)':'translateX(0)'; }
+          cb.addEventListener('change', upd); upd();
+      }
+      setSlider('manageAnalytics','analyticsSlider','analyticsThumb');
+      setSlider('manageMarketing','marketingSlider','marketingThumb');
+
+      const existing = getConsent();
+      if (existing && existing.expires && new Date(existing.expires) > new Date()) { applyConsent(existing); return; }
+
+      setTimeout(() => { banner.style.display = 'block'; }, 800);
+
+      document.getElementById('cookieBtnAccept').addEventListener('click', () => { setConsent(true,true); banner.style.display='none'; });
+      document.getElementById('cookieBtnDecline').addEventListener('click', () => { setConsent(false,false); banner.style.display='none'; });
+      document.getElementById('cookieBtnSettings').addEventListener('click', () => {
+          const c = getConsent();
+          document.getElementById('manageAnalytics').checked = c?.analytics||false;
+          document.getElementById('manageMarketing').checked = c?.marketing||false;
+          ['manageAnalytics','manageMarketing'].forEach(id => document.getElementById(id).dispatchEvent(new Event('change')));
+          manageModal.style.display = 'flex';
+      });
+      document.getElementById('cookieManageSave').addEventListener('click', () => {
+          setConsent(document.getElementById('manageAnalytics').checked, document.getElementById('manageMarketing').checked);
+          manageModal.style.display='none'; banner.style.display='none';
+      });
+      document.getElementById('cookieManageCancel').addEventListener('click', () => { manageModal.style.display='none'; });
+      manageModal.addEventListener('click', e => { if(e.target===manageModal) manageModal.style.display='none'; });
+  }());
+  </script>
+</body>
+</html>

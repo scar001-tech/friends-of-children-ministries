@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Bible Study Resources - Discover in-depth Bible study materials and guided scripture exploration for all ages">
+    <title>Bible Study | Friends of Children Ministries</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="index.css">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* Bible Study Page Specific Styles */
+        .bible-study-hero {
+            background:
+                linear-gradient(135deg, rgba(0, 0, 0, 0.60) 0%, rgba(53, 122, 189, 0.65) 100%),
+                url('images/children-hero-bg.png') center/cover no-repeat;
+            background-attachment: fixed;
+            padding: 8rem var(--spacing-md) 6rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 50vh;
+        }
+
+        .bible-study-hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .bible-study-hero h1 {
+            font-family: var(--font-heading);
+            color: white;
+            font-size: 4rem;
+            margin-bottom: var(--spacing-md);
+            font-weight: 900;
+            text-shadow: 0 2px 14px rgba(0,0,0,0.5);
+            line-height: 1.1;
+        }
+
+        .bible-study-hero p {
+            color: rgba(255,255,255,0.95);
+            font-size: 1.35rem;
+            line-height: 1.6;
+            font-weight: 500;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .bible-study-section {
+            padding: 5rem var(--spacing-md);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+        }
+
+        .section-intro p {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            line-height: 1.8;
+        }
+
+        .study-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .category-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-base);
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .category-icon {
+            width: 4px;
+            height: 40px;
+            background: var(--gradient-button);
+            border-radius: 2px;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-card h3 {
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .category-card p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-topics {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .category-topics li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .category-topics li:last-child {
+            border-bottom: none;
+        }
+
+        .category-topics li::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .resources-section {
+            background: var(--bg-tertiary);
+            padding: 5rem var(--spacing-md);
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 3rem auto 0;
+        }
+
+        .resource-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-base);
+        }
+
+        .resource-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .resource-card h4 {
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .resource-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .scripture-verse {
+            background: var(--bg-primary);
+            border-left: 4px solid var(--primary-color);
+            padding: 2rem;
+            margin: 3rem auto;
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+            max-width: 900px;
+        }
+
+        .scripture-verse blockquote {
+            font-style: italic;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .scripture-verse cite {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        .study-tools {
+            padding: 5rem var(--spacing-md);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .tool-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .tool-icon {
+            width: 3px;
+            height: 24px;
+            background: var(--gradient-button);
+            border-radius: 2px;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+
+        .tool-content h4 {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-content p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+            padding: 5rem var(--spacing-md);
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-content p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary-color);
+            border: none;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .bible-study-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .study-categories {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .bible-study-hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">Friends of Children Ministries</div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="lessons.html">Lessons</a></li>
+                <li><a href="bible-study.html" class="active">Bible Study</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Bible Study Hero Section -->
+    <section class="bible-study-hero">
+        <div class="bible-study-hero-content">
+            <h1>Bible Study Resources</h1>
+            <p>Deepen your understanding of Scripture with comprehensive study guides, topical studies,
+                and interactive resources designed to bring God's Word to life.</p>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section class="bible-study-section">
+        <div class="section-intro">
+            <h2 class="section-title">Explore God's Word</h2>
+            <p>Our Bible study resources are designed to help teachers, students, and seekers engage
+                with Scripture in meaningful ways. Whether you're preparing for a class, leading a small
+                group, or studying independently, we provide structured guides and supporting materials
+                to enrich your spiritual journey.</p>
+        </div>
+
+        <div class="scripture-verse">
+            <blockquote>
+                "Study to shew thyself approved unto God, a workman that needeth not to be ashamed,
+                rightly dividing the word of truth."
+            </blockquote>
+            <cite>— 2 Timothy 2:15 (KJV)</cite>
+        </div>
+    </section>
+
+    <!-- Study Categories Section -->
+    <section class="bible-study-section">
+        <h2 class="section-title">Study Categories</h2>
+        <p style="text-align: center; color: var(--text-secondary); max-width: 700px; margin: 0 auto;">
+            Browse our collection of Bible studies organized by theme, book, and topic.
+        </p>
+
+        <div class="study-categories">
+            <div class="category-card">
+                <div class="category-icon"></div>
+                <h3>Old Testament Studies</h3>
+                <p>Explore the foundations of faith through detailed studies of the Old Testament books,
+                    from Genesis to Malachi.</p>
+                <ul class="category-topics">
+                    <li>The Pentateuch (Genesis - Deuteronomy)</li>
+                    <li>Historical Books (Joshua - Esther)</li>
+                    <li>Wisdom Literature (Job - Song of Solomon)</li>
+                    <li>Major & Minor Prophets</li>
+                </ul>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon"></div>
+                <h3>New Testament Studies</h3>
+                <p>Discover the life of Christ and the early Church through in-depth New Testament studies.</p>
+                <ul class="category-topics">
+                    <li>The Gospels (Matthew - John)</li>
+                    <li>Acts of the Apostles</li>
+                    <li>Pauline Epistles</li>
+                    <li>General Epistles & Revelation</li>
+                </ul>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon"></div>
+                <h3>Topical Studies</h3>
+                <p>Study the Bible through specific themes and topics that address real-life questions and challenges.
+                </p>
+                <ul class="category-topics">
+                    <li>Faith & Trust in God</li>
+                    <li>Prayer & Worship</li>
+                    <li>Love & Relationships</li>
+                    <li>Purpose & Calling</li>
+                    <li>Spiritual Growth</li>
+                </ul>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon"></div>
+                <h3>Character Studies</h3>
+                <p>Learn from the lives of Biblical characters and discover how their stories apply to our lives today.
+                </p>
+                <ul class="category-topics">
+                    <li>Abraham - Father of Faith</li>
+                    <li>Moses - Leader & Lawgiver</li>
+                    <li>David - Man After God's Heart</li>
+                    <li>Mary - Mother of Jesus</li>
+                    <li>Paul - Apostle to the Gentiles</li>
+                </ul>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon"></div>
+                <h3>Doctrinal Studies</h3>
+                <p>Understand core Christian beliefs and theological concepts through systematic Bible study.</p>
+                <ul class="category-topics">
+                    <li>The Nature of God</li>
+                    <li>Salvation & Grace</li>
+                    <li>The Holy Spirit</li>
+                    <li>The Church & Community</li>
+                    <li>End Times & Prophecy</li>
+                </ul>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon"></div>
+                <h3>Age-Appropriate Studies</h3>
+                <p>Bible studies tailored for different age groups, from children to adults.</p>
+                <ul class="category-topics">
+                    <li>Children's Bible Stories</li>
+                    <li>Youth Bible Studies</li>
+                    <li>Teen Devotionals</li>
+                    <li>Adult Study Guides</li>
+                    <li>Family Devotions</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Weekly Lesson Compilation Section -->
+    <section class="bible-study-section" id="weekly-compilation"
+        style="background: var(--bg-secondary); border-radius: var(--radius-xl); margin-top: 2rem; margin-bottom: 2rem;">
+        <h2 class="section-title">Weekly Bible Study Lessons</h2>
+        <div style="max-width: 900px; margin: 0 auto; padding: 2rem;">
+            <p style="text-align: center; margin-bottom: 2rem;">
+                New lessons are uploaded every week. Download individual lessons as PDF or get the full weekly pack.
+            </p>
+
+            <!-- Weekly Pack Download -->
+            <div id="weeklyPackBar"
+                style="background: white; padding: 1.5rem 2rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2rem;">
+                <div style="display: flex; gap: 1.5rem; align-items: center;">
+                    <div style="font-size: 3rem; color: #e74c3c;"><i class="fas fa-file-pdf"></i></div>
+                    <div>
+                        <h3 style="margin: 0; font-size: 1.2rem;" id="weeklyPackTitle">Weekly Ministry Pack</h3>
+                        <p style="margin: 0; font-size: 0.9rem; color: var(--text-secondary);" id="weeklyPackMeta">Updated weekly every Sunday</p>
+                    </div>
+                </div>
+                <a id="weeklyPackBtn" href="#" class="btn btn-primary" style="display:none;">
+                    <i class="fas fa-download"></i> Download Full Pack
+                </a>
+            </div>
+
+            <!-- Individual Lessons List -->
+            <div id="weeklyLessonsList" style="display:grid;gap:1rem;">
+                <div style="text-align:center;padding:2rem;color:var(--text-secondary);">
+                    <i class="fas fa-spinner fa-spin"></i> Loading lessons…
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Media & Premium Article Layout -->
+    <section class="bible-study-section">
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 3rem;">
+
+            <!-- Premium Articles Column -->
+            <div class="premium-articles">
+                <h2
+                    style="margin-bottom: 2rem; border-bottom: 2px solid var(--primary-light); padding-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                    <i class="fas fa-crown" style="color: var(--accent-gold);"></i> Premium Content
+                </h2>
+
+                <!-- Premium Article Card -->
+                <div class="resource-card" style="position: relative; overflow: hidden; margin-bottom: 2rem;">
+                    <div
+                        style="position: absolute; top: 1rem; right: -2.5rem; background: var(--accent-gold); color: white; padding: 0.5rem 3rem; transform: rotate(45deg); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; box-shadow: var(--shadow-sm);">
+                        Premium</div>
+
+                    <h3 style="margin-top: 1rem;">Masterclass: Effective Storytelling for Children</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.7;">Learn the advanced techniques used by
+                        professional children's ministers to keep kids engaged and help them retain Biblical truths.
+                        Includes 5 instructional videos and a full curriculum guide.</p>
+
+                    <div
+                        style="margin: 2rem 0; padding: 1.5rem; background: var(--bg-tertiary); border-radius: var(--radius-md); border-left: 4px solid var(--accent-gold);">
+                        <p style="margin: 0; font-weight: 600; color: var(--text-primary);">What's Inside:</p>
+                        <ul
+                            style="padding-left: 1.25rem; margin: 0.5rem 0; font-size: 0.9rem; color: var(--text-secondary);">
+                            <li>Psychology of child engagement</li>
+                            <li>Voice modulation techniques</li>
+                            <li>Using props effectively</li>
+                            <li>Managing disruptive behavior through story</li>
+                        </ul>
+                    </div>
+
+                    <div id="premiumArticleContent"
+                        style="filter: blur(4px); pointer-events: none; height: 100px; overflow: hidden; margin-bottom: 1.5rem; transition: all 0.5s ease;">
+                        <p>In the heart of every child is a hunger for stories that resonate with their world. When we
+                            tell the story of David and Goliath, we aren't just recounting history; we are speaking to
+                            their fears of the giants in their own lives—bullies, exams, and the unknown. The first step
+                            in effective storytelling is establishes a hook...</p>
+                    </div>
+
+                    <div id="paywallOverlay"
+                        style="text-align: center; padding: 1rem; border: 2px dashed var(--accent-gold); border-radius: var(--radius-md);">
+                        <h4 style="margin-bottom: 0.5rem;">Access Full Article</h4>
+                        <p style="font-size: 0.9rem; margin-bottom: 1.5rem;">This is a premium resource for ministry
+                            leaders.</p>
+                        <button class="btn btn-primary" style="background: var(--accent-gold); border: none;"
+                            onclick="unlockArticle()">
+                            <i class="fas fa-lock-open"></i> Unlock for KES 499</button>
+                    </div>
+                </div>
+
+                <div class="resource-card">
+                    <h4>Topical Series: The Fruits of the Spirit</h4>
+                    <p>A comprehensive 9-week study series for families. Explore each fruit with daily devotions and
+                        dinner-time conversation starters.</p>
+                    <a href="#" class="card-link" style="color: var(--secondary-color);">Learn More</a>
+                </div>
+            </div>
+
+            <!-- Social Media Sidebar Column -->
+            <div class="social-sidebar">
+                <h3 style="margin-bottom: 1.5rem;">Community Feed</h3>
+
+                <div class="social-widget"
+                    style="background: white; border-radius: var(--radius-lg); border: 1px solid var(--border-color); overflow: hidden;">
+                    <div
+                        style="background: #1da1f2; color: white; padding: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                        <i class="fab fa-twitter" style="font-size: 1.5rem;"></i>
+                        <span style="font-weight: 700;">@FriendsOfChildren</span>
+                    </div>
+
+                    <div class="feed-content" style="padding: 1rem;">
+                        <!-- Tweet 1 -->
+                        <div
+                            style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+                            <div style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 0.5rem;">
+                                <div
+                                    style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary-color);">
+                                </div>
+                                <div>
+                                    <p style="margin: 0; font-weight: 700; font-size: 0.85rem;">FOC Ministries</p>
+                                    <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted);">2 hours ago</p>
+                                </div>
+                            </div>
+                            <p style="font-size: 0.85rem; margin: 0;">Our new lesson on "Solomon's Wisdom" is now live!
+                                Perfect for Sunday School this week. 🙏✨ #BibleStudy #ChildrensMinistry</p>
+                        </div>
+
+                        <!-- Tweet 2 -->
+                        <div
+                            style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+                            <div style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 0.5rem;">
+                                <div
+                                    style="width: 32px; height: 32px; border-radius: 50%; background: var(--secondary-color);">
+                                </div>
+                                <div>
+                                    <p style="margin: 0; font-weight: 700; font-size: 0.85rem;">Sarah Johnson</p>
+                                    <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted);">5 hours ago</p>
+                                </div>
+                            </div>
+                            <p style="font-size: 0.85rem; margin: 0;">The kids absolutely loved the "Creation Collage"
+                                activity today! Thanks for the great ideas @FriendsOfChildren ❤️</p>
+                        </div>
+
+                        <div style="text-align: center;">
+                            <a href="#" style="font-size: 0.85rem; color: #1da1f2; font-weight: 600;">View on
+                                Twitter</a>
+                        </div>
+                    </div>
+
+                    <div style="background: #f0f2f5; padding: 1rem; border-top: 1px solid var(--border-color);">
+                        <div
+                            style="display: flex; justify-content: space-around; font-size: 1.25rem; color: var(--text-secondary);">
+                            <i class="fab fa-facebook-f"></i>
+                            <i class="fab fa-instagram"></i>
+                            <i class="fab fa-youtube"></i>
+                            <i class="fab fa-pinterest"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    style="margin-top: 2rem; background: var(--ot-crimson-light); color: white; padding: 1.5rem; border-radius: var(--radius-lg); text-align: center;">
+                    <i class="fas fa-envelope-open-text" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                    <h4>Newsletter</h4>
+                    <p style="font-size: 0.85rem; margin-bottom: 1rem;">Get monthly inspiration and resources directly
+                        in your inbox.</p>
+                    <input type="email" placeholder="Your Email"
+                        style="width: 100%; padding: 0.5rem; border-radius: 4px; border: none; margin-bottom: 1rem;">
+                    <button class="btn"
+                        style="background: white; color: var(--ot-crimson); width: 100%; padding: 0.5rem;">Subscribe</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Study Tools Section -->
+    <section class="study-tools">
+        <h2 class="section-title">Study Tools & Features</h2>
+        <p style="text-align: center; color: var(--text-secondary); max-width: 700px; margin: 0 auto;">
+            Enhance your Bible study experience with our comprehensive tools and resources.
+        </p>
+
+        <div class="tools-grid">
+            <div class="tool-item">
+                <div class="tool-icon"></div>
+                <div class="tool-content">
+                    <h4>Study Guides</h4>
+                    <p>Structured lesson plans with questions, discussion points, and reflection exercises.</p>
+                </div>
+            </div>
+
+            <div class="tool-item">
+                <div class="tool-icon"></div>
+                <div class="tool-content">
+                    <h4>Scripture References</h4>
+                    <p>Cross-references and parallel passages to deepen understanding of Bible context.</p>
+                </div>
+            </div>
+
+            <div class="tool-item">
+                <div class="tool-icon"></div>
+                <div class="tool-content">
+                    <h4>Historical Context</h4>
+                    <p>Background information on culture, geography, and historical settings of Biblical events.</p>
+                </div>
+            </div>
+
+            <div class="tool-item">
+                <div class="tool-icon"></div>
+                <div class="tool-content">
+                    <h4>Application Questions</h4>
+                    <p>Practical questions to help apply Biblical truths to everyday life situations.</p>
+                </div>
+            </div>
+
+            <div class="tool-item">
+                <div class="tool-icon"></div>
+                <div class="tool-content">
+                    <h4>Memory Verses</h4>
+                    <p>Key Scripture verses for memorization and meditation on God's Word.</p>
+                </div>
+            </div>
+
+            <div class="tool-item">
+                <div class="tool-icon"></div>
+                <div class="tool-content">
+                    <h4>Downloadable Resources</h4>
+                    <p>Printable study sheets, worksheets, and supplementary materials for group studies.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="resources-section">
+        <h2 class="section-title" style="text-align: center;">Additional Resources</h2>
+        <p style="text-align: center; color: var(--text-secondary); max-width: 700px; margin: 0 auto;">
+            Access a variety of supplementary materials to enrich your Bible study experience.
+        </p>
+
+        <div class="resources-grid">
+            <div class="resource-card">
+                <h4>Video Teachings</h4>
+                <p>Watch engaging video lessons and Biblical teaching series from experienced teachers
+                    and scholars.</p>
+            </div>
+
+            <div class="resource-card">
+                <h4>Audio Commentaries</h4>
+                <p>Listen to in-depth Bible commentaries and expositions that provide insights into
+                    Scripture passages.</p>
+            </div>
+
+            <div class="resource-card">
+                <h4>Reading Plans</h4>
+                <p>Follow structured reading plans to systematically read through the entire Bible
+                    in one year or more.</p>
+            </div>
+
+            <div class="resource-card">
+                <h4>Study Notes</h4>
+                <p>Access detailed study notes and explanations for challenging passages and difficult
+                    theological concepts.</p>
+            </div>
+
+            <div class="resource-card">
+                <h4>Group Discussion Guides</h4>
+                <p>Facilitate meaningful group discussions with our comprehensive small group study guides.</p>
+            </div>
+
+            <div class="resource-card">
+                <h4>Prayer Journals</h4>
+                <p>Downloadable prayer journals to track your prayers, reflections, and spiritual growth.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Start Your Bible Study Journey</h2>
+            <p>Ready to dive deeper into God's Word? Explore our comprehensive study resources
+                and begin your journey of spiritual growth today.</p>
+            <div class="cta-buttons">
+                <a href="lessons.html" class="btn btn-primary">
+                    Browse Lessons
+                </a>
+                <a href="contact.html" class="btn btn-secondary">
+                    Get Support
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3 style="color: white; margin-bottom: var(--spacing-md);">Friends of Children Ministries</h3>
+            <p>Empowering teachers to inspire the next generation</p>
+            <p style="margin-top: var(--spacing-md); font-size: 0.875rem;">
+                &copy; 2025 Friends of Children Ministries. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="app.js"></script>
+    <script>
+        function unlockArticle() {
+            const overlay = document.getElementById('paywallOverlay');
+            const content = document.getElementById('premiumArticleContent');
+
+            // Show inline payment prompt instead of confirm()
+            overlay.innerHTML = `
+                <div style="text-align:center;padding:1rem;">
+                    <h4 style="margin-bottom:.75rem;">Unlock Full Article</h4>
+                    <p style="font-size:.9rem;color:var(--text-secondary);margin-bottom:1.25rem;">
+                        Get full access to this premium resource for <strong>KES 499</strong>.<br>
+                        Pay via M-Pesa or Airtel Money.
+                    </p>
+                    <div style="display:flex;gap:.75rem;flex-wrap:wrap;justify-content:center;margin-bottom:1rem;">
+                        <input type="tel" id="unlockPhone" placeholder="07XXXXXXXX" style="padding:.65rem 1rem;border:2px solid var(--border-color);border-radius:var(--radius-md);font-size:.95rem;width:200px;">
+                        <select id="unlockProvider" style="padding:.65rem 1rem;border:2px solid var(--border-color);border-radius:var(--radius-md);font-size:.95rem;">
+                            <option value="mpesa">M-Pesa</option>
+                            <option value="airtel">Airtel Money</option>
+                        </select>
+                    </div>
+                    <button onclick="processUnlock()" style="padding:.75rem 2rem;background:var(--accent-gold);color:white;border:none;border-radius:var(--radius-md);font-weight:700;cursor:pointer;font-size:.95rem;">
+                        <i class="fas fa-mobile-alt"></i> Send Payment Prompt
+                    </button>
+                    <p style="font-size:.75rem;color:var(--text-muted);margin-top:.75rem;">
+                        You will receive an STK push on your phone to complete payment.
+                    </p>
+                </div>`;
+        }
+
+        function processUnlock() {
+            const phone = document.getElementById('unlockPhone')?.value?.trim();
+            if (!phone || phone.length < 9) {
+                document.getElementById('unlockPhone').style.borderColor = '#dc2626';
+                document.getElementById('unlockPhone').placeholder = 'Enter a valid number';
+                return;
+            }
+            const overlay = document.getElementById('paywallOverlay');
+            const content = document.getElementById('premiumArticleContent');
+            overlay.innerHTML = `
+                <div style="text-align:center;padding:1.5rem;">
+                    <i class="fas fa-spinner fa-spin" style="font-size:2rem;color:var(--accent-gold);margin-bottom:1rem;display:block;"></i>
+                    <p style="font-weight:600;">Payment prompt sent to ${phone}</p>
+                    <p style="font-size:.875rem;color:var(--text-secondary);">Check your phone and enter your PIN to complete payment.</p>
+                </div>`;
+            // Simulate payment completion after 3s (replace with real API call)
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                content.style.filter = 'none';
+                content.style.height = 'auto';
+                content.style.pointerEvents = 'auto';
+            }, 3000);
+        }
+
+        // ── Load weekly lessons from API ───────────────────────────────────────
+        const LEVEL_COLORS = {
+            beginner:     { bg:'#dcfce7', color:'#16a34a' },
+            intermediate: { bg:'#dbeafe', color:'#2563eb' },
+            advanced:     { bg:'#ede9fe', color:'#7c3aed' }
+        };
+
+        async function loadWeeklyLessons() {
+            let studies = [];
+            try {
+                const res  = await fetch('/api/bible-studies?status=published');
+                const data = await res.json();
+                studies = data.studies || [];
+            } catch {
+                // Fallback seed data when server is offline
+                studies = [
+                    { id:1, weekLabel:'Week 1', title:'Fruits of the Spirit', scripture:'Galatians 5:22-23', level:'intermediate', memoryVerse:'But the fruit of the Spirit is love, joy, peace… — Galatians 5:22', pdfGenerated:false },
+                    { id:2, weekLabel:'Week 2', title:'The Beatitudes', scripture:'Matthew 5:1-12', level:'beginner', memoryVerse:'Blessed are the pure in heart, for they will see God. — Matthew 5:8', pdfGenerated:false }
+                ];
+            }
+
+            const list = document.getElementById('weeklyLessonsList');
+
+            if (!studies.length) {
+                list.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:2rem;">No lessons published yet. Check back soon!</p>';
+                return;
+            }
+
+            // Update pack title
+            const latest = studies[studies.length - 1];
+            document.getElementById('weeklyPackTitle').textContent =
+                `Weekly Ministry Pack — ${latest.weekLabel || 'Latest Week'}`;
+            document.getElementById('weeklyPackMeta').textContent =
+                `${studies.length} lesson${studies.length > 1 ? 's' : ''} • Updated every Sunday`;
+
+            list.innerHTML = studies.map(s => {
+                const lc = LEVEL_COLORS[s.level] || LEVEL_COLORS.beginner;
+                return `
+                <div style="background:white;border-radius:var(--radius-lg);padding:1.5rem;border:1px solid var(--border-color);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+                    <div style="display:flex;gap:1rem;align-items:flex-start;flex:1;min-width:0;">
+                        <div style="background:#fef2f2;color:#e74c3c;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0;">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div style="min-width:0;">
+                            <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.25rem;">
+                                <span style="background:var(--primary-light);color:var(--primary-color);padding:0.15rem 0.5rem;border-radius:4px;font-size:0.75rem;font-weight:700;">${s.weekLabel || 'Week '+s.weekNumber}</span>
+                                <span style="background:${lc.bg};color:${lc.color};padding:0.15rem 0.5rem;border-radius:4px;font-size:0.75rem;font-weight:600;text-transform:capitalize;">${s.level}</span>
+                            </div>
+                            <h4 style="margin:0 0 0.25rem;font-size:1.05rem;color:var(--text-primary);">${s.title}</h4>
+                            <p style="margin:0;font-size:0.875rem;color:var(--primary-color);font-weight:500;">${s.scripture}</p>
+                            ${s.memoryVerse ? `<p style="margin:0.4rem 0 0;font-size:0.8rem;color:var(--text-secondary);font-style:italic;">"${s.memoryVerse}"</p>` : ''}
+                        </div>
+                    </div>
+                    <div>
+                        ${s.pdfGenerated
+                            ? `<a href="/api/bible-studies/${s.id}/download-pdf" class="btn btn-primary" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.65rem 1.25rem;font-size:0.9rem;">
+                                <i class="fas fa-download"></i> Download PDF
+                               </a>`
+                            : `<span style="font-size:0.85rem;color:var(--text-muted);display:flex;align-items:center;gap:0.4rem;">
+                                <i class="fas fa-clock"></i> PDF coming soon
+                               </span>`
+                        }
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        loadWeeklyLessons();
+    </script>
+
+</body>
+
+</html>

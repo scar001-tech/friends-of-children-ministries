@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Resources | Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+    <aside class="admin-sidebar" id="adminSidebar"></aside>
+    <main class="admin-main">
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+        <div class="admin-topbar">
+            <div class="topbar-title"><h1>Manage Resources</h1><p>Upload and manage downloadable resources</p></div>
+            <div class="topbar-actions">
+                <button class="btn btn-primary" id="btnNew"><i class="fas fa-plus"></i> New Resource</button>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-header">
+                <h2>All Resources</h2>
+                <div class="search-filter-bar">
+                    <input type="text" class="search-field" id="searchField" placeholder="Search resources...">
+                </div>
+            </div>
+            <div class="panel-body" style="padding:0;">
+                <table class="data-table">
+                    <thead><tr><th>Title</th><th>Type</th><th>Category</th><th>Size</th><th>Downloads</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody id="tableBody"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);">Loading…</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Edit / Create Modal -->
+<div class="modal-overlay" id="formModal" style="display:none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="modalTitle">New Resource</h2>
+            <button class="modal-close" id="btnCloseModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="editId">
+            <div class="form-group">
+                <label>Title <span class="required">*</span></label>
+                <input type="text" id="fTitle" class="form-control" placeholder="Resource title" required>
+            </div>
+            <div class="form-group">
+                <label>File URL</label>
+                <div style="display:flex;gap:.5rem;align-items:center;">
+                    <input type="text" id="fFileUrl" class="form-control" placeholder="Paste URL or select from media library" style="margin:0;">
+                    <button type="button" class="btn btn-outline" style="white-space:nowrap;" id="btnPickFile">Select File</button>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Type</label>
+                    <select id="fType" class="form-control">
+                        <option value="pdf">PDF</option>
+                        <option value="audio">Audio</option>
+                        <option value="video">Video</option>
+                        <option value="image">Image</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="fCategory" class="form-control">
+                        <option value="curriculum">Curriculum</option>
+                        <option value="activities">Activities</option>
+                        <option value="music">Music</option>
+                        <option value="guides">Guides</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="fDescription" class="form-control" rows="3" placeholder="Brief description"></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>File Size</label>
+                    <input type="text" id="fFileSize" class="form-control" placeholder="e.g. 2.4 MB">
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="fStatus" class="form-control">
+                        <option value="published">Published</option>
+                        <option value="draft">Draft</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancel">Cancel</button>
+            <button class="btn btn-primary" id="btnSave">Save Resource</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-overlay" id="deleteModal" style="display:none;">
+    <div class="modal modal-sm">
+        <div class="modal-header">
+            <h2>Delete Resource</h2>
+            <button class="modal-close" id="btnCloseDelete">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="color:var(--text-secondary);">Delete "<strong id="deleteTitle"></strong>"? This cannot be undone.</p>
+            <input type="hidden" id="deleteId">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancelDelete">Cancel</button>
+            <button class="btn btn-danger-outline" id="btnConfirmDelete">Delete</button>
+        </div>
+    </div>
+</div>
+
+<script src="admin-shared.js"></script>
+<script>
+(function () {
+    if (!checkAuth()) return;
+    renderSidebar('resources');
+
+    const ENDPOINT = '/api/resources';
+    const STORAGE  = 'resources';
+    const ENTITY   = 'Resource';
+    const TYPE_ICONS = {
+        pdf:   '<i class="fas fa-file-pdf" style="color:#dc2626;"></i>',
+        audio: '<i class="fas fa-music" style="color:#7c3aed;"></i>',
+        video: '<i class="fas fa-film" style="color:#2563eb;"></i>',
+        image: '<i class="fas fa-image" style="color:#16a34a;"></i>',
+        other: '<i class="fas fa-file-alt" style="color:#64748b;"></i>'
+    };
+
+    let items = [];
+
+    function openModal(id)  { document.getElementById(id).style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none';  document.body.style.overflow = ''; }
+
+    async function load() {
+        try {
+            const r = await fetch(ENDPOINT);
+            items = r.ok ? await r.json() : getData(STORAGE);
+        } catch { items = getData(STORAGE); }
+        if (!Array.isArray(items)) items = getData(STORAGE);
+        setData(STORAGE, items);
+        render();
+    }
+
+    function render(filter) {
+        filter = (filter || document.getElementById('searchField').value).toLowerCase();
+        const rows = filter ? items.filter(d => (d.title+(d.type||'')+(d.category||'')).toLowerCase().includes(filter)) : items;
+        const tbody = document.getElementById('tableBody');
+        if (!rows.length) { tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="empty-icon"><i class="fas fa-folder-open"></i></div><p>No resources found</p></div></td></tr>'; return; }
+        tbody.innerHTML = rows.map(d => `
+            <tr>
+                <td style="font-weight:600">${d.title}</td>
+                <td>${TYPE_ICONS[d.type]||TYPE_ICONS.other} ${(d.type||'').toUpperCase()}</td>
+                <td><span class="badge badge-info">${d.category||'—'}</span></td>
+                <td>${d.fileSize||'—'}</td>
+                <td>${d.downloads||0}</td>
+                <td><span class="badge ${d.status==='published'?'badge-success':'badge-warning'}">${d.status}</span></td>
+                <td>
+                    <div style="display:flex;gap:.4rem">
+                        <button class="btn btn-sm btn-outline" data-action="edit" data-id="${d.id}">Edit</button>
+                        <button class="btn btn-sm btn-danger-outline" data-action="delete" data-id="${d.id}">Delete</button>
+                    </div>
+                </td>
+            </tr>`).join('');
+    }
+
+    function openCreate() {
+        document.getElementById('modalTitle').textContent = 'New ' + ENTITY;
+        document.getElementById('btnSave').textContent = 'Create Resource';
+        document.getElementById('editId').value = '';
+        document.getElementById('fTitle').value = '';
+        document.getElementById('fFileUrl').value = '';
+        document.getElementById('fType').value = 'pdf';
+        document.getElementById('fCategory').value = 'curriculum';
+        document.getElementById('fDescription').value = '';
+        document.getElementById('fFileSize').value = '';
+        document.getElementById('fStatus').value = 'published';
+        openModal('formModal');
+        document.getElementById('fTitle').focus();
+    }
+
+    function openEdit(id) {
+        const d = items.find(x => x.id === id || x.id === parseInt(id));
+        if (!d) return;
+        document.getElementById('modalTitle').textContent = 'Edit ' + ENTITY;
+        document.getElementById('btnSave').textContent = 'Save Changes';
+        document.getElementById('editId').value = d.id;
+        document.getElementById('fTitle').value = d.title;
+        document.getElementById('fFileUrl').value = d.url || '';
+        document.getElementById('fType').value = d.type || 'pdf';
+        document.getElementById('fCategory').value = d.category || 'curriculum';
+        document.getElementById('fDescription').value = d.description || '';
+        document.getElementById('fFileSize').value = d.fileSize || '';
+        document.getElementById('fStatus').value = d.status;
+        openModal('formModal');
+        document.getElementById('fTitle').focus();
+    }
+
+    async function save() {
+        const title = document.getElementById('fTitle').value.trim();
+        if (!title) { showToast('Title is required', 'error'); return; }
+
+        const editId = document.getElementById('editId').value;
+        const btn    = document.getElementById('btnSave');
+        btn.disabled = true; btn.textContent = 'Saving…';
+
+        const payload = {
+            title,
+            url:         document.getElementById('fFileUrl').value.trim(),
+            type:        document.getElementById('fType').value,
+            category:    document.getElementById('fCategory').value,
+            description: document.getElementById('fDescription').value.trim(),
+            fileSize:    document.getElementById('fFileSize').value.trim(),
+            status:      document.getElementById('fStatus').value
+        };
+
+        const headers = { 'Content-Type':'application/json', 'x-admin-role': sessionStorage.getItem('adminRole')||'system_admin' };
+
+        try {
+            let saved;
+            if (editId) {
+                const r = await fetch(`${ENDPOINT}/${editId}`, { method:'PUT', headers, body:JSON.stringify(payload) });
+                saved = r.ok ? await r.json() : null;
+                const i = items.findIndex(x => x.id === parseInt(editId));
+                if (i > -1) items[i] = { ...items[i], ...(saved || payload) };
+                addAuditEntry('UPDATE', ENTITY, `Updated: ${title}`);
+                showToast(ENTITY + ' updated!', 'success');
+            } else {
+                const r = await fetch(ENDPOINT, { method:'POST', headers, body:JSON.stringify(payload) });
+                saved = r.ok ? await r.json() : null;
+                if (saved) items.push(saved);
+                else { payload.id = nextId(items); payload.downloads = 0; payload.createdAt = new Date().toISOString().split('T')[0]; items.push(payload); }
+                addAuditEntry('CREATE', ENTITY, `Created: ${title}`);
+                showToast(ENTITY + ' created!', 'success');
+            }
+        } catch {
+            if (editId) { const i = items.findIndex(x=>x.id===parseInt(editId)); if(i>-1) items[i]={...items[i],...payload}; }
+            else { payload.id = nextId(items); payload.downloads = 0; payload.createdAt = new Date().toISOString().split('T')[0]; items.push(payload); }
+            addAuditEntry(editId?'UPDATE':'CREATE', ENTITY, `${editId?'Updated':'Created'}: ${title}`);
+            showToast(ENTITY + (editId?' updated':' created') + ' (offline)', 'success');
+        }
+
+        setData(STORAGE, items);
+        render();
+        closeModal('formModal');
+        btn.disabled = false;
+        btn.textContent = editId ? 'Save Changes' : 'Create Resource';
+    }
+
+    function openDelete(id) {
+        const d = items.find(x => x.id === id || x.id === parseInt(id));
+        if (!d) return;
+        document.getElementById('deleteId').value = d.id;
+        document.getElementById('deleteTitle').textContent = d.title;
+        openModal('deleteModal');
+    }
+
+    async function confirmDelete() {
+        const id  = parseInt(document.getElementById('deleteId').value);
+        const d   = items.find(x => x.id === id);
+        const btn = document.getElementById('btnConfirmDelete');
+        btn.disabled = true; btn.textContent = 'Deleting…';
+
+        try { await fetch(`${ENDPOINT}/${id}`, { method:'DELETE', headers:{'x-admin-role':sessionStorage.getItem('adminRole')||'system_admin'} }); } catch {}
+
+        items = items.filter(x => x.id !== id);
+        setData(STORAGE, items);
+        addAuditEntry('DELETE', ENTITY, `Deleted: ${d?.title}`);
+        showToast(ENTITY + ' deleted', 'info');
+        render();
+        closeModal('deleteModal');
+        btn.disabled = false; btn.textContent = 'Delete';
+    }
+
+    document.getElementById('btnNew').addEventListener('click', openCreate);
+    document.getElementById('btnSave').addEventListener('click', save);
+    document.getElementById('btnCancel').addEventListener('click', () => closeModal('formModal'));
+    document.getElementById('btnCloseModal').addEventListener('click', () => closeModal('formModal'));
+    document.getElementById('btnConfirmDelete').addEventListener('click', confirmDelete);
+    document.getElementById('btnCancelDelete').addEventListener('click', () => closeModal('deleteModal'));
+    document.getElementById('btnCloseDelete').addEventListener('click', () => closeModal('deleteModal'));
+    document.getElementById('searchField').addEventListener('input', e => render(e.target.value));
+    document.getElementById('formModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('formModal'); });
+    document.getElementById('deleteModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('deleteModal'); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal('formModal'); closeModal('deleteModal'); } });
+    document.getElementById('tableBody').addEventListener('click', e => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        const id = parseInt(btn.dataset.id);
+        if (btn.dataset.action === 'edit')   openEdit(id);
+        if (btn.dataset.action === 'delete') openDelete(id);
+    });
+    document.getElementById('btnPickFile').addEventListener('click', () => {
+        openMediaPicker(file => {
+            document.getElementById('fFileUrl').value = file.url;
+            document.getElementById('fFileSize').value = file.size;
+            const ext = file.name.toLowerCase();
+            document.getElementById('fType').value = ext.endsWith('.pdf') ? 'pdf' : file.type === 'audio' ? 'audio' : file.type === 'video' ? 'video' : file.type === 'image' ? 'image' : 'other';
+            if (!document.getElementById('fTitle').value) document.getElementById('fTitle').value = file.name.replace(/\.[^/.]+$/, '');
+            showToast('File linked!', 'success');
+        });
+    });
+
+    load();
+}());
+</script>
+</body>
+</html>

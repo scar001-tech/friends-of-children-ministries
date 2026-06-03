@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users | Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+    <aside class="admin-sidebar" id="adminSidebar"></aside>
+    <main class="admin-main">
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+        <div class="admin-topbar">
+            <div class="topbar-title"><h1>User Management</h1><p>Manage admin accounts and roles</p></div>
+            <div class="topbar-actions">
+                <button class="btn btn-primary" id="btnNew"><i class="fas fa-plus"></i> New User</button>
+            </div>
+        </div>
+
+        <!-- Role legend -->
+        <div style="display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;">
+            <div class="readiness-card" style="flex:1;min-width:180px;">
+                <div style="font-size:1.25rem;color:var(--primary-color);"><i class="fas fa-shield-alt"></i></div>
+                <div class="readiness-info"><div class="readiness-label">System Admin</div><div class="readiness-status">Full access — users, audit, settings, content</div></div>
+            </div>
+            <div class="readiness-card" style="flex:1;min-width:180px;">
+                <div style="font-size:1.25rem;color:#16a34a;"><i class="fas fa-pen"></i></div>
+                <div class="readiness-info"><div class="readiness-label">Editor</div><div class="readiness-status">Content management only — no admin access</div></div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h2>All Users</h2>
+                <div class="search-filter-bar">
+                    <input type="text" class="search-field" id="searchField" placeholder="Search users...">
+                </div>
+            </div>
+            <div class="panel-body" style="padding:0;">
+                <table class="data-table">
+                    <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Status</th><th>Last Login</th><th>Actions</th></tr></thead>
+                    <tbody id="tableBody"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-secondary);">Loading…</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Create / Edit Modal -->
+<div class="modal-overlay" id="formModal" style="display:none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="modalTitle">New User</h2>
+            <button class="modal-close" id="btnCloseModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="editId">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Full Name <span class="required">*</span></label>
+                    <input type="text" id="fFullName" class="form-control" placeholder="Full name">
+                </div>
+                <div class="form-group">
+                    <label>Username <span class="required">*</span></label>
+                    <input type="text" id="fUsername" class="form-control" placeholder="username">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Email <span class="required">*</span></label>
+                <input type="email" id="fEmail" class="form-control" placeholder="email@example.com">
+            </div>
+            <div class="form-group" id="passwordGroup">
+                <label id="passwordLabel">Password <span class="required">*</span></label>
+                <input type="password" id="fPassword" class="form-control" placeholder="Minimum 6 characters">
+                <p style="font-size:.78rem;color:var(--text-muted);margin-top:.25rem;" id="passwordHint">Minimum 6 characters</p>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Role <span class="required">*</span></label>
+                    <select id="fRole" class="form-control">
+                        <option value="system_admin">System Admin</option>
+                        <option value="editor">Editor</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="fStatus" class="form-control">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancel">Cancel</button>
+            <button class="btn btn-primary" id="btnSave">Create User</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal-overlay" id="deleteModal" style="display:none;">
+    <div class="modal modal-sm">
+        <div class="modal-header">
+            <h2>Delete User</h2>
+            <button class="modal-close" id="btnCloseDelete">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="color:var(--text-secondary);">Delete user "<strong id="deleteTitle"></strong>"? This cannot be undone.</p>
+            <input type="hidden" id="deleteId">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancelDelete">Cancel</button>
+            <button class="btn btn-danger-outline" id="btnConfirmDelete">Delete</button>
+        </div>
+    </div>
+</div>
+
+<script src="api.js"></script>
+<script src="admin-shared.js"></script>
+<script>
+(function () {
+    if (!checkAuth(true)) return;
+    renderSidebar('users');
+
+    const ROLE_NAMES   = { system_admin:'System Admin', editor:'Editor' };
+    const ROLE_AVATARS = {
+        system_admin: '<i class="fas fa-shield-alt" style="color:var(--primary-color);"></i>',
+        editor:       '<i class="fas fa-pen" style="color:#16a34a;"></i>'
+    };
+
+    let users = [];
+
+    function openModal(id)  { document.getElementById(id).style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none';  document.body.style.overflow = ''; }
+
+    /* ── load ── */
+    async function load() {
+        try {
+            if (window.API && await API.checkHealth()) {
+                users = await API.getUsers();
+            } else {
+                users = JSON.parse(sessionStorage.getItem('usersDB') || '[]');
+            }
+        } catch {
+            users = JSON.parse(sessionStorage.getItem('usersDB') || '[]');
+        }
+        render();
+    }
+
+    /* ── render ── */
+    function render(filter) {
+        filter = (filter || document.getElementById('searchField').value).toLowerCase();
+        const rows = filter ? users.filter(u => (u.fullName+u.username+u.email+u.role).toLowerCase().includes(filter)) : users;
+        const tbody = document.getElementById('tableBody');
+        const myId  = getUser().id;
+        if (!rows.length) { tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon"><i class="fas fa-users"></i></div><p>No users found</p></div></td></tr>'; return; }
+        tbody.innerHTML = rows.map(u => `
+            <tr>
+                <td>
+                    <div style="display:flex;align-items:center;gap:.75rem;">
+                        <div style="width:36px;height:36px;border-radius:10px;background:rgba(74,144,226,.1);display:flex;align-items:center;justify-content:center;font-size:1rem;">${ROLE_AVATARS[u.role]||'<i class="fas fa-user" style="color:#64748b;"></i>'}</div>
+                        <div>
+                            <div style="font-weight:600;">${u.fullName}</div>
+                            <div style="font-size:.78rem;color:var(--text-muted);">@${u.username}</div>
+                        </div>
+                    </div>
+                </td>
+                <td>${u.email}</td>
+                <td><span class="badge ${u.role==='system_admin'?'badge-purple':'badge-info'}">${ROLE_NAMES[u.role]||u.role}</span></td>
+                <td><span class="badge ${u.status==='active'?'badge-success':'badge-danger'}">${u.status}</span></td>
+                <td>${u.lastLogin ? formatDateTime(u.lastLogin) : '<span style="color:var(--text-muted);">Never</span>'}</td>
+                <td>
+                    <div style="display:flex;gap:.4rem;">
+                        <button class="btn btn-sm btn-outline" data-action="edit" data-id="${u.id}">Edit</button>
+                        ${u.id !== myId ? `<button class="btn btn-sm btn-danger-outline" data-action="delete" data-id="${u.id}">Delete</button>` : ''}
+                    </div>
+                </td>
+            </tr>`).join('');
+    }
+
+    /* ── open create ── */
+    function openCreate() {
+        document.getElementById('modalTitle').textContent = 'New User';
+        document.getElementById('btnSave').textContent = 'Create User';
+        document.getElementById('editId').value = '';
+        document.getElementById('fFullName').value = '';
+        document.getElementById('fUsername').value = '';
+        document.getElementById('fEmail').value = '';
+        document.getElementById('fPassword').value = '';
+        document.getElementById('fPassword').required = true;
+        document.getElementById('fRole').value = 'editor';
+        document.getElementById('fStatus').value = 'active';
+        document.getElementById('passwordLabel').innerHTML = 'Password <span class="required">*</span>';
+        document.getElementById('passwordHint').textContent = 'Minimum 6 characters';
+        openModal('formModal');
+        document.getElementById('fFullName').focus();
+    }
+
+    /* ── open edit ── */
+    function openEdit(id) {
+        const u = users.find(x => x.id === id || x.id === parseInt(id));
+        if (!u) return;
+        document.getElementById('modalTitle').textContent = 'Edit User';
+        document.getElementById('btnSave').textContent = 'Save Changes';
+        document.getElementById('editId').value = u.id;
+        document.getElementById('fFullName').value = u.fullName;
+        document.getElementById('fUsername').value = u.username;
+        document.getElementById('fEmail').value = u.email;
+        document.getElementById('fPassword').value = '';
+        document.getElementById('fPassword').required = false;
+        document.getElementById('fRole').value = u.role;
+        document.getElementById('fStatus').value = u.status;
+        document.getElementById('passwordLabel').innerHTML = 'Password <span style="font-size:.78rem;color:var(--text-muted);">(leave blank to keep current)</span>';
+        document.getElementById('passwordHint').textContent = 'Only fill in if you want to change the password';
+        openModal('formModal');
+        document.getElementById('fFullName').focus();
+    }
+
+    /* ── save ── */
+    async function save() {
+        const fullName = document.getElementById('fFullName').value.trim();
+        const username = document.getElementById('fUsername').value.trim();
+        const email    = document.getElementById('fEmail').value.trim();
+        const password = document.getElementById('fPassword').value;
+        const role     = document.getElementById('fRole').value;
+        const status   = document.getElementById('fStatus').value;
+        const editId   = document.getElementById('editId').value;
+
+        if (!fullName || !username || !email) { showToast('Full name, username and email are required', 'error'); return; }
+        if (!editId && (!password || password.length < 6)) { showToast('Password must be at least 6 characters', 'error'); return; }
+        if (!editId && users.find(u => u.username === username)) { showToast('Username already exists', 'error'); return; }
+
+        const btn = document.getElementById('btnSave');
+        btn.disabled = true; btn.textContent = 'Saving…';
+
+        try {
+            if (editId) {
+                const updateData = { fullName, username, email, role, status };
+                if (password) updateData.password = password;
+
+                if (window.API && await API.checkHealth()) {
+                    const updated = await API.updateUser(editId, updateData);
+                    const i = users.findIndex(u => u.id === parseInt(editId));
+                    if (i > -1) users[i] = updated;
+                } else {
+                    const i = users.findIndex(u => u.id === parseInt(editId));
+                    if (i > -1) users[i] = { ...users[i], ...updateData, roleName: ROLE_NAMES[role], avatar: ROLE_AVATARS[role] };
+                    sessionStorage.setItem('usersDB', JSON.stringify(users));
+                }
+                addAuditEntry('UPDATE', 'User', `Updated: ${fullName}`);
+                showToast('User updated!', 'success');
+            } else {
+                const createData = { username, password, fullName, email, role, status };
+                if (window.API && await API.checkHealth()) {
+                    const created = await API.createUser(createData);
+                    users.push(created);
+                } else {
+                    const newU = { id: nextId(users), ...createData, roleName: ROLE_NAMES[role], avatar: ROLE_AVATARS[role], lastLogin: null, createdAt: new Date().toISOString() };
+                    users.push(newU);
+                    sessionStorage.setItem('usersDB', JSON.stringify(users));
+                }
+                addAuditEntry('CREATE', 'User', `Created: ${fullName} (${ROLE_NAMES[role]})`);
+                showToast('User created!', 'success');
+            }
+            render();
+            closeModal('formModal');
+        } catch (err) {
+            showToast(err.message || 'Save failed', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = editId ? 'Save Changes' : 'Create User';
+        }
+    }
+
+    /* ── delete ── */
+    function openDelete(id) {
+        const u = users.find(x => x.id === id || x.id === parseInt(id));
+        if (!u) return;
+        if (u.id === getUser().id) { showToast('You cannot delete your own account', 'error'); return; }
+        document.getElementById('deleteId').value = u.id;
+        document.getElementById('deleteTitle').textContent = u.fullName;
+        openModal('deleteModal');
+    }
+
+    async function confirmDelete() {
+        const id  = parseInt(document.getElementById('deleteId').value);
+        const u   = users.find(x => x.id === id);
+        const btn = document.getElementById('btnConfirmDelete');
+        btn.disabled = true; btn.textContent = 'Deleting…';
+
+        try {
+            if (window.API && await API.checkHealth()) await API.deleteUser(id);
+            users = users.filter(x => x.id !== id);
+            sessionStorage.setItem('usersDB', JSON.stringify(users));
+            addAuditEntry('DELETE', 'User', `Deleted: ${u?.fullName}`);
+            showToast('User deleted', 'info');
+            render();
+            closeModal('deleteModal');
+        } catch (err) {
+            showToast('Error: ' + err.message, 'error');
+        } finally {
+            btn.disabled = false; btn.textContent = 'Delete';
+        }
+    }
+
+    /* ── event wiring ── */
+    document.getElementById('btnNew').addEventListener('click', openCreate);
+    document.getElementById('btnSave').addEventListener('click', save);
+    document.getElementById('btnCancel').addEventListener('click', () => closeModal('formModal'));
+    document.getElementById('btnCloseModal').addEventListener('click', () => closeModal('formModal'));
+    document.getElementById('btnConfirmDelete').addEventListener('click', confirmDelete);
+    document.getElementById('btnCancelDelete').addEventListener('click', () => closeModal('deleteModal'));
+    document.getElementById('btnCloseDelete').addEventListener('click', () => closeModal('deleteModal'));
+    document.getElementById('searchField').addEventListener('input', e => render(e.target.value));
+    document.getElementById('formModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('formModal'); });
+    document.getElementById('deleteModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('deleteModal'); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal('formModal'); closeModal('deleteModal'); } });
+    document.getElementById('tableBody').addEventListener('click', e => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        const id = parseInt(btn.dataset.id);
+        if (btn.dataset.action === 'edit')   openEdit(id);
+        if (btn.dataset.action === 'delete') openDelete(id);
+    });
+
+    load();
+}());
+</script>
+</body>
+</html>

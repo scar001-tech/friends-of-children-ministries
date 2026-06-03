@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Add a new Lesson">
+    <title>Add New Lesson | Friends of Children Ministries</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="index.css">
+
+    <style>
+        body {
+            background: 
+                linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(240, 249, 255, 0.5) 100%),
+                url('admin-dashboard-bg.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        .add-lesson-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: var(--spacing-xl) var(--spacing-md);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+        }
+
+        .page-header h1 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            margin-bottom: var(--spacing-sm);
+            font-weight: 800;
+        }
+
+        .page-header p {
+            color: #1E293B;
+            font-size: 1.125rem;
+            font-weight: 500;
+        }
+
+        .lesson-form {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            padding: var(--spacing-xl);
+            border: 1px solid var(--border-color);
+        }
+
+        .form-section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .form-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-section h2 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-md);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 2px solid var(--border-color);
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: var(--spacing-xs);
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: var(--spacing-sm);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .submit-section {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            margin-top: var(--spacing-xl);
+            padding-top: var(--spacing-xl);
+            border-top: 2px solid var(--border-color);
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--gradient-button);
+            color: white;
+            box-shadow: var(--shadow-gold);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary-dark);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .required {
+            color: #dc2626;
+        }
+
+        .form-hint {
+            font-size: 0.875rem;
+            color: #475569;
+            margin-top: var(--spacing-xs);
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .lesson-form {
+                padding: var(--spacing-md);
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .submit-section {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Admin Header -->
+    <header class="header" style="background: var(--gradient-primary);">
+        <nav class="nav-container">
+            <div class="logo" style="color: white;">Friends of Children Ministries <span
+                    style="background: rgba(255,255,255,0.2); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; margin-left: 0.5rem;">ADMIN</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="admin.html" style="color: rgba(255,255,255,0.9);">← Back to Dashboard</a></li>
+                <li><a href="#" onclick="logout()" style="color: rgba(255,255,255,0.9);">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="add-lesson-container">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Add New Lesson</h1>
+            <p>Create a new lesson with all the required information</p>
+        </div>
+
+        <!-- Lesson Form -->
+        <form class="lesson-form" id="addLessonForm">
+
+            <!-- Basic Information Section -->
+            <div class="form-section">
+                <h2>Basic Information</h2>
+
+                <div class="form-group">
+                    <label for="lessonTitle">Lesson Title <span class="required">*</span></label>
+                    <input type="text" id="lessonTitle" name="lessonTitle" required
+                        placeholder="e.g., God's Amazing Creation">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="scripture">Scripture Reference <span class="required">*</span></label>
+                        <input type="text" id="scripture" name="scripture" required placeholder="e.g., Genesis 1:1-31">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category <span class="required">*</span></label>
+                        <select id="category" name="category" required>
+                            <option value="">Select a category</option>
+                            <option value="creation">Creation Stories</option>
+                            <option value="parables">Parables</option>
+                            <option value="faith">Faith & Purpose</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date">Lesson Date <span class="required">*</span></label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duration">Duration (minutes)</label>
+                        <input type="number" id="duration" name="duration" min="15" max="120" placeholder="e.g., 45">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ageGroup">Age Group</label>
+                        <input type="text" id="ageGroup" name="ageGroup" placeholder="e.g., Elementary (6-11)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="overview">Lesson Overview <span class="required">*</span></label>
+                    <textarea id="overview" name="overview" required
+                        placeholder="Provide a brief overview of what this lesson covers..."></textarea>
+                    <p class="form-hint">A concise summary of the lesson's main focus and goals</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="objectives">Learning Objectives</label>
+                    <textarea id="objectives" name="objectives"
+                        placeholder="List the key learning objectives (one per line)..."></textarea>
+                    <p class="form-hint">What students should learn or be able to do after this lesson</p>
+                </div>
+            </div>
+
+            <!-- Lesson Content Section - Age Group Specific -->
+            <div class="form-section">
+                <h2>Lesson Content (Age Groups)</h2>
+                <p class="form-hint" style="margin-bottom: 2rem;">Provide tailored content and PDF resources for each
+                    age group. Use Markdown-style headers (###) for activity titles.</p>
+
+                <!-- Class A (3-5) -->
+                <div
+                    style="background: var(--bg-secondary); padding: 1.5rem; border-radius: var(--radius-lg); border-left: 5px solid var(--children-blue); margin-bottom: 2rem;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">Class A (Ages 3-5)</h3>
+                    <div class="form-group">
+                        <label for="contentClassA">Teaching Content <span class="required">*</span></label>
+                        <textarea id="contentClassA" name="contentClassA" required
+                            placeholder="### Opening Prayer\n...### Interactive Story\n..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="pdfClassA">PDF Download URL</label>
+                        <input type="text" id="pdfClassA" name="pdfClassA"
+                            placeholder="downloads/lesson-name-class-a.pdf">
+                    </div>
+                </div>
+
+                <!-- Class B (6-9) -->
+                <div
+                    style="background: var(--bg-secondary); padding: 1.5rem; border-radius: var(--radius-lg); border-left: 5px solid var(--children-orange); margin-bottom: 2rem;">
+                    <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">Class B (Ages 6-9)</h3>
+                    <div class="form-group">
+                        <label for="contentClassB">Teaching Content <span class="required">*</span></label>
+                        <textarea id="contentClassB" name="contentClassB" required
+                            placeholder="### Bible Reading & Drama\n...### Group Discussion\n..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="pdfClassB">PDF Download URL</label>
+                        <input type="text" id="pdfClassB" name="pdfClassB"
+                            placeholder="downloads/lesson-name-class-b.pdf">
+                    </div>
+                </div>
+
+                <!-- Class C (10-12) -->
+                <div
+                    style="background: var(--bg-secondary); padding: 1.5rem; border-radius: var(--radius-lg); border-left: 5px solid var(--children-purple); margin-bottom: 2rem;">
+                    <h3 style="color: var(--children-purple); margin-bottom: 1rem;">Class C (Ages 10-12)</h3>
+                    <div class="form-group">
+                        <label for="contentClassC">Teaching Content <span class="required">*</span></label>
+                        <textarea id="contentClassC" name="contentClassC" required
+                            placeholder="### Deep Study\n...### Analysis\n..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="pdfClassC">PDF Download URL</label>
+                        <input type="text" id="pdfClassC" name="pdfClassC"
+                            placeholder="downloads/lesson-name-class-c.pdf">
+                    </div>
+                </div>
+
+                <!-- Teens (13+) -->
+                <div
+                    style="background: var(--bg-secondary); padding: 1.5rem; border-radius: var(--radius-lg); border-left: 5px solid var(--ot-crimson-light); margin-bottom: 2rem;">
+                    <h3 style="color: var(--ot-crimson); margin-bottom: 1rem;">Teens (Ages 13+)</h3>
+                    <div class="form-group">
+                        <label for="contentTeens">Teaching Content <span class="required">*</span></label>
+                        <textarea id="contentTeens" name="contentTeens" required
+                            placeholder="### Theological Reflection\n...### Ethical Forum\n..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="pdfTeens">PDF Download URL</label>
+                        <input type="text" id="pdfTeens" name="pdfTeens" placeholder="downloads/lesson-name-teens.pdf">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Article/Blog Information Section -->
+            <div class="form-section">
+                <h2>Related Article/Blog Information</h2>
+
+                <div class="form-group">
+                    <label for="articleTitle">Article Title</label>
+                    <input type="text" id="articleTitle" name="articleTitle"
+                        placeholder="e.g., Teaching Creation to Children: Best Practices">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="articleAuthor">Author</label>
+                        <input type="text" id="articleAuthor" name="articleAuthor" placeholder="e.g., Sarah Johnson">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="articleDate">Publication Date</label>
+                        <input type="date" id="articleDate" name="articleDate">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="articleContent">Article Content/Excerpt</label>
+                    <textarea id="articleContent" name="articleContent"
+                        placeholder="Enter article content or a brief excerpt..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="articleLink">Article Link (URL)</label>
+                    <input type="url" id="articleLink" name="articleLink" placeholder="https://example.com/article">
+                    <p class="form-hint">Optional: Link to full article if hosted elsewhere</p>
+                </div>
+            </div>
+
+            <!-- Media Resources Section -->
+            <div class="form-section">
+                <h2>Media Resources (Optional)</h2>
+
+                <div class="form-group">
+                    <label for="videoUrl">Video URL</label>
+                    <input type="url" id="videoUrl" name="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
+                    <p class="form-hint">YouTube or other video platform URL</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="audioUrl">Audio URL</label>
+                    <input type="url" id="audioUrl" name="audioUrl" placeholder="https://example.com/audio.mp3">
+                    <p class="form-hint">Link to audio file or podcast</p>
+                </div>
+            </div>
+
+            <!-- Submit Section -->
+            <div class="submit-section">
+                <button type="submit" class="btn btn-primary">Add Lesson</button>
+                <a href="admin.html" class="btn btn-secondary">Cancel</a>
+            </div>
+
+        </form>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3 style="color: white; margin-bottom: var(--spacing-md);">Friends of Children Ministries</h3>
+            <p>Empowering teachers to inspire the next generation</p>
+            <p style="margin-top: var(--spacing-md); font-size: 0.875rem;">
+                &copy; 2025 Friends of Children Ministries. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Check authentication on page load
+        if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
+            alert('Access denied. Please login as admin.');
+            window.location.href = 'admin-login.html';
+        }
+
+        // Logout function
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                sessionStorage.removeItem('adminLoggedIn');
+                sessionStorage.removeItem('adminUsername');
+                window.location.href = 'admin-login.html';
+            }
+        }
+    </script>
+    <script src="app.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Config | Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .status-dot { width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:.4rem; }
+        .dot-green  { background:#16a34a; }
+        .dot-amber  { background:#ca8a04; }
+        .dot-grey   { background:#94a3b8; }
+        .instruction-step { display:flex;gap:1rem;margin-bottom:1.25rem;align-items:flex-start; }
+        .step-num { width:28px;height:28px;border-radius:50%;background:var(--primary-color);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;flex-shrink:0; }
+        .step-body p { margin:0;font-size:.875rem;color:var(--text-secondary); }
+        .step-body strong { color:var(--text-primary); }
+        code { background:var(--bg-tertiary);padding:.15rem .4rem;border-radius:4px;font-family:monospace;font-size:.85em; }
+        .process-result { padding:1rem;border-radius:var(--radius-md);margin-top:1rem;display:none; }
+        .process-result.success { background:#dcfce7;color:#166534;border-left:4px solid #16a34a; }
+        .process-result.error   { background:#fee2e2;color:#991b1b;border-left:4px solid #dc2626; }
+        .process-result.info    { background:#dbeafe;color:#1e40af;border-left:4px solid #3b82f6; }
+    </style>
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+    <aside class="admin-sidebar" id="adminSidebar"></aside>
+    <main class="admin-main">
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+
+        <div class="admin-topbar">
+            <div class="topbar-title">
+                <h1>Telegram Configuration</h1>
+                <p>Configure bot integration for live message ingestion</p>
+            </div>
+            <div class="topbar-actions">
+                <a href="admin-telegram-imports.html" class="btn btn-outline" style="margin-right:.5rem;">
+                    <i class="fab fa-telegram"></i> View Imports
+                </a>
+                <button class="btn btn-primary" id="btnTestConn">
+                    <i class="fas fa-plug"></i> Test Connection
+                </button>
+            </div>
+        </div>
+
+        <!-- Status cards -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-bottom:1.5rem;">
+            <div class="panel" style="padding:1.25rem;">
+                <div style="font-size:.8rem;color:var(--text-muted);margin-bottom:.5rem;">BOT STATUS</div>
+                <div id="statusBot" style="font-weight:700;display:flex;align-items:center;"><span class="status-dot dot-grey"></span>Not Configured</div>
+            </div>
+            <div class="panel" style="padding:1.25rem;">
+                <div style="font-size:.8rem;color:var(--text-muted);margin-bottom:.5rem;">WEBHOOK</div>
+                <div id="statusWebhook" style="font-weight:700;display:flex;align-items:center;"><span class="status-dot dot-grey"></span>Not Set</div>
+            </div>
+            <div class="panel" style="padding:1.25rem;">
+                <div style="font-size:.8rem;color:var(--text-muted);margin-bottom:.5rem;">LAST PROCESSED</div>
+                <div id="statusLastProcessed" style="font-weight:700;">Never</div>
+            </div>
+            <div class="panel" style="padding:1.25rem;">
+                <div style="font-size:.8rem;color:var(--text-muted);margin-bottom:.5rem;">MESSAGE OFFSET</div>
+                <div id="statusOffset" style="font-weight:700;">0</div>
+            </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 380px;gap:1.5rem;align-items:start;">
+
+            <!-- Config form -->
+            <div class="panel">
+                <div class="panel-header"><h2>Bot Configuration</h2></div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label>Bot Token <span class="required">*</span></label>
+                        <input type="password" id="fBotToken" class="form-control" placeholder="Get from @BotFather on Telegram">
+                        <small style="color:var(--text-muted);">Keep this secret — it gives full control of your bot</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Chat ID <small style="color:var(--text-muted);">(optional)</small></label>
+                        <input type="text" id="fChatId" class="form-control" placeholder="Specific chat to monitor, or leave empty for all">
+                    </div>
+                    <div class="form-group">
+                        <label>Webhook URL <small style="color:var(--text-muted);">(optional)</small></label>
+                        <input type="url" id="fWebhookUrl" class="form-control" placeholder="https://yourdomain.com/api/telegram/webhook">
+                        <small style="color:var(--text-muted);">Must be a public HTTPS URL. Use ngrok for local testing.</small>
+                    </div>
+                    <div class="form-group">
+                        <label style="display:flex;align-items:center;gap:.75rem;cursor:pointer;">
+                            <input type="checkbox" id="fActive" style="width:18px;height:18px;">
+                            <span>Enable Telegram Integration</span>
+                        </label>
+                    </div>
+                    <div style="display:flex;gap:.75rem;margin-top:.5rem;">
+                        <button class="btn btn-outline" id="btnResetConfig">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                        <button class="btn btn-primary" id="btnSaveConfig">
+                            <i class="fas fa-save"></i> Save Configuration
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right column -->
+            <div style="display:flex;flex-direction:column;gap:1.5rem;">
+
+                <!-- Manual processing -->
+                <div class="panel">
+                    <div class="panel-header"><h2>Manual Processing</h2></div>
+                    <div class="panel-body">
+                        <p style="color:var(--text-secondary);font-size:.875rem;margin-bottom:1rem;">Manually fetch new messages from Telegram using the polling API.</p>
+                        <button class="btn btn-primary" id="btnProcessQueue" style="width:100%;">
+                            <i class="fas fa-sync"></i> Process Queue Now
+                        </button>
+                        <div class="process-result" id="processResult"></div>
+                    </div>
+                </div>
+
+                <!-- Webhook endpoint -->
+                <div class="panel">
+                    <div class="panel-header"><h2>Webhook Endpoint</h2></div>
+                    <div class="panel-body">
+                        <p style="color:var(--text-secondary);font-size:.875rem;margin-bottom:.75rem;">Register this URL in your Telegram bot settings:</p>
+                        <div style="display:flex;gap:.5rem;align-items:center;">
+                            <code id="webhookEndpoint" style="flex:1;padding:.5rem .75rem;background:var(--bg-tertiary);border-radius:var(--radius-md);font-size:.8rem;word-break:break-all;"></code>
+                            <button class="btn btn-sm btn-outline" id="btnCopyWebhook"><i class="fas fa-copy"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Setup instructions -->
+        <div class="panel" style="margin-top:1.5rem;">
+            <div class="panel-header"><h2>Setup Instructions</h2></div>
+            <div class="panel-body">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;">
+                    <div>
+                        <h4 style="margin-bottom:1rem;color:var(--text-primary);">1. Create a Telegram Bot</h4>
+                        <div class="instruction-step"><div class="step-num">1</div><div class="step-body"><strong>Open Telegram</strong><p>Search for <code>@BotFather</code> and start a chat</p></div></div>
+                        <div class="instruction-step"><div class="step-num">2</div><div class="step-body"><strong>Create bot</strong><p>Send <code>/newbot</code> and follow the prompts</p></div></div>
+                        <div class="instruction-step"><div class="step-num">3</div><div class="step-body"><strong>Copy token</strong><p>Paste the bot token in the configuration form above</p></div></div>
+                        <div class="instruction-step"><div class="step-num">4</div><div class="step-body"><strong>Enable &amp; save</strong><p>Check "Enable Telegram Integration" and click Save</p></div></div>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom:1rem;color:var(--text-primary);">2. Import Historical Messages</h4>
+                        <div class="instruction-step"><div class="step-num">1</div><div class="step-body"><strong>Export from Telegram Desktop</strong><p>Settings → Export Telegram Data → select JSON format</p></div></div>
+                        <div class="instruction-step"><div class="step-num">2</div><div class="step-body"><strong>Upload result.json</strong><p>Go to <a href="admin-telegram-imports.html" style="color:var(--primary-color);">Telegram Imports</a> and upload the file</p></div></div>
+                        <div class="instruction-step"><div class="step-num">3</div><div class="step-body"><strong>Review &amp; promote</strong><p>Select messages and promote them to lesson drafts</p></div></div>
+                    </div>
+                </div>
+                <div style="background:#dbeafe;border-left:4px solid #3b82f6;padding:1rem;border-radius:0 var(--radius-md) var(--radius-md) 0;margin-top:1rem;">
+                    <i class="fas fa-info-circle" style="color:#1d4ed8;"></i>
+                    <strong style="color:#1e40af;"> Note:</strong>
+                    <span style="color:#1e40af;font-size:.875rem;"> For live webhook ingestion, your server must be publicly accessible via HTTPS. Use <a href="https://ngrok.com" target="_blank" style="color:#1d4ed8;">ngrok</a> for local development.</span>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="admin-shared.js"></script>
+<script>
+(function () {
+    if (!checkAuth()) return;
+    renderSidebar('telegram-config');
+
+    const H = () => ({ 'Content-Type':'application/json', 'x-admin-role': sessionStorage.getItem('adminRole')||'system_admin' });
+    let cfg = {};
+
+    /* ── webhook endpoint display ── */
+    document.getElementById('webhookEndpoint').textContent = window.location.origin + '/api/telegram/webhook';
+    document.getElementById('btnCopyWebhook').addEventListener('click', () => {
+        navigator.clipboard.writeText(window.location.origin + '/api/telegram/webhook')
+            .then(() => showToast('Webhook URL copied!', 'success'));
+    });
+
+    /* ── load config ── */
+    async function loadConfig() {
+        try {
+            const r = await fetch('/api/telegram/config', { headers: H() });
+            cfg = r.ok ? await r.json() : {};
+        } catch { cfg = {}; }
+        populateForm();
+        updateStatus();
+    }
+
+    function populateForm() {
+        document.getElementById('fBotToken').value   = cfg.botToken    || '';
+        document.getElementById('fChatId').value     = cfg.chatId      || '';
+        document.getElementById('fWebhookUrl').value = cfg.webhookUrl  || '';
+        document.getElementById('fActive').checked   = cfg.active      || false;
+    }
+
+    function updateStatus() {
+        const botEl = document.getElementById('statusBot');
+        if (cfg.botToken) {
+            botEl.innerHTML = `<span class="status-dot ${cfg.active?'dot-green':'dot-amber'}"></span>${cfg.active?'Active':'Configured (Inactive)'}`;
+        } else {
+            botEl.innerHTML = '<span class="status-dot dot-grey"></span>Not Configured';
+        }
+
+        const whEl = document.getElementById('statusWebhook');
+        whEl.innerHTML = cfg.webhookUrl
+            ? '<span class="status-dot dot-green"></span>Configured'
+            : '<span class="status-dot dot-grey"></span>Not Set';
+
+        document.getElementById('statusLastProcessed').textContent = cfg.lastProcessed || 'Never';
+        document.getElementById('statusOffset').textContent = cfg.lastProcessedOffset || 0;
+    }
+
+    /* ── save ── */
+    document.getElementById('btnSaveConfig').addEventListener('click', async () => {
+        const btn = document.getElementById('btnSaveConfig');
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
+
+        const payload = {
+            botToken:   document.getElementById('fBotToken').value.trim(),
+            chatId:     document.getElementById('fChatId').value.trim(),
+            webhookUrl: document.getElementById('fWebhookUrl').value.trim(),
+            active:     document.getElementById('fActive').checked
+        };
+
+        try {
+            const r = await fetch('/api/telegram/config', { method:'PUT', headers: H(), body: JSON.stringify(payload) });
+            if (r.ok) {
+                cfg = await r.json();
+                updateStatus();
+                addAuditEntry('UPDATE', 'Telegram Config', 'Configuration saved');
+                showToast('Configuration saved!', 'success');
+            } else {
+                const e = await r.json();
+                showToast(e.error || 'Save failed', 'error');
+            }
+        } catch { showToast('Server offline — config not saved', 'error'); }
+        finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Save Configuration'; }
+    });
+
+    document.getElementById('btnResetConfig').addEventListener('click', () => { populateForm(); showToast('Form reset', 'info'); });
+
+    /* ── test connection ── */
+    document.getElementById('btnTestConn').addEventListener('click', async () => {
+        if (!cfg.botToken) { showToast('Save a bot token first', 'error'); return; }
+        const btn = document.getElementById('btnTestConn');
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing…';
+
+        try {
+            // Call Telegram getMe API directly to verify token
+            const r = await fetch(`https://api.telegram.org/bot${cfg.botToken}/getMe`);
+            const d = await r.json();
+            if (d.ok) {
+                showToast(`Connected! Bot: @${d.result.username}`, 'success');
+            } else {
+                showToast('Connection failed: ' + d.description, 'error');
+            }
+        } catch {
+            showToast('Connection test failed — check your token', 'error');
+        } finally {
+            btn.disabled = false; btn.innerHTML = '<i class="fas fa-plug"></i> Test Connection';
+        }
+    });
+
+    /* ── process queue ── */
+    document.getElementById('btnProcessQueue').addEventListener('click', async () => {
+        const btn = document.getElementById('btnProcessQueue');
+        const res = document.getElementById('processResult');
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing…';
+        res.style.display = 'none';
+
+        try {
+            const r = await fetch('/api/telegram/process-queue', { method:'POST', headers: H() });
+            const d = await r.json();
+            res.className = 'process-result ' + (r.ok ? 'success' : 'error');
+            res.innerHTML = `<i class="fas fa-${r.ok?'check-circle':'exclamation-circle'}"></i> ${d.message || (r.ok?'Queue processed':'Processing failed')}${d.processed>0?`<br><small>Processed ${d.processed} new messages</small>`:''}${d.note?`<br><small>${d.note}</small>`:''}`;
+            res.style.display = 'block';
+            if (r.ok) showToast('Queue processed!', 'success');
+        } catch {
+            res.className = 'process-result error';
+            res.innerHTML = '<i class="fas fa-exclamation-circle"></i> Server offline — cannot process queue';
+            res.style.display = 'block';
+        } finally {
+            btn.disabled = false; btn.innerHTML = '<i class="fas fa-sync"></i> Process Queue Now';
+        }
+    });
+
+    loadConfig();
+}());
+</script>
+</body>
+</html>

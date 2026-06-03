@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Study Lessons | Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .pdf-badge { display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .6rem;border-radius:4px;font-size:.75rem;font-weight:600; }
+        .pdf-ready   { background:#dcfce7;color:#16a34a; }
+        .pdf-pending { background:#fef9c3;color:#ca8a04; }
+        .compile-bar { background:linear-gradient(135deg,#4A90E2,#357ABD);color:white;border-radius:var(--radius-xl);padding:1.5rem 2rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem; }
+        .compile-bar h3 { margin:0;font-size:1.1rem; }
+        .compile-bar p  { margin:0;font-size:.875rem;opacity:.9; }
+        .btn-compile { background:white;color:#4A90E2;border:none;padding:.75rem 1.5rem;border-radius:var(--radius-md);font-weight:700;cursor:pointer;display:flex;align-items:center;gap:.5rem;transition:all .2s; }
+        .btn-compile:hover { transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.15); }
+        .btn-compile:disabled { opacity:.6;cursor:not-allowed;transform:none; }
+        .week-badge { background:var(--primary-light);color:var(--primary-color);padding:.2rem .6rem;border-radius:4px;font-size:.75rem;font-weight:700; }
+    </style>
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+    <aside class="admin-sidebar" id="adminSidebar"></aside>
+    <main class="admin-main">
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+
+        <div class="admin-topbar">
+            <div class="topbar-title">
+                <h1>Bible Study Lessons</h1>
+                <p>Upload weekly lessons — each is auto-compiled to PDF after publishing</p>
+            </div>
+            <div class="topbar-actions">
+                <a href="bible-study.html" target="_blank" class="btn btn-outline" style="margin-right:.5rem;">
+                    <i class="fas fa-external-link-alt"></i> Public Page
+                </a>
+                <button class="btn btn-primary" id="btnNew">
+                    <i class="fas fa-plus"></i> New Weekly Lesson
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-bottom:1.5rem;">
+            <div class="panel" style="padding:1.25rem;text-align:center;">
+                <div style="font-size:2rem;font-weight:800;color:var(--primary-color);" id="statTotal">—</div>
+                <div style="font-size:.85rem;color:var(--text-secondary);">Total Lessons</div>
+            </div>
+            <div class="panel" style="padding:1.25rem;text-align:center;">
+                <div style="font-size:2rem;font-weight:800;color:#16a34a;" id="statPublished">—</div>
+                <div style="font-size:.85rem;color:var(--text-secondary);">Published</div>
+            </div>
+            <div class="panel" style="padding:1.25rem;text-align:center;">
+                <div style="font-size:2rem;font-weight:800;color:#ca8a04;" id="statDraft">—</div>
+                <div style="font-size:.85rem;color:var(--text-secondary);">Drafts</div>
+            </div>
+            <div class="panel" style="padding:1.25rem;text-align:center;">
+                <div style="font-size:2rem;font-weight:800;color:#4A90E2;" id="statPdfs">—</div>
+                <div style="font-size:.85rem;color:var(--text-secondary);">PDFs Ready</div>
+            </div>
+        </div>
+
+        <!-- Compile bar -->
+        <div class="compile-bar">
+            <div>
+                <h3><i class="fas fa-file-pdf"></i> Weekly PDF Pack</h3>
+                <p>Compile all published lessons into one downloadable PDF for the congregation</p>
+            </div>
+            <button class="btn-compile" id="compileBtn">
+                <i class="fas fa-layer-group"></i> Compile Weekly PDF
+            </button>
+        </div>
+
+        <!-- Table -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2>All Weekly Lessons</h2>
+                <div class="search-filter-bar" style="display:flex;gap:.75rem;align-items:center;">
+                    <input type="text" class="search-field" id="searchField" placeholder="Search lessons…">
+                    <select class="form-control" id="filterStatus" style="width:auto;margin:0;">
+                        <option value="all">All Status</option>
+                        <option value="published">Published</option>
+                        <option value="draft">Draft</option>
+                    </select>
+                </div>
+            </div>
+            <div class="panel-body" style="padding:0;">
+                <table class="data-table">
+                    <thead>
+                        <tr><th>Week</th><th>Title</th><th>Scripture</th><th>Level</th><th>Status</th><th>PDF</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);">Loading…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Create / Edit Modal -->
+<div class="modal-overlay" id="formModal" style="display:none;">
+    <div class="modal" style="max-width:720px;">
+        <div class="modal-header">
+            <h2 id="modalTitle">New Weekly Lesson</h2>
+            <button class="modal-close" id="btnCloseModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="editId">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Week Number <span class="required">*</span></label>
+                    <input type="number" id="fWeekNumber" class="form-control" min="1" value="1">
+                </div>
+                <div class="form-group">
+                    <label>Week Label</label>
+                    <input type="text" id="fWeekLabel" class="form-control" placeholder="e.g. Week 1 — Jan 5">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Lesson Title <span class="required">*</span></label>
+                <input type="text" id="fTitle" class="form-control" placeholder="e.g. Fruits of the Spirit">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Scripture Reference <span class="required">*</span></label>
+                    <input type="text" id="fScripture" class="form-control" placeholder="e.g. Galatians 5:22-23">
+                </div>
+                <div class="form-group">
+                    <label>Level</label>
+                    <select id="fLevel" class="form-control">
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Memory Verse</label>
+                <input type="text" id="fMemoryVerse" class="form-control" placeholder="Key verse for memorization">
+            </div>
+            <div class="form-group">
+                <label>Short Description</label>
+                <textarea id="fDescription" class="form-control" rows="2" placeholder="Brief summary of the lesson"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Lesson Content <span class="required">*</span></label>
+                <textarea id="fContent" class="form-control" rows="5" placeholder="Full lesson text — this will appear in the PDF…"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Learning Objectives <small style="color:var(--text-muted)">(one per line)</small></label>
+                <textarea id="fObjectives" class="form-control" rows="3" placeholder="Understand the nine fruits&#10;Apply fruit-bearing principles"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Discussion Questions <small style="color:var(--text-muted)">(one per line)</small></label>
+                <textarea id="fDiscussion" class="form-control" rows="3" placeholder="Which fruit do you find easiest to exhibit?"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Activities &amp; Crafts</label>
+                <textarea id="fActivities" class="form-control" rows="2" placeholder="Describe hands-on activities…"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select id="fStatus" class="form-control">
+                    <option value="draft">Draft</option>
+                    <option value="published">Published</option>
+                </select>
+                <small style="color:var(--text-muted);">Publishing will automatically trigger PDF generation.</small>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancel">Cancel</button>
+            <button class="btn btn-primary" id="btnSave">
+                <i class="fas fa-save"></i> Save Lesson
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal-overlay" id="deleteModal" style="display:none;">
+    <div class="modal modal-sm">
+        <div class="modal-header">
+            <h2>Delete Lesson</h2>
+            <button class="modal-close" id="btnCloseDelete">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="color:var(--text-secondary);">Delete "<strong id="deleteTitle"></strong>"? This will also remove its PDF file.</p>
+            <input type="hidden" id="deleteId">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancelDelete">Cancel</button>
+            <button class="btn btn-danger-outline" id="btnConfirmDelete">
+                <i class="fas fa-trash"></i> Delete
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="admin-shared.js"></script>
+<script>
+(function () {
+    if (!checkAuth()) return;
+    renderSidebar('bible-studies');
+
+    const API_BASE = '/api/bible-studies';
+    const STORAGE  = 'bibleStudies';
+    const HEADERS  = () => ({ 'Content-Type':'application/json', 'x-admin-role': sessionStorage.getItem('adminRole')||'system_admin' });
+    const LEVEL_BADGE = { beginner:'badge-success', intermediate:'badge-info', advanced:'badge-purple' };
+
+    let items = [];
+
+    /* ── modal helpers ── */
+    function openModal(id)  { document.getElementById(id).style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none';  document.body.style.overflow = ''; }
+
+    /* ── load ── */
+    async function load() {
+        try {
+            const r = await fetch(API_BASE);
+            const d = r.ok ? await r.json() : null;
+            items = Array.isArray(d) ? d : (d?.studies || getData(STORAGE));
+        } catch { items = getData(STORAGE); }
+        if (!Array.isArray(items)) items = getData(STORAGE);
+        setData(STORAGE, items);
+        updateStats();
+        render();
+    }
+
+    function updateStats() {
+        document.getElementById('statTotal').textContent     = items.length;
+        document.getElementById('statPublished').textContent = items.filter(s => s.status === 'published').length;
+        document.getElementById('statDraft').textContent     = items.filter(s => s.status === 'draft').length;
+        document.getElementById('statPdfs').textContent      = items.filter(s => s.pdfGenerated).length;
+    }
+
+    /* ── render table ── */
+    function render() {
+        const search = document.getElementById('searchField').value.toLowerCase();
+        const status = document.getElementById('filterStatus').value;
+        const rows   = items.filter(s => {
+            const ms = !search || (s.title+s.scripture+(s.description||'')).toLowerCase().includes(search);
+            const mv = status === 'all' || s.status === status;
+            return ms && mv;
+        });
+        const tbody = document.getElementById('tableBody');
+        if (!rows.length) { tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="empty-icon"><i class="fas fa-cross"></i></div><p>No lessons found</p></div></td></tr>'; return; }
+        tbody.innerHTML = rows.map(s => `
+            <tr>
+                <td><span class="week-badge">${s.weekLabel||'Week '+s.weekNumber}</span></td>
+                <td style="font-weight:600;max-width:200px">${s.title}</td>
+                <td style="color:var(--text-secondary);font-size:.9rem">${s.scripture}</td>
+                <td><span class="badge ${LEVEL_BADGE[s.level]||'badge-muted'}">${s.level}</span></td>
+                <td><span class="badge ${s.status==='published'?'badge-success':'badge-warning'}">${s.status}</span></td>
+                <td>
+                    ${s.pdfGenerated
+                        ? `<span class="pdf-badge pdf-ready"><i class="fas fa-check-circle"></i> Ready</span>
+                           <a href="${API_BASE}/${s.id}/download-pdf" target="_blank" class="btn btn-sm btn-outline" style="margin-left:.4rem;padding:.2rem .5rem;font-size:.75rem;"><i class="fas fa-download"></i></a>`
+                        : `<span class="pdf-badge pdf-pending"><i class="fas fa-clock"></i> Pending</span>
+                           ${s.status==='published'?`<button class="btn btn-sm btn-outline" style="margin-left:.4rem;padding:.2rem .5rem;font-size:.75rem;" data-action="genpdf" data-id="${s.id}"><i class="fas fa-file-pdf"></i> Generate</button>`:''}`
+                    }
+                </td>
+                <td>
+                    <div style="display:flex;gap:.4rem">
+                        <button class="btn btn-sm btn-outline" data-action="edit" data-id="${s.id}"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="btn btn-sm btn-danger-outline" data-action="delete" data-id="${s.id}"><i class="fas fa-trash"></i></button>
+                    </div>
+                </td>
+            </tr>`).join('');
+    }
+
+    /* ── open create ── */
+    function openCreate() {
+        const maxWeek = items.reduce((m, s) => Math.max(m, s.weekNumber||0), 0);
+        document.getElementById('modalTitle').textContent = 'New Weekly Lesson';
+        document.getElementById('btnSave').innerHTML = '<i class="fas fa-save"></i> Save Lesson';
+        document.getElementById('editId').value = '';
+        document.getElementById('fWeekNumber').value = maxWeek + 1;
+        document.getElementById('fWeekLabel').value  = `Week ${maxWeek + 1}`;
+        document.getElementById('fTitle').value = '';
+        document.getElementById('fScripture').value = '';
+        document.getElementById('fLevel').value = 'beginner';
+        document.getElementById('fMemoryVerse').value = '';
+        document.getElementById('fDescription').value = '';
+        document.getElementById('fContent').value = '';
+        document.getElementById('fObjectives').value = '';
+        document.getElementById('fDiscussion').value = '';
+        document.getElementById('fActivities').value = '';
+        document.getElementById('fStatus').value = 'draft';
+        openModal('formModal');
+        document.getElementById('fTitle').focus();
+    }
+
+    /* ── open edit ── */
+    function openEdit(id) {
+        const s = items.find(x => x.id === id || x.id === parseInt(id));
+        if (!s) return;
+        document.getElementById('modalTitle').textContent = 'Edit Lesson';
+        document.getElementById('btnSave').innerHTML = '<i class="fas fa-save"></i> Save Changes';
+        document.getElementById('editId').value        = s.id;
+        document.getElementById('fWeekNumber').value   = s.weekNumber || 1;
+        document.getElementById('fWeekLabel').value    = s.weekLabel || '';
+        document.getElementById('fTitle').value        = s.title;
+        document.getElementById('fScripture').value    = s.scripture;
+        document.getElementById('fLevel').value        = s.level || 'beginner';
+        document.getElementById('fMemoryVerse').value  = s.memoryVerse || '';
+        document.getElementById('fDescription').value  = s.description || '';
+        document.getElementById('fContent').value      = s.content || '';
+        document.getElementById('fObjectives').value   = Array.isArray(s.objectives) ? s.objectives.join('\n') : (s.objectives||'');
+        document.getElementById('fDiscussion').value   = Array.isArray(s.discussionQuestions) ? s.discussionQuestions.join('\n') : (s.discussionQuestions||'');
+        document.getElementById('fActivities').value   = s.activities || '';
+        document.getElementById('fStatus').value       = s.status;
+        openModal('formModal');
+        document.getElementById('fTitle').focus();
+    }
+
+    /* ── save ── */
+    async function save() {
+        const title    = document.getElementById('fTitle').value.trim();
+        const scripture = document.getElementById('fScripture').value.trim();
+        const content  = document.getElementById('fContent').value.trim();
+        if (!title || !scripture || !content) { showToast('Title, Scripture and Content are required', 'error'); return; }
+
+        const editId    = document.getElementById('editId').value;
+        const btn       = document.getElementById('btnSave');
+        const prevStatus = editId ? items.find(x=>x.id===parseInt(editId))?.status : null;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
+
+        const payload = {
+            weekNumber:          parseInt(document.getElementById('fWeekNumber').value)||1,
+            weekLabel:           document.getElementById('fWeekLabel').value || `Week ${document.getElementById('fWeekNumber').value}`,
+            title, scripture, content,
+            level:               document.getElementById('fLevel').value,
+            memoryVerse:         document.getElementById('fMemoryVerse').value.trim(),
+            description:         document.getElementById('fDescription').value.trim(),
+            objectives:          document.getElementById('fObjectives').value.trim(),
+            discussionQuestions: document.getElementById('fDiscussion').value.trim(),
+            activities:          document.getElementById('fActivities').value.trim(),
+            status:              document.getElementById('fStatus').value
+        };
+
+        try {
+            let saved, res;
+            if (editId) {
+                res   = await fetch(`${API_BASE}/${editId}`, { method:'PUT', headers:HEADERS(), body:JSON.stringify(payload) });
+                saved = res.ok ? await res.json() : null;
+                const i = items.findIndex(x => x.id === parseInt(editId));
+                if (i > -1) items[i] = { ...items[i], ...(saved?.study || saved || payload) };
+                addAuditEntry('UPDATE', 'Bible Study', `Updated: ${title}`);
+                showToast('Lesson updated!', 'success');
+            } else {
+                res   = await fetch(API_BASE, { method:'POST', headers:HEADERS(), body:JSON.stringify(payload) });
+                saved = res.ok ? await res.json() : null;
+                const entry = saved?.study || saved;
+                if (entry) items.push(entry);
+                else { payload.id = nextId(items); payload.pdfGenerated = false; payload.createdAt = new Date().toISOString(); items.push(payload); }
+                addAuditEntry('CREATE', 'Bible Study', `Created: ${title}`);
+                showToast('Lesson created!', 'success');
+            }
+
+            setData(STORAGE, items);
+            updateStats();
+            render();
+            closeModal('formModal');
+
+            // Auto-generate PDF when publishing for the first time
+            const newStatus = payload.status;
+            if (newStatus === 'published' && prevStatus !== 'published') {
+                const savedId = editId ? parseInt(editId) : items[items.length-1]?.id;
+                if (savedId) setTimeout(() => generatePdf(savedId), 600);
+            }
+        } catch {
+            // Offline fallback
+            if (editId) { const i = items.findIndex(x=>x.id===parseInt(editId)); if(i>-1) items[i]={...items[i],...payload}; }
+            else { payload.id = nextId(items); payload.pdfGenerated = false; payload.createdAt = new Date().toISOString(); items.push(payload); }
+            setData(STORAGE, items);
+            addAuditEntry(editId?'UPDATE':'CREATE', 'Bible Study', `${editId?'Updated':'Created'}: ${title}`);
+            showToast('Lesson saved (offline mode)', 'success');
+            updateStats();
+            render();
+            closeModal('formModal');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Save Lesson';
+        }
+    }
+
+    /* ── generate PDF ── */
+    async function generatePdf(id) {
+        showToast('Generating PDF…', 'info');
+        try {
+            const r = await fetch(`${API_BASE}/${id}/generate-pdf`, { method:'POST', headers:HEADERS() });
+            const d = await r.json();
+            if (r.ok && d.success) {
+                showToast('PDF generated!', 'success');
+                addAuditEntry('GENERATE_PDF', 'Bible Study', `PDF for study ${id}`);
+                await load();
+            } else {
+                showToast(d.error || 'PDF generation failed', 'error');
+            }
+        } catch { showToast('Server offline — cannot generate PDF', 'error'); }
+    }
+
+    /* ── compile weekly ── */
+    async function compileWeekly() {
+        const btn = document.getElementById('compileBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Compiling…';
+        try {
+            const r = await fetch(`${API_BASE}/compile-weekly`, { method:'POST', headers:HEADERS() });
+            const d = await r.json();
+            if (r.ok && d.success) {
+                showToast(d.message, 'success');
+                addAuditEntry('COMPILE_PDF', 'Bible Study', 'Weekly PDF compiled');
+                const a = document.createElement('a');
+                a.href = d.downloadUrl; a.download = d.filename; a.click();
+            } else {
+                showToast(d.error || 'Compile failed', 'error');
+            }
+        } catch { showToast('Server offline — cannot compile PDF', 'error'); }
+        finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-layer-group"></i> Compile Weekly PDF'; }
+    }
+
+    /* ── delete ── */
+    function openDelete(id) {
+        const s = items.find(x => x.id === id || x.id === parseInt(id));
+        if (!s) return;
+        document.getElementById('deleteId').value = s.id;
+        document.getElementById('deleteTitle').textContent = s.title;
+        openModal('deleteModal');
+    }
+
+    async function confirmDelete() {
+        const id  = parseInt(document.getElementById('deleteId').value);
+        const s   = items.find(x => x.id === id);
+        const btn = document.getElementById('btnConfirmDelete');
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting…';
+
+        try { await fetch(`${API_BASE}/${id}`, { method:'DELETE', headers:HEADERS() }); } catch {}
+
+        items = items.filter(x => x.id !== id);
+        setData(STORAGE, items);
+        addAuditEntry('DELETE', 'Bible Study', `Deleted: ${s?.title}`);
+        showToast('Lesson deleted', 'info');
+        updateStats();
+        render();
+        closeModal('deleteModal');
+        btn.disabled = false; btn.innerHTML = '<i class="fas fa-trash"></i> Delete';
+    }
+
+    /* ── event wiring ── */
+    document.getElementById('btnNew').addEventListener('click', openCreate);
+    document.getElementById('btnSave').addEventListener('click', save);
+    document.getElementById('btnCancel').addEventListener('click', () => closeModal('formModal'));
+    document.getElementById('btnCloseModal').addEventListener('click', () => closeModal('formModal'));
+    document.getElementById('btnConfirmDelete').addEventListener('click', confirmDelete);
+    document.getElementById('btnCancelDelete').addEventListener('click', () => closeModal('deleteModal'));
+    document.getElementById('btnCloseDelete').addEventListener('click', () => closeModal('deleteModal'));
+    document.getElementById('compileBtn').addEventListener('click', compileWeekly);
+    document.getElementById('searchField').addEventListener('input', render);
+    document.getElementById('filterStatus').addEventListener('change', render);
+
+    document.getElementById('formModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('formModal'); });
+    document.getElementById('deleteModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('deleteModal'); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal('formModal'); closeModal('deleteModal'); } });
+
+    document.getElementById('tableBody').addEventListener('click', e => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        const id = parseInt(btn.dataset.id);
+        if (btn.dataset.action === 'edit')   openEdit(id);
+        if (btn.dataset.action === 'delete') openDelete(id);
+        if (btn.dataset.action === 'genpdf') generatePdf(id);
+    });
+
+    load();
+}());
+</script>
+</body>
+</html>

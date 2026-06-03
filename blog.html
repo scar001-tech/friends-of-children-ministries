@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Ministry Blog - Teaching tips, spiritual insights, and practical advice for Sunday School teachers">
+    <title>Blog | Friends of Children Ministries</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="index.css">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        .blog-hero {
+            background:
+                linear-gradient(135deg, rgba(0, 0, 0, 0.60) 0%, rgba(80, 50, 140, 0.70) 100%),
+                url('images/about-background.png') center/cover no-repeat;
+            padding: 7rem var(--spacing-md) 5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-hero h1 {
+            color: white;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
+            font-weight: 900;
+        }
+
+        .blog-hero p {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+        }
+
+        .blog-section {
+            padding: 5rem var(--spacing-md);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .blog-filters {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--border-color);
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            font-weight: 500;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .blog-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-base);
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .blog-card-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .blog-card-image-placeholder {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+
+        .blog-card-content {
+            padding: 2rem;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .blog-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .blog-category {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--primary-light);
+            color: var(--primary-color);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .blog-card h3 {
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .blog-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-button);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .author-info {
+            flex: 1;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .author-role {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .featured-post {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 4rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        .featured-image {
+            position: relative;
+            min-height: 400px;
+            overflow: hidden;
+        }
+
+        .featured-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .featured-content {
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .featured-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--accent-gold);
+            color: white;
+            border-radius: var(--radius-md);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            width: fit-content;
+        }
+
+        .featured-content h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .featured-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        /* Search bar */
+        .blog-search {
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+        .blog-search input {
+            width: 100%;
+            padding: 0.9rem 3rem 0.9rem 1.25rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+            transition: border-color var(--transition-base);
+            box-sizing: border-box;
+        }
+        .blog-search input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        .blog-search .search-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        /* Read more link on cards */
+        .blog-read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            margin-top: 0.75rem;
+            transition: gap var(--transition-base);
+        }
+        .blog-read-more:hover { gap: 0.7rem; }
+
+        /* Empty state */
+        .blog-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .blog-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .featured-post {
+                grid-template-columns: 1fr;
+            }
+
+            .featured-image {
+                min-height: 250px;
+            }
+
+            .featured-content {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">Friends of Children Ministries</div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="lessons.html">Lessons</a></li>
+                <li><a href="bible-study.html">Bible Study</a></li>
+                <li><a href="blog.html" class="active">Blog</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Blog Hero Section -->
+    <section class="blog-hero">
+        <h1>Ministry Blog</h1>
+        <p>Teaching tips, spiritual insights, and practical advice for Sunday School teachers and ministry leaders</p>
+    </section>
+
+    <!-- Blog Content Section -->
+    <section class="blog-section">
+        <!-- Featured Post -->
+        <div class="featured-post">
+            <div class="featured-image">
+                <img src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=800&q=80&fit=crop&crop=center" alt="Kids engaged in Sunday School">
+            </div>
+            <div class="featured-content">
+                <span class="featured-badge">Featured Article</span>
+                <h2>10 Ways to Keep Kids Engaged During Sunday School</h2>
+                <p>Discover proven strategies to maintain attention, encourage participation, and create memorable learning experiences that children will carry with them throughout the week.</p>
+                <div class="blog-meta">
+                    <span><i class="far fa-calendar"></i> May 15, 2026</span>
+                    <span><i class="far fa-clock"></i> 8 min read</span>
+                </div>
+                <a href="blog-post-1.html" class="btn btn-primary" style="margin-top:1.5rem; display:inline-block;">Read Article</a>
+            </div>
+        </div>
+
+        <!-- Search -->
+        <div class="blog-search">
+            <input type="text" id="blogSearch" placeholder="Search articles…" aria-label="Search blog posts">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="blog-filters">
+            <button class="filter-btn active" data-category="all">All Posts</button>
+            <button class="filter-btn" data-category="teaching-tips">Teaching Tips</button>
+            <button class="filter-btn" data-category="spiritual-growth">Spiritual Growth</button>
+            <button class="filter-btn" data-category="classroom-management">Classroom Management</button>
+            <button class="filter-btn" data-category="activities">Activities & Crafts</button>
+        </div>
+
+        <!-- Blog Grid -->
+        <div class="blog-grid" id="blogGrid">
+            <!-- Blog Post 1 -->
+            <article class="blog-card" data-category="teaching-tips" data-title="creative ways to teach bible memory verses">
+                <img class="blog-card-image" src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=75&fit=crop&crop=center" alt="Teaching Bible Memory Verses">
+                <div class="blog-card-content">
+                    <span class="blog-category">Teaching Tips</span>
+                    <h3>Creative Ways to Teach Bible Memory Verses</h3>
+                    <div class="blog-meta">
+                        <span><i class="far fa-calendar"></i> May 12, 2026</span>
+                        <span><i class="far fa-clock"></i> 5 min read</span>
+                    </div>
+                    <p>Make Scripture memorization fun and effective with these creative techniques that work for all age groups.</p>
+                    <div class="blog-author">
+                        <div class="author-avatar">SJ</div>
+                        <div class="author-info">
+                            <div class="author-name">Sarah Johnson</div>
+                            <div class="author-role">Children's Ministry Director</div>
+                        </div>
+                    </div>
+                    <a href="blog-post-1.html" class="blog-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+
+            <!-- Blog Post 2 -->
+            <article class="blog-card" data-category="spiritual-growth" data-title="nurturing your own faith while teaching others">
+                <img class="blog-card-image" src="https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=600&q=75&fit=crop&crop=center" alt="Nurturing Faith">
+                <div class="blog-card-content">
+                    <span class="blog-category">Spiritual Growth</span>
+                    <h3>Nurturing Your Own Faith While Teaching Others</h3>
+                    <div class="blog-meta">
+                        <span><i class="far fa-calendar"></i> May 8, 2026</span>
+                        <span><i class="far fa-clock"></i> 6 min read</span>
+                    </div>
+                    <p>How to maintain your personal spiritual growth while pouring into the lives of young believers.</p>
+                    <div class="blog-author">
+                        <div class="author-avatar">MR</div>
+                        <div class="author-info">
+                            <div class="author-name">Michael Roberts</div>
+                            <div class="author-role">Pastor &amp; Author</div>
+                        </div>
+                    </div>
+                    <a href="blog-post-1.html" class="blog-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+
+            <!-- Blog Post 3 -->
+            <article class="blog-card" data-category="classroom-management" data-title="handling difficult behavior with grace">
+                <img class="blog-card-image" src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=600&q=75&fit=crop&crop=center" alt="Classroom Management">
+                <div class="blog-card-content">
+                    <span class="blog-category">Classroom Management</span>
+                    <h3>Handling Difficult Behavior with Grace</h3>
+                    <div class="blog-meta">
+                        <span><i class="far fa-calendar"></i> May 5, 2026</span>
+                        <span><i class="far fa-clock"></i> 7 min read</span>
+                    </div>
+                    <p>Biblical approaches to managing challenging behaviors while maintaining a loving, Christ-centered environment.</p>
+                    <div class="blog-author">
+                        <div class="author-avatar">LT</div>
+                        <div class="author-info">
+                            <div class="author-name">Lisa Thompson</div>
+                            <div class="author-role">Sunday School Teacher</div>
+                        </div>
+                    </div>
+                    <a href="blog-post-1.html" class="blog-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+
+            <!-- Blog Post 4 -->
+            <article class="blog-card" data-category="activities" data-title="15 low-cost crafts that teach big truths">
+                <img class="blog-card-image" src="https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=600&q=75&fit=crop&crop=center" alt="Crafts for Kids">
+                <div class="blog-card-content">
+                    <span class="blog-category">Activities &amp; Crafts</span>
+                    <h3>15 Low-Cost Crafts That Teach Big Truths</h3>
+                    <div class="blog-meta">
+                        <span><i class="far fa-calendar"></i> May 1, 2026</span>
+                        <span><i class="far fa-clock"></i> 10 min read</span>
+                    </div>
+                    <p>Budget-friendly craft ideas that reinforce Biblical lessons and create lasting memories.</p>
+                    <div class="blog-author">
+                        <div class="author-avatar">EW</div>
+                        <div class="author-info">
+                            <div class="author-name">Emily Wilson</div>
+                            <div class="author-role">Creative Arts Coordinator</div>
+                        </div>
+                    </div>
+                    <a href="blog-post-1.html" class="blog-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+
+            <!-- Blog Post 5 -->
+            <article class="blog-card" data-category="teaching-tips" data-title="using storytelling to bring the bible to life">
+                <img class="blog-card-image" src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&q=75&fit=crop&crop=center" alt="Storytelling">
+                <div class="blog-card-content">
+                    <span class="blog-category">Teaching Tips</span>
+                    <h3>Using Storytelling to Bring the Bible to Life</h3>
+                    <div class="blog-meta">
+                        <span><i class="far fa-calendar"></i> Apr 28, 2026</span>
+                        <span><i class="far fa-clock"></i> 6 min read</span>
+                    </div>
+                    <p>Master the art of Biblical storytelling with techniques that captivate young audiences.</p>
+                    <div class="blog-author">
+                        <div class="author-avatar">DJ</div>
+                        <div class="author-info">
+                            <div class="author-name">David Jenkins</div>
+                            <div class="author-role">Youth Pastor</div>
+                        </div>
+                    </div>
+                    <a href="blog-post-1.html" class="blog-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+
+            <!-- Blog Post 6 -->
+            <article class="blog-card" data-category="spiritual-growth" data-title="building authentic relationships with students">
+                <img class="blog-card-image" src="https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?w=600&q=75&fit=crop&crop=center" alt="Building Relationships">
+                <div class="blog-card-content">
+                    <span class="blog-category">Spiritual Growth</span>
+                    <h3>Building Authentic Relationships with Students</h3>
+                    <div class="blog-meta">
+                        <span><i class="far fa-calendar"></i> Apr 24, 2026</span>
+                        <span><i class="far fa-clock"></i> 5 min read</span>
+                    </div>
+                    <p>How to connect with children on a deeper level and become a trusted spiritual mentor.</p>
+                    <div class="blog-author">
+                        <div class="author-avatar">RB</div>
+                        <div class="author-info">
+                            <div class="author-name">Rachel Brown</div>
+                            <div class="author-role">Children's Ministry Leader</div>
+                        </div>
+                    </div>
+                    <a href="blog-post-1.html" class="blog-read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3 style="color: white; margin-bottom: var(--spacing-md);">Friends of Children Ministries</h3>
+            <p>Empowering teachers to inspire the next generation</p>
+            <p style="margin-top: var(--spacing-md); font-size: 0.875rem;">
+                &copy; 2025 Friends of Children Ministries. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="app.js"></script>
+    <script>
+        let activeCategory = 'all';
+        let activeSearch   = '';
+
+        function applyFilters() {
+            const cards = document.querySelectorAll('.blog-card');
+            let visible = 0;
+
+            cards.forEach(card => {
+                const cat   = card.dataset.category;
+                const title = card.dataset.title || card.querySelector('h3').textContent.toLowerCase();
+                const desc  = card.querySelector('p').textContent.toLowerCase();
+
+                const matchCat    = activeCategory === 'all' || cat === activeCategory;
+                const matchSearch = !activeSearch || title.includes(activeSearch) || desc.includes(activeSearch);
+
+                card.style.display = (matchCat && matchSearch) ? '' : 'none';
+                if (matchCat && matchSearch) visible++;
+            });
+
+            let empty = document.getElementById('blogEmpty');
+            if (visible === 0) {
+                if (!empty) {
+                    empty = document.createElement('p');
+                    empty.id = 'blogEmpty';
+                    empty.className = 'blog-empty';
+                    empty.textContent = 'No articles match your search. Try a different term or category.';
+                    document.getElementById('blogGrid').appendChild(empty);
+                }
+            } else if (empty) {
+                empty.remove();
+            }
+        }
+
+        // Category filter
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                activeCategory = this.dataset.category;
+                applyFilters();
+            });
+        });
+
+        // Search
+        const blogSearch = document.getElementById('blogSearch');
+        blogSearch.addEventListener('input', function () {
+            activeSearch = this.value.trim().toLowerCase();
+            applyFilters();
+        });
+        blogSearch.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                this.value = '';
+                activeSearch = '';
+                applyFilters();
+            }
+        });
+    </script>
+
+</body>
+
+</html>

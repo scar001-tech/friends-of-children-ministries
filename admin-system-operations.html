@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Operations | Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .check-row { display:flex;align-items:center;justify-content:space-between;padding:.85rem 1rem;border-bottom:1px solid var(--border-color); }
+        .check-row:last-child { border-bottom:none; }
+        .check-label { display:flex;align-items:center;gap:.75rem;font-weight:600; }
+        .check-label i { width:20px;text-align:center; }
+        .check-badge { padding:.25rem .75rem;border-radius:20px;font-size:.75rem;font-weight:700; }
+        .cb-ready    { background:#dcfce7;color:#16a34a; }
+        .cb-degraded { background:#fef9c3;color:#ca8a04; }
+        .cb-error    { background:#fee2e2;color:#dc2626; }
+        .cb-unknown  { background:#f1f5f9;color:#64748b; }
+        .tab-bar { display:flex;gap:0;border-bottom:2px solid var(--border-color);margin-bottom:1.5rem; }
+        .tab-btn { padding:.85rem 1.75rem;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;cursor:pointer;font-weight:600;font-size:.9rem;color:var(--text-secondary);transition:all .2s; }
+        .tab-btn:hover { color:var(--primary-color); }
+        .tab-btn.active { color:var(--primary-color);border-bottom-color:var(--primary-color); }
+        .tab-pane { display:none; }
+        .tab-pane.active { display:block; }
+        .uptime-bar { height:6px;background:var(--bg-tertiary);border-radius:3px;overflow:hidden;margin-top:4px; }
+        .uptime-fill { height:100%;background:linear-gradient(90deg,#16a34a,#4ade80);border-radius:3px; }
+    </style>
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+    <aside class="admin-sidebar" id="adminSidebar"></aside>
+    <main class="admin-main">
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+
+        <div class="admin-topbar">
+            <div class="topbar-title">
+                <h1>System Operations</h1>
+                <p>Monitor health, manage backups, and manage newsletter subscribers</p>
+            </div>
+            <div class="topbar-actions">
+                <button class="btn btn-outline" id="btnRefreshAll">
+                    <i class="fas fa-sync"></i> Refresh All
+                </button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-body">
+                <div class="tab-bar">
+                    <button class="tab-btn active" data-tab="readiness"><i class="fas fa-heartbeat"></i> System Health</button>
+                    <button class="tab-btn" data-tab="backups"><i class="fas fa-database"></i> Backups</button>
+                    <button class="tab-btn" data-tab="newsletters"><i class="fas fa-envelope"></i> Newsletters</button>
+                </div>
+
+                <!-- ── READINESS TAB ── -->
+                <div class="tab-pane active" id="tab-readiness">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+                        <div id="overallStatus" style="font-size:1.1rem;font-weight:700;">Checking…</div>
+                        <button class="btn btn-outline" id="btnCheckReadiness">
+                            <i class="fas fa-sync"></i> Refresh
+                        </button>
+                    </div>
+
+                    <!-- Check rows -->
+                    <div class="panel" style="margin-bottom:1.5rem;">
+                        <div id="checkRows">
+                            <div class="check-row"><div class="check-label"><i class="fas fa-spinner fa-spin"></i> Loading…</div></div>
+                        </div>
+                    </div>
+
+                    <!-- Data counts + system info -->
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+                        <div class="panel">
+                            <div class="panel-header"><h3>Data Counts</h3></div>
+                            <div class="panel-body" id="dataCounts" style="padding:.5rem 0;">
+                                <div style="text-align:center;padding:1rem;color:var(--text-muted);">Loading…</div>
+                            </div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-header"><h3>System Info</h3></div>
+                            <div class="panel-body" id="sysInfo" style="padding:.5rem 0;">
+                                <div style="text-align:center;padding:1rem;color:var(--text-muted);">Loading…</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── BACKUPS TAB ── -->
+                <div class="tab-pane" id="tab-backups">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+                        <p style="color:var(--text-secondary);font-size:.875rem;margin:0;">Backups are stored in <code>server/backups/</code> and contain all JSON database files.</p>
+                        <button class="btn btn-primary" id="btnCreateBackup">
+                            <i class="fas fa-save"></i> Create Backup
+                        </button>
+                    </div>
+                    <table class="data-table">
+                        <thead><tr><th>Backup Name</th><th>Created</th><th>Size</th><th>Files</th><th>Actions</th></tr></thead>
+                        <tbody id="backupsTable"><tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-secondary);">Loading…</td></tr></tbody>
+                    </table>
+                </div>
+
+                <!-- ── NEWSLETTERS TAB ── -->
+                <div class="tab-pane" id="tab-newsletters">
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-bottom:1.5rem;">
+                        <div class="panel" style="padding:1.25rem;text-align:center;"><div style="font-size:2rem;font-weight:800;color:var(--primary-color);" id="nlTotal">0</div><div style="font-size:.85rem;color:var(--text-secondary);">Total</div></div>
+                        <div class="panel" style="padding:1.25rem;text-align:center;"><div style="font-size:2rem;font-weight:800;color:#16a34a;" id="nlActive">0</div><div style="font-size:.85rem;color:var(--text-secondary);">Active</div></div>
+                        <div class="panel" style="padding:1.25rem;text-align:center;"><div style="font-size:2rem;font-weight:800;color:#94a3b8;" id="nlUnsub">0</div><div style="font-size:.85rem;color:var(--text-secondary);">Unsubscribed</div></div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem;">
+                        <input type="text" class="search-field" id="nlSearch" placeholder="Search by email…" style="max-width:280px;">
+                        <button class="btn btn-outline" id="btnExportCSV">
+                            <i class="fas fa-download"></i> Export CSV
+                        </button>
+                    </div>
+                    <table class="data-table">
+                        <thead><tr><th>ID</th><th>Email</th><th>Name</th><th>Status</th><th>Subscribed</th><th>Source</th><th>Actions</th></tr></thead>
+                        <tbody id="nlTable"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);">Loading…</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Restore confirm modal -->
+<div class="modal-overlay" id="restoreModal" style="display:none;">
+    <div class="modal modal-sm">
+        <div class="modal-header">
+            <h2>Restore Backup</h2>
+            <button class="modal-close" id="btnCloseRestore">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="color:var(--text-secondary);">Restore from <strong id="restoreName"></strong>?<br>This will overwrite all current data. A pre-restore copy will be saved automatically.</p>
+            <input type="hidden" id="restoreBackupName">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancelRestore">Cancel</button>
+            <button class="btn btn-danger-outline" id="btnConfirmRestore">Restore</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete backup confirm modal -->
+<div class="modal-overlay" id="delBackupModal" style="display:none;">
+    <div class="modal modal-sm">
+        <div class="modal-header">
+            <h2>Delete Backup</h2>
+            <button class="modal-close" id="btnCloseDelBackup">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="color:var(--text-secondary);">Delete backup <strong id="delBackupName"></strong>? This cannot be undone.</p>
+            <input type="hidden" id="delBackupNameVal">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancelDelBackup">Cancel</button>
+            <button class="btn btn-danger-outline" id="btnConfirmDelBackup">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete subscriber confirm modal -->
+<div class="modal-overlay" id="delSubModal" style="display:none;">
+    <div class="modal modal-sm">
+        <div class="modal-header">
+            <h2>Delete Subscriber</h2>
+            <button class="modal-close" id="btnCloseDelSub">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="color:var(--text-secondary);">Delete subscriber <strong id="delSubEmail"></strong>?</p>
+            <input type="hidden" id="delSubId">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancelDelSub">Cancel</button>
+            <button class="btn btn-danger-outline" id="btnConfirmDelSub">Delete</button>
+        </div>
+    </div>
+</div>
+
+<script src="admin-shared.js"></script>
+<script>
+(function () {
+    if (!checkAuth()) return;
+    renderSidebar('system-operations');
+
+    const H = () => ({ 'Content-Type':'application/json', 'x-admin-role': sessionStorage.getItem('adminRole')||'system_admin' });
+
+    function openModal(id)  { document.getElementById(id).style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none';  document.body.style.overflow = ''; }
+
+    /* ── tabs ── */
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+        });
+    });
+
+    /* ══════════════════════════════════════════
+       SYSTEM READINESS
+    ══════════════════════════════════════════ */
+    async function checkReadiness() {
+        document.getElementById('overallStatus').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking…';
+        document.getElementById('checkRows').innerHTML = '<div class="check-row"><div class="check-label"><i class="fas fa-spinner fa-spin"></i> Loading…</div></div>';
+
+        try {
+            const r = await fetch('/api/system/readiness');
+            const d = await r.json();
+            renderReadiness(d);
+        } catch {
+            document.getElementById('overallStatus').innerHTML = '<span style="color:#dc2626;"><i class="fas fa-exclamation-circle"></i> Server offline</span>';
+            document.getElementById('checkRows').innerHTML = '<div class="check-row" style="color:var(--text-muted);padding:1.5rem;text-align:center;">Cannot reach server — start the server with <code>npm start</code></div>';
+        }
+    }
+
+    function renderReadiness(d) {
+        const statusColors = { ready:'#16a34a', degraded:'#ca8a04', not_ready:'#dc2626' };
+        const color = statusColors[d.status] || '#64748b';
+        document.getElementById('overallStatus').innerHTML =
+            `<span style="color:${color};"><i class="fas fa-${d.status==='ready'?'check-circle':d.status==='degraded'?'exclamation-triangle':'times-circle'}"></i> System ${d.status.toUpperCase()}</span>
+             <span style="font-size:.8rem;color:var(--text-muted);font-weight:400;margin-left:1rem;">Uptime: ${Math.floor((d.uptime||0)/60)}m ${Math.floor((d.uptime||0)%60)}s · Checked ${new Date(d.timestamp).toLocaleTimeString()}</span>`;
+
+        const checkDefs = [
+            { key:'database',     label:'Database',     icon:'fas fa-database' },
+            { key:'fileSystem',   label:'File System',  icon:'fas fa-hdd' },
+            { key:'memory',       label:'Memory',       icon:'fas fa-memory' },
+            { key:'dependencies', label:'Dependencies', icon:'fas fa-cubes' }
+        ];
+
+        document.getElementById('checkRows').innerHTML = checkDefs.map(c => {
+            const val = d.checks?.[c.key] || 'unknown';
+            const cls = val === 'ready' ? 'cb-ready' : val === 'degraded' ? 'cb-degraded' : val === 'not_ready' ? 'cb-error' : 'cb-unknown';
+            const extra = c.key === 'memory' && d.system?.memory ? `<span style="font-size:.75rem;color:var(--text-muted);margin-left:.5rem;">${d.system.memory.heapUsed} / ${d.system.memory.heapTotal}</span>` : '';
+            return `<div class="check-row">
+                <div class="check-label"><i class="${c.icon}" style="color:var(--primary-color);"></i> ${c.label}${extra}</div>
+                <span class="check-badge ${cls}">${val}</span>
+            </div>`;
+        }).join('');
+
+        // Data counts
+        if (d.counts) {
+            document.getElementById('dataCounts').innerHTML = Object.entries(d.counts).map(([k, v]) =>
+                `<div class="check-row"><div style="color:var(--text-secondary);font-size:.875rem;">${k}</div><strong>${v}</strong></div>`
+            ).join('');
+        }
+
+        // System info
+        if (d.system) {
+            document.getElementById('sysInfo').innerHTML = [
+                ['Platform', d.system.platform],
+                ['Node', d.system.nodeVersion],
+                ['Environment', d.environment],
+                ['Version', d.version],
+                ['RSS Memory', d.system.memory?.rss || '—']
+            ].map(([k, v]) =>
+                `<div class="check-row"><div style="color:var(--text-secondary);font-size:.875rem;">${k}</div><strong style="font-size:.875rem;">${v}</strong></div>`
+            ).join('');
+        }
+
+        if (d.issues?.length) {
+            document.getElementById('checkRows').innerHTML += `
+                <div style="background:#fef9c3;border-left:4px solid #ca8a04;padding:1rem;margin:.5rem 1rem;border-radius:0 var(--radius-md) var(--radius-md) 0;">
+                    <strong style="color:#92400e;">Issues:</strong>
+                    <ul style="margin:.5rem 0 0 1rem;color:#92400e;font-size:.875rem;">${d.issues.map(i=>`<li>${i}</li>`).join('')}</ul>
+                </div>`;
+        }
+    }
+
+    document.getElementById('btnCheckReadiness').addEventListener('click', checkReadiness);
+
+    /* ══════════════════════════════════════════
+       BACKUPS
+    ══════════════════════════════════════════ */
+    async function loadBackups() {
+        try {
+            const r = await fetch('/api/system/backups', { headers: H() });
+            const d = await r.json();
+            renderBackups(d.backups || []);
+        } catch {
+            document.getElementById('backupsTable').innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-muted);">Server offline</td></tr>';
+        }
+    }
+
+    function renderBackups(backups) {
+        const tbody = document.getElementById('backupsTable');
+        if (!backups.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--text-secondary);">No backups yet. Create your first backup above.</td></tr>'; return; }
+        tbody.innerHTML = backups.map(b => `
+            <tr>
+                <td style="font-family:monospace;font-size:.8rem;">${b.name}</td>
+                <td>${b.created ? new Date(b.created).toLocaleString() : '—'}</td>
+                <td>${b.size || '—'}</td>
+                <td>${b.metadata?.files?.length || '—'}</td>
+                <td>
+                    <div style="display:flex;gap:.4rem;">
+                        <button class="btn btn-sm btn-outline" data-action="restore" data-name="${b.name}" title="Restore"><i class="fas fa-undo"></i> Restore</button>
+                        <button class="btn btn-sm btn-danger-outline" data-action="del-backup" data-name="${b.name}" title="Delete"><i class="fas fa-trash"></i></button>
+                    </div>
+                </td>
+            </tr>`).join('');
+    }
+
+    document.getElementById('btnCreateBackup').addEventListener('click', async () => {
+        const btn = document.getElementById('btnCreateBackup');
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating…';
+        try {
+            const r = await fetch('/api/system/backup', { method:'POST', headers: H() });
+            const d = await r.json();
+            if (d.success) { showToast('Backup created: ' + d.backup.name, 'success'); addAuditEntry('BACKUP', 'System', 'Backup created: ' + d.backup.name); await loadBackups(); }
+            else showToast(d.message || 'Backup failed', 'error');
+        } catch { showToast('Server offline', 'error'); }
+        finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Create Backup'; }
+    });
+
+    document.getElementById('backupsTable').addEventListener('click', e => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        if (btn.dataset.action === 'restore') {
+            document.getElementById('restoreName').textContent = btn.dataset.name;
+            document.getElementById('restoreBackupName').value = btn.dataset.name;
+            openModal('restoreModal');
+        }
+        if (btn.dataset.action === 'del-backup') {
+            document.getElementById('delBackupName').textContent = btn.dataset.name;
+            document.getElementById('delBackupNameVal').value = btn.dataset.name;
+            openModal('delBackupModal');
+        }
+    });
+
+    document.getElementById('btnConfirmRestore').addEventListener('click', async () => {
+        const name = document.getElementById('restoreBackupName').value;
+        const btn  = document.getElementById('btnConfirmRestore');
+        btn.disabled = true; btn.textContent = 'Restoring…';
+        try {
+            const r = await fetch(`/api/system/restore/${name}`, { method:'POST', headers: H() });
+            const d = await r.json();
+            if (d.success) { showToast('Restore complete! Reloading…', 'success'); addAuditEntry('RESTORE', 'System', 'Restored from: ' + name); setTimeout(() => location.reload(), 1500); }
+            else showToast(d.message || 'Restore failed', 'error');
+        } catch { showToast('Server offline', 'error'); }
+        finally { btn.disabled = false; btn.textContent = 'Restore'; closeModal('restoreModal'); }
+    });
+
+    document.getElementById('btnConfirmDelBackup').addEventListener('click', async () => {
+        const name = document.getElementById('delBackupNameVal').value;
+        const btn  = document.getElementById('btnConfirmDelBackup');
+        btn.disabled = true; btn.textContent = 'Deleting…';
+        try {
+            const r = await fetch(`/api/system/backups/${name}`, { method:'DELETE', headers: H() });
+            const d = await r.json();
+            if (d.success) { showToast('Backup deleted', 'info'); await loadBackups(); }
+            else showToast(d.message || 'Delete failed', 'error');
+        } catch { showToast('Server offline', 'error'); }
+        finally { btn.disabled = false; btn.textContent = 'Delete'; closeModal('delBackupModal'); }
+    });
+
+    document.getElementById('btnCloseRestore').addEventListener('click', () => closeModal('restoreModal'));
+    document.getElementById('btnCancelRestore').addEventListener('click', () => closeModal('restoreModal'));
+    document.getElementById('btnCloseDelBackup').addEventListener('click', () => closeModal('delBackupModal'));
+    document.getElementById('btnCancelDelBackup').addEventListener('click', () => closeModal('delBackupModal'));
+
+    /* ══════════════════════════════════════════
+       NEWSLETTERS
+    ══════════════════════════════════════════ */
+    let subscribers = [];
+
+    async function loadNewsletters() {
+        try {
+            const r = await fetch('/api/system/newsletter/subscribers', { headers: H() });
+            const d = await r.json();
+            subscribers = d.subscribers || [];
+            document.getElementById('nlTotal').textContent  = d.total || 0;
+            document.getElementById('nlActive').textContent = d.active || 0;
+            document.getElementById('nlUnsub').textContent  = d.unsubscribed || 0;
+            renderNewsletters();
+        } catch {
+            document.getElementById('nlTable').innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-muted);">Server offline</td></tr>';
+        }
+    }
+
+    function renderNewsletters() {
+        const q = document.getElementById('nlSearch').value.toLowerCase();
+        const rows = q ? subscribers.filter(s => (s.email||'').toLowerCase().includes(q) || (s.name||'').toLowerCase().includes(q)) : subscribers;
+        const tbody = document.getElementById('nlTable');
+        if (!rows.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);">No subscribers found</td></tr>'; return; }
+        tbody.innerHTML = rows.map(s => `
+            <tr>
+                <td>#${s.id}</td>
+                <td>${s.email}</td>
+                <td>${s.name||'—'}</td>
+                <td><span class="badge ${s.status==='active'?'badge-success':'badge-muted'}">${s.status}</span></td>
+                <td>${s.createdAt ? new Date(s.createdAt).toLocaleDateString() : '—'}</td>
+                <td style="font-size:.8rem;color:var(--text-muted);">${s.source||'—'}</td>
+                <td>
+                    <button class="btn btn-sm btn-danger-outline" data-action="del-sub" data-id="${s.id}" data-email="${s.email}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>`).join('');
+    }
+
+    document.getElementById('nlSearch').addEventListener('input', renderNewsletters);
+
+    document.getElementById('nlTable').addEventListener('click', e => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn || btn.dataset.action !== 'del-sub') return;
+        document.getElementById('delSubId').value = btn.dataset.id;
+        document.getElementById('delSubEmail').textContent = btn.dataset.email;
+        openModal('delSubModal');
+    });
+
+    document.getElementById('btnConfirmDelSub').addEventListener('click', async () => {
+        const id  = parseInt(document.getElementById('delSubId').value);
+        const btn = document.getElementById('btnConfirmDelSub');
+        btn.disabled = true; btn.textContent = 'Deleting…';
+        try {
+            const r = await fetch(`/api/system/newsletter/subscribers/${id}`, { method:'DELETE', headers: H() });
+            const d = await r.json();
+            if (d.success) { showToast('Subscriber deleted', 'info'); await loadNewsletters(); }
+            else showToast(d.message || 'Delete failed', 'error');
+        } catch { showToast('Server offline', 'error'); }
+        finally { btn.disabled = false; btn.textContent = 'Delete'; closeModal('delSubModal'); }
+    });
+
+    document.getElementById('btnCloseDelSub').addEventListener('click', () => closeModal('delSubModal'));
+    document.getElementById('btnCancelDelSub').addEventListener('click', () => closeModal('delSubModal'));
+
+    document.getElementById('btnExportCSV').addEventListener('click', async () => {
+        try {
+            const r = await fetch('/api/system/newsletter/export', { method:'POST', headers: H() });
+            const blob = await r.blob();
+            const url  = URL.createObjectURL(blob);
+            const a    = document.createElement('a');
+            a.href = url; a.download = 'newsletter-subscribers.csv'; a.click();
+            URL.revokeObjectURL(url);
+            showToast('CSV exported!', 'success');
+        } catch { showToast('Export failed', 'error'); }
+    });
+
+    /* ── escape + backdrop ── */
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') ['restoreModal','delBackupModal','delSubModal'].forEach(id => closeModal(id));
+    });
+    ['restoreModal','delBackupModal','delSubModal'].forEach(id => {
+        document.getElementById(id).addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(id); });
+    });
+
+    /* ── refresh all ── */
+    document.getElementById('btnRefreshAll').addEventListener('click', () => { checkReadiness(); loadBackups(); loadNewsletters(); });
+
+    /* ── init ── */
+    checkReadiness();
+    loadBackups();
+    loadNewsletters();
+}());
+</script>
+</body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Imports | Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .content-preview { font-size:.85rem; color:var(--text-secondary); max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .upload-drop { border:2px dashed var(--border-color); border-radius:var(--radius-lg); padding:3rem 2rem; text-align:center; transition:border-color .2s; cursor:pointer; }
+        .upload-drop:hover, .upload-drop.drag-over { border-color:var(--primary-color); background:var(--primary-light); }
+        .upload-drop i { font-size:2.5rem; color:var(--primary-color); margin-bottom:1rem; display:block; }
+        .progress-bar { height:8px; background:var(--bg-tertiary); border-radius:4px; overflow:hidden; margin:.75rem 0; }
+        .progress-fill { height:100%; background:var(--gradient-button); border-radius:4px; transition:width .3s; }
+    </style>
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+    <aside class="admin-sidebar" id="adminSidebar"></aside>
+    <main class="admin-main">
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+
+        <div class="admin-topbar">
+            <div class="topbar-title">
+                <h1>Telegram Imports</h1>
+                <p>Review and promote Telegram messages to lesson drafts</p>
+            </div>
+            <div class="topbar-actions">
+                <a href="admin-telegram-config.html" class="btn btn-outline" style="margin-right:.5rem;">
+                    <i class="fas fa-cog"></i> Config
+                </a>
+                <button class="btn btn-primary" id="btnUpload">
+                    <i class="fas fa-upload"></i> Upload result.json
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-bottom:1.5rem;">
+            <div class="panel" style="padding:1.25rem;text-align:center;"><div style="font-size:2rem;font-weight:800;color:var(--primary-color);" id="statTotal">0</div><div style="font-size:.85rem;color:var(--text-secondary);">Total</div></div>
+            <div class="panel" style="padding:1.25rem;text-align:center;"><div style="font-size:2rem;font-weight:800;color:#ca8a04;" id="statPending">0</div><div style="font-size:.85rem;color:var(--text-secondary);">Pending</div></div>
+            <div class="panel" style="padding:1.25rem;text-align:center;"><div style="font-size:2rem;font-weight:800;color:#16a34a;" id="statPromoted">0</div><div style="font-size:.85rem;color:var(--text-secondary);">Promoted</div></div>
+            <div class="panel" style="padding:1.25rem;text-align:center;"><div style="font-size:2rem;font-weight:800;color:#4A90E2;" id="statMedia">0</div><div style="font-size:.85rem;color:var(--text-secondary);">With Media</div></div>
+        </div>
+
+        <!-- Filter + bulk actions -->
+        <div class="panel">
+            <div class="panel-header" style="flex-wrap:wrap;gap:.75rem;">
+                <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;">
+                    <select class="form-control" id="statusFilter" style="width:auto;margin:0;">
+                        <option value="all">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="promoted">Promoted</option>
+                    </select>
+                    <input type="text" class="search-field" id="searchInput" placeholder="Search content…" style="max-width:260px;">
+                </div>
+                <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+                    <button class="btn btn-sm btn-outline" id="btnSelectAll">Select All</button>
+                    <button class="btn btn-sm btn-outline" id="btnDeselectAll">Deselect All</button>
+                    <button class="btn btn-sm btn-primary" id="btnBulkPromote" disabled>
+                        <i class="fas fa-arrow-up"></i> Promote Selected
+                    </button>
+                    <button class="btn btn-sm btn-danger-outline" id="btnBulkDelete" disabled>
+                        <i class="fas fa-trash"></i> Delete Selected
+                    </button>
+                </div>
+            </div>
+            <div class="panel-body" style="padding:0;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th width="40"><input type="checkbox" id="masterCheck"></th>
+                            <th width="80">ID</th>
+                            <th width="110">Date</th>
+                            <th>Content Preview</th>
+                            <th width="80">Media</th>
+                            <th width="100">Status</th>
+                            <th width="160">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);"><i class="fas fa-spinner fa-spin"></i> Loading…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Upload Modal -->
+<div class="modal-overlay" id="uploadModal" style="display:none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Upload Telegram Export</h2>
+            <button class="modal-close" id="btnCloseUpload">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="color:var(--text-secondary);margin-bottom:1.5rem;">Upload your Telegram Desktop <code>result.json</code> export file to import historical messages.</p>
+            <div class="upload-drop" id="uploadDrop">
+                <i class="fab fa-telegram"></i>
+                <p style="font-weight:600;margin-bottom:.5rem;">Drag &amp; drop your result.json here</p>
+                <p style="color:var(--text-muted);font-size:.875rem;margin-bottom:1rem;">or</p>
+                <input type="file" id="fileInput" accept=".json" style="display:none;">
+                <button class="btn btn-primary" id="btnBrowse">Browse Files</button>
+            </div>
+            <div id="uploadProgress" style="display:none;">
+                <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+                <p id="uploadStatus" style="text-align:center;color:var(--text-secondary);font-size:.875rem;">Uploading…</p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancelUpload">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Promote Modal -->
+<div class="modal-overlay" id="promoteModal" style="display:none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Promote to Lesson Draft</h2>
+            <button class="modal-close" id="btnClosePromote">&times;</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="promoteId">
+            <div class="form-group">
+                <label>Lesson Title <span class="required">*</span></label>
+                <input type="text" id="fLessonTitle" class="form-control" placeholder="Lesson title">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="fLessonCategory" class="form-control">
+                        <option value="creation">Creation Stories</option>
+                        <option value="parables">Parables</option>
+                        <option value="faith">Faith &amp; Purpose</option>
+                        <option value="other" selected>Telegram Import</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Age Group</label>
+                    <select id="fLessonAge" class="form-control">
+                        <option value="All Ages">All Ages</option>
+                        <option value="Ages 3-5">Ages 3-5</option>
+                        <option value="Ages 6-8">Ages 6-8</option>
+                        <option value="Ages 9-12">Ages 9-12</option>
+                        <option value="Teens">Teens</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Scripture Reference</label>
+                <input type="text" id="fLessonScripture" class="form-control" placeholder="e.g. Genesis 1:1-31">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancelPromote">Cancel</button>
+            <button class="btn btn-primary" id="btnConfirmPromote">
+                <i class="fas fa-arrow-up"></i> Promote to Draft
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Details Modal -->
+<div class="modal-overlay" id="detailsModal" style="display:none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Import Details</h2>
+            <button class="modal-close" id="btnCloseDetails">&times;</button>
+        </div>
+        <div class="modal-body" id="detailsBody"></div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCloseDetailsFooter">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-overlay" id="deleteModal" style="display:none;">
+    <div class="modal modal-sm">
+        <div class="modal-header">
+            <h2>Delete Import</h2>
+            <button class="modal-close" id="btnCloseDeleteImport">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="color:var(--text-secondary);">Delete this import? This cannot be undone.</p>
+            <input type="hidden" id="deleteImportId">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancelDeleteImport">Cancel</button>
+            <button class="btn btn-danger-outline" id="btnConfirmDeleteImport">Delete</button>
+        </div>
+    </div>
+</div>
+
+<script src="admin-shared.js"></script>
+<script>
+(function () {
+    if (!checkAuth()) return;
+    renderSidebar('telegram-imports');
+
+    const H = () => ({ 'Content-Type':'application/json', 'x-admin-role': sessionStorage.getItem('adminRole')||'system_admin' });
+
+    let allImports = [];
+    let selected   = new Set();
+
+    function openModal(id)  { document.getElementById(id).style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none';  document.body.style.overflow = ''; }
+
+    /* ── load ── */
+    async function load() {
+        try {
+            const r = await fetch('/api/telegram/imports', { headers: H() });
+            allImports = r.ok ? await r.json() : [];
+        } catch { allImports = []; }
+        updateStats();
+        render();
+    }
+
+    function updateStats() {
+        document.getElementById('statTotal').textContent    = allImports.length;
+        document.getElementById('statPending').textContent  = allImports.filter(i => i.status === 'pending').length;
+        document.getElementById('statPromoted').textContent = allImports.filter(i => i.status === 'promoted').length;
+        document.getElementById('statMedia').textContent    = allImports.filter(i => i.mediaPath || i.mediaUrl).length;
+    }
+
+    function render() {
+        const sf = document.getElementById('statusFilter').value;
+        const q  = document.getElementById('searchInput').value.toLowerCase();
+        let rows = allImports;
+        if (sf !== 'all') rows = rows.filter(i => i.status === sf);
+        if (q) rows = rows.filter(i => (i.text||'').toLowerCase().includes(q) || String(i.telegramId||'').includes(q));
+
+        const tbody = document.getElementById('tableBody');
+        if (!rows.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);">No imports found</td></tr>'; return; }
+
+        tbody.innerHTML = rows.map(i => `
+            <tr>
+                <td><input type="checkbox" class="row-check" data-id="${i.id}" ${selected.has(i.id)?'checked':''}></td>
+                <td style="font-size:.8rem;color:var(--text-muted);">#${i.telegramId||i.id}</td>
+                <td style="font-size:.8rem;">${i.date ? new Date(i.date).toLocaleDateString() : '—'}</td>
+                <td><div class="content-preview" title="${(i.text||'').replace(/"/g,'&quot;')}">${(i.text||'').substring(0,100)}${(i.text||'').length>100?'…':''}</div></td>
+                <td style="text-align:center;">
+                    ${(i.mediaPath||i.mediaUrl) ? '<i class="fas fa-image" style="color:var(--primary-color);"></i>' : '<i class="fas fa-minus" style="color:var(--text-muted);"></i>'}
+                </td>
+                <td><span class="badge ${i.status==='promoted'?'badge-success':'badge-warning'}">${i.status}</span></td>
+                <td>
+                    <div style="display:flex;gap:.3rem;">
+                        ${i.status==='pending'
+                            ? `<button class="btn btn-sm btn-outline" data-action="promote" data-id="${i.id}" title="Promote"><i class="fas fa-arrow-up"></i></button>`
+                            : `<button class="btn btn-sm btn-outline" data-action="view-lesson" data-id="${i.promotedLessonId||0}" title="View Lesson"><i class="fas fa-eye"></i></button>`
+                        }
+                        <button class="btn btn-sm btn-outline" data-action="details" data-id="${i.id}" title="Details"><i class="fas fa-info-circle"></i></button>
+                        <button class="btn btn-sm btn-danger-outline" data-action="delete" data-id="${i.id}" title="Delete"><i class="fas fa-trash"></i></button>
+                    </div>
+                </td>
+            </tr>`).join('');
+
+        // Re-attach checkbox listeners
+        document.querySelectorAll('.row-check').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const id = parseInt(cb.dataset.id);
+                cb.checked ? selected.add(id) : selected.delete(id);
+                updateBulkBtns();
+            });
+        });
+    }
+
+    function updateBulkBtns() {
+        const has = selected.size > 0;
+        document.getElementById('btnBulkPromote').disabled = !has;
+        document.getElementById('btnBulkDelete').disabled  = !has;
+    }
+
+    document.getElementById('statusFilter').addEventListener('change', render);
+    document.getElementById('searchInput').addEventListener('input', render);
+
+    document.getElementById('masterCheck').addEventListener('change', function () {
+        document.querySelectorAll('.row-check').forEach(cb => {
+            cb.checked = this.checked;
+            const id = parseInt(cb.dataset.id);
+            this.checked ? selected.add(id) : selected.delete(id);
+        });
+        updateBulkBtns();
+    });
+
+    document.getElementById('btnSelectAll').addEventListener('click', () => {
+        document.getElementById('masterCheck').checked = true;
+        document.getElementById('masterCheck').dispatchEvent(new Event('change'));
+    });
+    document.getElementById('btnDeselectAll').addEventListener('click', () => {
+        document.getElementById('masterCheck').checked = false;
+        document.getElementById('masterCheck').dispatchEvent(new Event('change'));
+    });
+
+    /* ── table delegation ── */
+    document.getElementById('tableBody').addEventListener('click', e => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        const id = parseInt(btn.dataset.id);
+        if (btn.dataset.action === 'promote')     openPromote(id);
+        if (btn.dataset.action === 'details')     openDetails(id);
+        if (btn.dataset.action === 'delete')      openDeleteImport(id);
+        if (btn.dataset.action === 'view-lesson') window.location.href = 'admin-manage-lessons.html';
+    });
+
+    /* ── upload ── */
+    document.getElementById('btnUpload').addEventListener('click', () => {
+        document.getElementById('uploadDrop').style.display = '';
+        document.getElementById('uploadProgress').style.display = 'none';
+        openModal('uploadModal');
+    });
+    document.getElementById('btnBrowse').addEventListener('click', () => document.getElementById('fileInput').click());
+    document.getElementById('btnCancelUpload').addEventListener('click', () => closeModal('uploadModal'));
+    document.getElementById('btnCloseUpload').addEventListener('click', () => closeModal('uploadModal'));
+
+    const drop = document.getElementById('uploadDrop');
+    drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('drag-over'); });
+    drop.addEventListener('dragleave', () => drop.classList.remove('drag-over'));
+    drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('drag-over'); handleFile(e.dataTransfer.files[0]); });
+    document.getElementById('fileInput').addEventListener('change', e => handleFile(e.target.files[0]));
+
+    async function handleFile(file) {
+        if (!file) return;
+        if (!file.name.endsWith('.json')) { showToast('Please select a .json file', 'error'); return; }
+
+        document.getElementById('uploadDrop').style.display = 'none';
+        document.getElementById('uploadProgress').style.display = '';
+        document.getElementById('progressFill').style.width = '30%';
+        document.getElementById('uploadStatus').textContent = 'Uploading ' + file.name + '…';
+
+        const fd = new FormData();
+        fd.append('file', file);
+
+        try {
+            const r = await fetch('/api/telegram/upload-json', {
+                method: 'POST',
+                headers: { 'x-admin-role': sessionStorage.getItem('adminRole')||'system_admin' },
+                body: fd
+            });
+            document.getElementById('progressFill').style.width = '100%';
+            const d = await r.json();
+            if (r.ok) {
+                showToast(d.message || 'Upload successful!', 'success');
+                closeModal('uploadModal');
+                await load();
+            } else {
+                showToast(d.error || 'Upload failed', 'error');
+                document.getElementById('uploadDrop').style.display = '';
+                document.getElementById('uploadProgress').style.display = 'none';
+            }
+        } catch {
+            showToast('Upload failed — server offline', 'error');
+            document.getElementById('uploadDrop').style.display = '';
+            document.getElementById('uploadProgress').style.display = 'none';
+        }
+    }
+
+    /* ── promote ── */
+    function openPromote(id) {
+        const imp = allImports.find(i => i.id === id);
+        if (!imp) return;
+        document.getElementById('promoteId').value = id;
+        document.getElementById('fLessonTitle').value = `Lesson from Telegram #${imp.telegramId||imp.id}`;
+        document.getElementById('fLessonScripture').value = '';
+        openModal('promoteModal');
+        document.getElementById('fLessonTitle').focus();
+    }
+
+    document.getElementById('btnCancelPromote').addEventListener('click', () => closeModal('promoteModal'));
+    document.getElementById('btnClosePromote').addEventListener('click', () => closeModal('promoteModal'));
+
+    document.getElementById('btnConfirmPromote').addEventListener('click', async () => {
+        const id    = parseInt(document.getElementById('promoteId').value);
+        const title = document.getElementById('fLessonTitle').value.trim();
+        if (!title) { showToast('Title is required', 'error'); return; }
+
+        const btn = document.getElementById('btnConfirmPromote');
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Promoting…';
+
+        try {
+            const r = await fetch('/api/telegram/promote', {
+                method: 'POST',
+                headers: H(),
+                body: JSON.stringify({ importId: id, lessonData: { title, category: document.getElementById('fLessonCategory').value, scripture: document.getElementById('fLessonScripture').value, ageGroup: document.getElementById('fLessonAge').value } })
+            });
+            const d = await r.json();
+            if (r.ok) { showToast('Promoted to lesson draft!', 'success'); closeModal('promoteModal'); await load(); }
+            else showToast(d.error || 'Promote failed', 'error');
+        } catch { showToast('Server offline', 'error'); }
+        finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-arrow-up"></i> Promote to Draft'; }
+    });
+
+    /* ── bulk promote ── */
+    document.getElementById('btnBulkPromote').addEventListener('click', async () => {
+        if (!selected.size) return;
+        const btn = document.getElementById('btnBulkPromote');
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Promoting…';
+        try {
+            const r = await fetch('/api/telegram/promote-bulk', {
+                method: 'POST', headers: H(),
+                body: JSON.stringify({ importIds: Array.from(selected), defaultLessonData: { category: 'other', ageGroup: 'All Ages' } })
+            });
+            const d = await r.json();
+            if (r.ok) { showToast(d.message || `Promoted ${selected.size} imports`, 'success'); selected.clear(); await load(); }
+            else showToast(d.error || 'Bulk promote failed', 'error');
+        } catch { showToast('Server offline', 'error'); }
+        finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-arrow-up"></i> Promote Selected'; updateBulkBtns(); }
+    });
+
+    /* ── bulk delete ── */
+    document.getElementById('btnBulkDelete').addEventListener('click', async () => {
+        if (!selected.size) return;
+        const btn = document.getElementById('btnBulkDelete');
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting…';
+        try {
+            const r = await fetch('/api/telegram/imports/delete-bulk', {
+                method: 'POST', headers: H(),
+                body: JSON.stringify({ importIds: Array.from(selected) })
+            });
+            const d = await r.json();
+            if (r.ok) { showToast(d.message || `Deleted ${selected.size} imports`, 'info'); selected.clear(); await load(); }
+            else showToast(d.error || 'Bulk delete failed', 'error');
+        } catch { showToast('Server offline', 'error'); }
+        finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-trash"></i> Delete Selected'; updateBulkBtns(); }
+    });
+
+    /* ── details ── */
+    function openDetails(id) {
+        const i = allImports.find(x => x.id === id);
+        if (!i) return;
+        document.getElementById('detailsBody').innerHTML = `
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+                <div><strong>ID:</strong> ${i.id}</div>
+                <div><strong>Telegram ID:</strong> ${i.telegramId||'—'}</div>
+                <div><strong>Date:</strong> ${i.date ? new Date(i.date).toLocaleString() : '—'}</div>
+                <div><strong>Status:</strong> <span class="badge ${i.status==='promoted'?'badge-success':'badge-warning'}">${i.status}</span></div>
+                ${i.promotedLessonId ? `<div><strong>Lesson ID:</strong> #${i.promotedLessonId}</div>` : ''}
+                ${i.mediaPath ? `<div><strong>Media Path:</strong> ${i.mediaPath}</div>` : ''}
+            </div>
+            <div class="form-group">
+                <label style="font-weight:600;">Content</label>
+                <div style="background:var(--bg-tertiary);padding:1rem;border-radius:var(--radius-md);font-size:.875rem;line-height:1.7;white-space:pre-wrap;max-height:300px;overflow-y:auto;">${i.text||'(no text)'}</div>
+            </div>`;
+        openModal('detailsModal');
+    }
+    document.getElementById('btnCloseDetails').addEventListener('click', () => closeModal('detailsModal'));
+    document.getElementById('btnCloseDetailsFooter').addEventListener('click', () => closeModal('detailsModal'));
+
+    /* ── delete single ── */
+    function openDeleteImport(id) {
+        document.getElementById('deleteImportId').value = id;
+        openModal('deleteModal');
+    }
+    document.getElementById('btnCancelDeleteImport').addEventListener('click', () => closeModal('deleteModal'));
+    document.getElementById('btnCloseDeleteImport').addEventListener('click', () => closeModal('deleteModal'));
+    document.getElementById('btnConfirmDeleteImport').addEventListener('click', async () => {
+        const id  = parseInt(document.getElementById('deleteImportId').value);
+        const btn = document.getElementById('btnConfirmDeleteImport');
+        btn.disabled = true; btn.textContent = 'Deleting…';
+        try {
+            const r = await fetch(`/api/telegram/imports/${id}`, { method:'DELETE', headers: H() });
+            const d = await r.json();
+            if (r.ok) { showToast('Import deleted', 'info'); closeModal('deleteModal'); await load(); }
+            else showToast(d.error || 'Delete failed', 'error');
+        } catch { showToast('Server offline', 'error'); }
+        finally { btn.disabled = false; btn.textContent = 'Delete'; }
+    });
+
+    /* ── escape ── */
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') ['uploadModal','promoteModal','detailsModal','deleteModal'].forEach(id => closeModal(id));
+    });
+    ['uploadModal','promoteModal','detailsModal','deleteModal'].forEach(id => {
+        document.getElementById(id).addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(id); });
+    });
+
+    load();
+}());
+</script>
+</body>
+</html>

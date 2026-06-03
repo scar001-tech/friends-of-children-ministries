@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin Media Library - Friends of Children Ministries">
+    <title>Media Library | Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .upload-area {
+            background: rgba(255,255,255,0.95);
+            border: 3px dashed var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .upload-area:hover, .upload-area.dragover {
+            border-color: var(--primary-color);
+            background: white;
+            transform: scale(1.005);
+        }
+        .upload-icon { font-size: 3rem; margin-bottom: 0.5rem; color: var(--primary-color); }
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.25rem;
+        }
+        .media-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .media-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-color);
+        }
+        .media-preview {
+            height: 130px;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            position: relative;
+            color: var(--primary-color);
+            overflow: hidden;
+        }
+        .media-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .media-type-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.2rem 0.5rem;
+            background: rgba(15,23,42,0.8);
+            color: white;
+            border-radius: var(--radius-sm);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        .media-info { padding: 1rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .media-name { font-weight: 700; color: var(--text-primary); font-size: 0.85rem; word-break: break-all; margin-bottom: 0.25rem; }
+        .media-meta { font-size: 0.75rem; color: var(--text-muted); }
+        .media-actions { display: flex; gap: 0.4rem; margin-top: 0.75rem; }
+        .media-actions .btn { flex: 1; padding: 0.4rem; font-size: 0.75rem; justify-content: center; }
+        .config-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: var(--radius-xl);
+            padding: 1.25rem 1.5rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body class="admin-body">
+    <div class="admin-shell">
+        <aside class="admin-sidebar" id="adminSidebar"></aside>
+        <main class="admin-main">
+            <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+            <div class="admin-topbar">
+                <div class="topbar-title"><h1>Media Library</h1><p>Upload and manage assets for lessons and blogs</p></div>
+                <div class="topbar-actions">
+                    <button class="btn btn-outline" onclick="openConfigModal()"><i class="fas fa-cog"></i> Storage Config</button>
+                </div>
+            </div>
+
+            <!-- Storage mode indicator -->
+            <div class="config-card" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+                <div>
+                    <span style="font-weight:700;color:var(--text-primary);">Active Provider:</span>
+                    <span id="activeProviderBadge" class="badge badge-success">Local Server Fallback</span>
+                </div>
+                <div>
+                    <span style="font-weight:700;color:var(--text-primary);">Storage Used:</span>
+                    <span id="storageStats" style="font-size:0.9rem;font-weight:600;color:var(--text-secondary);">0 MB of 10 GB</span>
+                </div>
+            </div>
+
+            <!-- Upload Area -->
+            <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-icon">↑</div>
+                <h3>Drag & Drop Files Here</h3>
+                <p style="margin:0.25rem 0 1rem; color:var(--text-muted);">or click to browse your computer</p>
+                <input type="file" id="fileInput" multiple hidden accept="image/*,video/*,audio/*,application/pdf">
+                <p style="font-size: 0.78rem; color:var(--text-muted);">Supported formats: PDF, Images (JPG, PNG, GIF), Videos (MP4), Audio (MP3)</p>
+            </div>
+
+            <!-- Filter and Listing -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Files</h2>
+                    <div class="search-filter-bar">
+                        <select class="form-control" id="typeFilter" style="width:auto;min-width:140px;">
+                            <option value="all">All Files</option>
+                            <option value="image">Images</option>
+                            <option value="video">Videos</option>
+                            <option value="audio">Audio</option>
+                            <option value="file">Documents/PDFs</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="media-grid" id="mediaGrid"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Storage Config Modal -->
+    <div class="modal-overlay" id="configModal">
+        <div class="modal">
+            <div class="modal-header"><h2>Storage Configuration</h2><button class="modal-close" onclick="closeConfigModal()">&times;</button></div>
+            <form id="configForm" onsubmit="saveConfig(event)">
+                <div class="modal-body">
+                    <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1.25rem;">
+                        Configure Supabase Storage for direct browser-to-cloud uploads. If disabled or fails, the application falls back to local server storage automatically.
+                    </p>
+                    <div class="form-group">
+                        <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+                            <input type="checkbox" id="cEnableSupabase" style="width:auto;margin:0;"> Enable Supabase Direct Upload
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>Supabase Project URL</label>
+                        <input type="url" id="cSupabaseUrl" class="form-control" placeholder="https://your-project.supabase.co">
+                    </div>
+                    <div class="form-group">
+                        <label>Supabase Anon Key</label>
+                        <input type="password" id="cSupabaseKey" class="form-control" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+                    </div>
+                    <div class="form-group">
+                        <label>Storage Bucket Name</label>
+                        <input type="text" id="cBucketName" class="form-control" placeholder="media" value="media">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeConfigModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script imports -->
+    <script src="api.js"></script>
+    <script src="admin-shared.js"></script>
+    <script>
+        if (!checkAuth()) throw new Error('Not authenticated');
+        renderSidebar('media-library');
+
+        let mediaFiles = [];
+        let currentFilter = 'all';
+
+        // Load storage settings
+        function loadSettings() {
+            const config = JSON.parse(localStorage.getItem('storageConfig') || '{}');
+            document.getElementById('cEnableSupabase').checked = !!config.enableSupabase;
+            document.getElementById('cSupabaseUrl').value = config.supabaseUrl || '';
+            document.getElementById('cSupabaseKey').value = config.supabaseKey || '';
+            document.getElementById('cBucketName').value = config.bucketName || 'media';
+
+            const providerBadge = document.getElementById('activeProviderBadge');
+            if (config.enableSupabase && config.supabaseUrl && config.supabaseKey) {
+                providerBadge.textContent = 'Supabase Cloud (Active)';
+                providerBadge.className = 'badge badge-purple';
+            } else {
+                providerBadge.textContent = 'Local Server Fallback';
+                providerBadge.className = 'badge badge-success';
+            }
+        }
+
+        function openConfigModal() {
+            loadSettings();
+            document.getElementById('configModal').classList.add('active');
+        }
+
+        function closeConfigModal() {
+            document.getElementById('configModal').classList.remove('active');
+        }
+
+        function saveConfig(e) {
+            e.preventDefault();
+            const config = {
+                enableSupabase: document.getElementById('cEnableSupabase').checked,
+                supabaseUrl: document.getElementById('cSupabaseUrl').value.trim(),
+                supabaseKey: document.getElementById('cSupabaseKey').value.trim(),
+                bucketName: document.getElementById('cBucketName').value.trim()
+            };
+            localStorage.setItem('storageConfig', JSON.stringify(config));
+            addAuditEntry('CONFIG', 'Storage', `Updated storage config (Supabase enabled: ${config.enableSupabase})`);
+            showToast('Storage configuration saved!', 'success');
+            closeConfigModal();
+            loadSettings();
+            loadMedia();
+        }
+
+        // Initialize Supabase if needed
+        async function getSupabaseClient() {
+            const config = JSON.parse(localStorage.getItem('storageConfig') || '{}');
+            if (!config.enableSupabase || !config.supabaseUrl || !config.supabaseKey) return null;
+
+            if (window.supabase) return window.supabase;
+
+            return new Promise((resolve) => {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+                script.onload = () => {
+                    const client = window.supabase.createClient(config.supabaseUrl, config.supabaseKey);
+                    window.supabaseClient = client;
+                    resolve(client);
+                };
+                script.onerror = () => {
+                    showToast('Failed to load Supabase SDK, falling back to local.', 'error');
+                    resolve(null);
+                };
+                document.head.appendChild(script);
+            });
+        }
+
+        // Load media files
+        async function loadMedia() {
+            const grid = document.getElementById('mediaGrid');
+            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-muted);">Loading media files...</div>';
+
+            try {
+                // Get local files from the API
+                const localFiles = await API.getMedia();
+                
+                // Get Supabase files if enabled
+                let supabaseFiles = [];
+                const client = await getSupabaseClient();
+                if (client) {
+                    const config = JSON.parse(localStorage.getItem('storageConfig') || '{}');
+                    const { data, error } = await client.storage.from(config.bucketName).list();
+                    if (!error && data) {
+                        supabaseFiles = data.map(item => {
+                            const { data: { publicUrl } } = client.storage.from(config.bucketName).getPublicUrl(item.name);
+                            const ext = item.name.split('.').pop().toLowerCase();
+                            const type = ['jpg','jpeg','png','gif','webp'].includes(ext) ? 'image' :
+                                         ['mp4','webm','mov'].includes(ext) ? 'video' :
+                                         ['mp3','wav','ogg'].includes(ext) ? 'audio' : 'file';
+                            const icon = type === 'image' ? 'IMG' : type === 'video' ? 'VID' : type === 'audio' ? 'AUD' : 'FILE';
+                            return {
+                                id: 'sb-' + item.id,
+                                name: item.name,
+                                type: type,
+                                size: formatBytes(item.metadata?.size || 0),
+                                bytes: item.metadata?.size || 0,
+                                date: new Date(item.created_at).toLocaleDateString(),
+                                icon: icon,
+                                url: publicUrl,
+                                isSupabase: true
+                            };
+                        });
+                    }
+                }
+
+                // Merge lists
+                mediaFiles = [...supabaseFiles, ...localFiles.map(f => ({ ...f, bytes: parseSizeToBytes(f.size) }))];
+                renderMedia();
+                updateStats();
+            } catch (err) {
+                console.error(err);
+                showToast('Failed to load media assets.', 'error');
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-danger);">Error loading library</div>';
+            }
+        }
+
+        function parseSizeToBytes(sizeStr) {
+            if (!sizeStr) return 0;
+            const num = parseFloat(sizeStr);
+            if (sizeStr.includes('MB')) return num * 1024 * 1024;
+            if (sizeStr.includes('KB')) return num * 1024;
+            return num;
+        }
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        function updateStats() {
+            const totalBytes = mediaFiles.reduce((acc, f) => acc + (f.bytes || 0), 0);
+            const totalMB = (totalBytes / (1024 * 1024)).toFixed(1);
+            document.getElementById('storageStats').textContent = `${totalMB} MB of 10 GB`;
+        }
+
+        function renderMedia() {
+            const grid = document.getElementById('mediaGrid');
+            const filtered = currentFilter === 'all' ? mediaFiles : mediaFiles.filter(m => m.type === currentFilter);
+
+            if (!filtered.length) {
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-muted);"><div style="font-size:2rem;margin-bottom:0.5rem;opacity:.4;"><i class="fas fa-folder-open"></i></div>No files found</div>';
+                return;
+            }
+
+            grid.innerHTML = filtered.map(file => {
+                let previewContent = `<span style="font-size:3rem;">${getFileEmoji(file.type)}</span>`;
+                if (file.type === 'image') {
+                    previewContent = `<img src="${file.url}" alt="${file.name}">`;
+                }
+
+                return `
+                    <div class="media-card">
+                        <div class="media-preview">
+                            ${previewContent}
+                            <span class="media-type-badge">${file.isSupabase ? 'Supabase' : 'Local'}</span>
+                        </div>
+                        <div class="media-info">
+                            <div>
+                                <div class="media-name" title="${file.name}">${file.name}</div>
+                                <div class="media-meta">${file.size} • ${file.date}</div>
+                            </div>
+                            <div class="media-actions">
+                                <button class="btn btn-sm btn-outline" onclick="copyUrl('${file.url}')">Link</button>
+                                <button class="btn btn-sm btn-danger-outline" onclick="deleteFile('${file.id}', ${!!file.isSupabase}, '${file.name}')">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getFileEmoji(type) {
+            if (type === 'image') return '<i class="fas fa-image" style="color:#16a34a;"></i>';
+            if (type === 'video') return '<i class="fas fa-film" style="color:#2563eb;"></i>';
+            if (type === 'audio') return '<i class="fas fa-music" style="color:#7c3aed;"></i>';
+            return '<i class="fas fa-file-alt" style="color:#64748b;"></i>';
+        }
+
+        document.getElementById('typeFilter').addEventListener('change', e => {
+            currentFilter = e.target.value;
+            renderMedia();
+        });
+
+        // Copy URL
+        function copyUrl(url) {
+            const fullUrl = url.startsWith('http') ? url : window.location.origin + url;
+            navigator.clipboard.writeText(fullUrl);
+            showToast('Media URL copied to clipboard!', 'success');
+        }
+
+        // Upload handling
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+        uploadArea.addEventListener('dragleave', () => { uploadArea.classList.remove('dragover'); });
+        uploadArea.addEventListener('drop', (e) => { e.preventDefault(); uploadArea.classList.remove('dragover'); handleUpload(e.dataTransfer.files); });
+        fileInput.addEventListener('change', (e) => { handleUpload(e.target.files); });
+
+        async function handleUpload(files) {
+            if (!files.length) return;
+            const client = await getSupabaseClient();
+            const config = JSON.parse(localStorage.getItem('storageConfig') || '{}');
+
+            let successCount = 0;
+            let failCount = 0;
+
+            for (const file of files) {
+                try {
+                    if (client) {
+                        // Direct upload to Supabase Storage
+                        const path = Date.now() + '-' + file.name;
+                        const { data, error } = await client.storage.from(config.bucketName).upload(path, file);
+                        if (error) throw error;
+                        successCount++;
+                        addAuditEntry('UPLOAD', 'Media', `Uploaded to Supabase: ${file.name}`);
+                    } else {
+                        // Local Upload Fallback
+                        await API.uploadMedia(file);
+                        successCount++;
+                        addAuditEntry('UPLOAD', 'Media', `Uploaded to Local Server: ${file.name}`);
+                    }
+                } catch (err) {
+                    console.error(err);
+                    failCount++;
+                }
+            }
+
+            if (successCount > 0) {
+                showToast(`Successfully uploaded ${successCount} file(s)!`, 'success');
+            }
+            if (failCount > 0) {
+                showToast(`Failed to upload ${failCount} file(s).`, 'error');
+            }
+            loadMedia();
+        }
+
+        // Delete File
+        async function deleteFile(id, isSupabase, name) {
+            if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
+
+            try {
+                if (isSupabase) {
+                    const client = await getSupabaseClient();
+                    const config = JSON.parse(localStorage.getItem('storageConfig') || '{}');
+                    // Extract path from public URL or keep name
+                    const { error } = await client.storage.from(config.bucketName).remove([name]);
+                    if (error) throw error;
+                    addAuditEntry('DELETE', 'Media', `Deleted from Supabase: ${name}`);
+                    showToast('File deleted from Supabase Storage.', 'info');
+                } else {
+                    await API.deleteMedia(id);
+                    addAuditEntry('DELETE', 'Media', `Deleted from Local: ${name}`);
+                    showToast('File deleted from Local Server.', 'info');
+                }
+                loadMedia();
+            } catch (err) {
+                console.error(err);
+                showToast('Failed to delete media asset.', 'error');
+            }
+        }
+
+        // Add to sidebar nav dynamically if sidebar link is active
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSettings();
+            loadMedia();
+        });
+    </script>
+</body>
+</html>

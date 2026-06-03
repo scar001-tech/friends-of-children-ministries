@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="10 Ways to Keep Kids Engaged During Sunday School - Practical strategies for maintaining attention and creating memorable learning experiences">
+    <title>10 Ways to Keep Kids Engaged During Sunday School | Friends of Children Ministries</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="index.css">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        .post-hero {
+            background:
+                linear-gradient(135deg, rgba(0, 0, 0, 0.60) 0%, rgba(80, 50, 140, 0.70) 100%),
+                url('images/children-hero-bg.png') center/cover no-repeat;
+            padding: 9rem var(--spacing-md) 5rem;
+            text-align: center;
+        }
+
+        .post-hero h1 {
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
+            font-weight: 900;
+            line-height: 1.2;
+        }
+
+        .post-meta {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.92);
+            font-size: 1rem;
+        }
+
+        .post-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .post-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 5rem var(--spacing-md);
+        }
+
+        .post-content h2 {
+            color: var(--text-primary);
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .post-content h3 {
+            color: var(--text-primary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .post-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.125rem;
+        }
+
+        .post-content ul, .post-content ol {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        .post-content li {
+            margin-bottom: 0.75rem;
+        }
+
+        .post-content strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .author-bio {
+            background: var(--bg-tertiary);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            margin: 3rem 0;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--gradient-button);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .author-info h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .author-info p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .related-posts {
+            background: var(--bg-secondary);
+            padding: 5rem var(--spacing-md);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 3rem auto 0;
+        }
+
+        .related-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-base);
+        }
+
+        .related-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .related-card-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .related-card-body {
+            padding: 1.5rem;
+        }
+
+        .related-card h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .related-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        /* Post banner image */
+        .post-banner {
+            width: 100%;
+            max-height: 480px;
+            object-fit: cover;
+            display: block;
+            border-radius: var(--radius-xl);
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Share toast */
+        .share-toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #667eea;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            font-weight: 600;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: toastIn 0.3s ease-out;
+        }
+        @keyframes toastIn {
+            from { opacity:0; transform: translateY(20px); }
+            to   { opacity:1; transform: translateY(0); }
+        }
+        .share-toast.hiding {
+            animation: toastOut 0.3s ease-in forwards;
+        }
+        @keyframes toastOut {
+            to { opacity:0; transform: translateY(20px); }
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 1rem;
+            margin: 3rem 0;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .share-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .share-facebook {
+            background: #1877f2;
+            color: white;
+        }
+
+        .share-twitter {
+            background: #1da1f2;
+            color: white;
+        }
+
+        .share-linkedin {
+            background: #0077b5;
+            color: white;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        @media (max-width: 768px) {
+            .post-hero h1 {
+                font-size: 2rem;
+            }
+
+            .post-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .author-bio {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">Friends of Children Ministries</div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="lessons.html">Lessons</a></li>
+                <li><a href="bible-study.html">Bible Study</a></li>
+                <li><a href="blog.html" class="active">Blog</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Post Hero Section -->
+    <section class="post-hero">
+        <h1>10 Ways to Keep Kids Engaged During Sunday School</h1>
+        <div class="post-meta">
+            <span><i class="far fa-calendar"></i> May 15, 2026</span>
+            <span><i class="far fa-clock"></i> 8 min read</span>
+            <span><i class="far fa-user"></i> Sarah Johnson</span>
+        </div>
+    </section>
+
+    <!-- Post Content -->
+    <article class="post-content">
+        <img class="post-banner" src="https://images.unsplash.com/photo-1607453998774-d533f65dac99?w=1200&q=80&fit=crop&crop=center" alt="Children engaged in Sunday School">
+
+        <p>
+            As Sunday School teachers, we've all experienced those moments when children's attention starts to wander. 
+            Whether it's fidgeting, side conversations, or glazed-over looks, maintaining engagement can be one of our 
+            biggest challenges. But it doesn't have to be this way.
+        </p>
+
+        <p>
+            After years of teaching and observing successful children's ministry programs, I've compiled these ten 
+            proven strategies that will help you keep kids engaged, excited, and eager to learn about God's Word.
+        </p>
+
+        <h2>1. Start with High Energy</h2>
+        <p>
+            The first five minutes set the tone for your entire lesson. Begin with an energetic song, a fun game, or 
+            an intriguing question that captures their curiosity. Children respond to enthusiasm, so bring your energy 
+            and excitement about the lesson.
+        </p>
+
+        <h2>2. Use Interactive Storytelling</h2>
+        <p>
+            Don't just read the Bible story—bring it to life! Use different voices for characters, incorporate sound 
+            effects, and invite children to act out parts of the story. When kids are participants rather than passive 
+            listeners, they stay engaged and remember the lesson better.
+        </p>
+
+        <h2>3. Incorporate Movement</h2>
+        <p>
+            Children have natural energy that needs an outlet. Build movement into your lesson through:
+        </p>
+        <ul>
+            <li>Action songs with hand motions</li>
+            <li>Bible verse relay races</li>
+            <li>Freeze dance with biblical themes</li>
+            <li>Acting out Bible stories</li>
+            <li>Scavenger hunts for lesson-related items</li>
+        </ul>
+
+        <h2>4. Ask Engaging Questions</h2>
+        <p>
+            Replace yes/no questions with open-ended ones that require thinking. Instead of "Did David trust God?" 
+            ask "How do you think David felt when he faced Goliath?" This encourages deeper reflection and keeps 
+            minds active.
+        </p>
+
+        <h2>5. Use Visual Aids</h2>
+        <p>
+            Children are visual learners. Enhance your lessons with:
+        </p>
+        <ul>
+            <li>Colorful posters and illustrations</li>
+            <li>Props and costumes</li>
+            <li>Videos and animations</li>
+            <li>Flannel boards or magnetic boards</li>
+            <li>Real objects that relate to the story</li>
+        </ul>
+
+        <h2>6. Make It Relevant</h2>
+        <p>
+            Connect Bible stories to children's everyday lives. Help them see how David's courage applies when they 
+            face bullies at school, or how Joseph's forgiveness relates to conflicts with siblings. When kids see 
+            the Bible as relevant to their world, they pay attention.
+        </p>
+
+        <h2>7. Vary Your Teaching Methods</h2>
+        <p>
+            Don't rely on just one approach. Mix it up with:
+        </p>
+        <ul>
+            <li>Storytelling</li>
+            <li>Crafts and hands-on activities</li>
+            <li>Small group discussions</li>
+            <li>Games and competitions</li>
+            <li>Music and worship</li>
+            <li>Drama and role-playing</li>
+        </ul>
+
+        <h2>8. Create a Positive Environment</h2>
+        <p>
+            Children engage better when they feel safe and valued. Learn their names, celebrate their contributions, 
+            and create a classroom culture where every child feels welcome. Positive reinforcement goes much further 
+            than criticism.
+        </p>
+
+        <h2>9. Use Technology Wisely</h2>
+        <p>
+            Today's children are digital natives. Incorporate age-appropriate technology like:
+        </p>
+        <ul>
+            <li>Bible apps with interactive features</li>
+            <li>Educational videos</li>
+            <li>Digital games that reinforce lessons</li>
+            <li>Online quizzes and polls</li>
+        </ul>
+        <p>
+            Just remember—technology should enhance, not replace, personal interaction and hands-on learning.
+        </p>
+
+        <h2>10. End with Application</h2>
+        <p>
+            Always conclude with a clear, actionable takeaway. Give children one specific thing they can do during 
+            the week to apply what they've learned. When kids leave with a mission, they're more likely to remember 
+            and internalize the lesson.
+        </p>
+
+        <h2>Putting It All Together</h2>
+        <p>
+            You don't need to use all ten strategies in every lesson. Start by incorporating two or three new 
+            approaches and see what works best for your class. Every group of children is different, so be willing 
+            to adapt and experiment.
+        </p>
+
+        <p>
+            Remember, the goal isn't just to keep kids busy—it's to help them encounter God's Word in meaningful 
+            ways. When we engage their minds, hearts, and bodies, we create opportunities for the Holy Spirit to 
+            work in their lives.
+        </p>
+
+        <p>
+            What strategies have worked best in your Sunday School class? I'd love to hear your experiences and 
+            ideas in the comments below!
+        </p>
+
+        <!-- Share Buttons -->
+        <div class="share-buttons">
+            <button class="share-btn share-facebook">
+                <i class="fab fa-facebook-f"></i> Share
+            </button>
+            <button class="share-btn share-twitter">
+                <i class="fab fa-twitter"></i> Tweet
+            </button>
+            <button class="share-btn share-linkedin">
+                <i class="fab fa-linkedin-in"></i> Share
+            </button>
+        </div>
+
+        <!-- Author Bio -->
+        <div class="author-bio">
+            <div class="author-avatar">SJ</div>
+            <div class="author-info">
+                <h4>About Sarah Johnson</h4>
+                <p>
+                    Sarah has been serving in children's ministry for over 15 years and currently serves as 
+                    Children's Ministry Director at Grace Community Church. She is passionate about equipping 
+                    teachers and creating engaging, Bible-centered curriculum for kids of all ages.
+                </p>
+            </div>
+        </div>
+    </article>
+
+    <!-- Related Posts -->
+    <section class="related-posts">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h2 class="section-title">Related Articles</h2>
+            <div class="related-grid">
+                <div class="related-card">
+                    <img class="related-card-img" src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=500&q=75&fit=crop" alt="Bible Memory Verses">
+                    <div class="related-card-body">
+                        <h3>Creative Ways to Teach Bible Memory Verses</h3>
+                        <p>Make Scripture memorization fun and effective with these creative techniques that work for all age groups.</p>
+                        <a href="blog-post-1.html" class="card-link">Read More</a>
+                    </div>
+                </div>
+
+                <div class="related-card">
+                    <img class="related-card-img" src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=500&q=75&fit=crop" alt="Classroom Management">
+                    <div class="related-card-body">
+                        <h3>Handling Difficult Behavior with Grace</h3>
+                        <p>Biblical approaches to managing challenging behaviors while maintaining a loving, Christ-centered environment.</p>
+                        <a href="blog-post-1.html" class="card-link">Read More</a>
+                    </div>
+                </div>
+
+                <div class="related-card">
+                    <img class="related-card-img" src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=500&q=75&fit=crop" alt="Storytelling">
+                    <div class="related-card-body">
+                        <h3>Using Storytelling to Bring the Bible to Life</h3>
+                        <p>Master the art of Biblical storytelling with techniques that captivate young audiences.</p>
+                        <a href="blog-post-1.html" class="card-link">Read More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3 style="color: white; margin-bottom: var(--spacing-md);">Friends of Children Ministries</h3>
+            <p>Empowering teachers to inspire the next generation</p>
+            <p style="margin-top: var(--spacing-md); font-size: 0.875rem;">
+                &copy; 2025 Friends of Children Ministries. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="app.js"></script>
+    <script>
+        const postUrl   = window.location.href;
+        const postTitle = document.title;
+
+        function showShareToast(platform) {
+            const existing = document.querySelector('.share-toast');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.className = 'share-toast';
+            toast.innerHTML = `<i class="fas fa-share-alt"></i> Shared on <strong>${platform}</strong>`;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('hiding');
+                setTimeout(() => toast.remove(), 350);
+            }, 3000);
+        }
+
+        // Facebook
+        document.querySelector('.share-facebook').addEventListener('click', function () {
+            const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`;
+            window.open(url, '_blank', 'width=600,height=400');
+            showShareToast('Facebook');
+        });
+
+        // Twitter / X
+        document.querySelector('.share-twitter').addEventListener('click', function () {
+            const url = `https://twitter.com/intent/tweet?url=${encodeURIComponent(postUrl)}&text=${encodeURIComponent(postTitle)}`;
+            window.open(url, '_blank', 'width=600,height=400');
+            showShareToast('Twitter');
+        });
+
+        // LinkedIn
+        document.querySelector('.share-linkedin').addEventListener('click', function () {
+            const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`;
+            window.open(url, '_blank', 'width=600,height=500');
+            showShareToast('LinkedIn');
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,1394 @@
+/* ============================================
+   Friends of Children Ministries CMS - DESIGN SYSTEM
+   Biblical Theme: Old & New Testament Inspired
+   ============================================ */
+
+/* ========== CSS VARIABLES & DESIGN TOKENS ========== */
+:root {
+    /* ==============================================
+       COLOR PALETTE - BIBLICAL INSPIRATION
+       
+       OLD TESTAMENT:
+       - Sacrificial Crimson: Blood of the covenant
+       - Temple Gold: The Ark, Tabernacle glory
+       - Royal Purple: Priestly garments, royalty
+       - Desert Sand: Wilderness journey
+       
+       NEW TESTAMENT:
+       - Living Water Blue: Baptism, Holy Spirit
+       - Olive Green: Mount of Olives, peace
+       - Pure White/Cream: Righteousness, Light
+       - Dove Silver: Holy Spirit, grace
+       ============================================== */
+
+    /* Primary - Modern Sky Blue (Fresh & Airy) */
+    --primary-color: #4A90E2;
+    --primary-dark: #357ABD;
+    --primary-light: #E1F5FE;
+
+    /* Secondary - Soft White/Blue */
+    --secondary-color: #F0F4F8;
+    --secondary-dark: #D1E3F0;
+    --secondary-light: #FFFFFF;
+
+    /* Children's Ministry Accent Colors - Fresh & Vibrant */
+    --children-yellow: #FFD54F;
+    --children-orange: #FFB74D;
+    --children-blue: #64B5F6;
+    --children-purple: #9575CD;
+    --children-green: #81C784;
+    --children-pink: #F06292;
+
+    /* Biblical theme colors — used across bible-study and lesson pages */
+    --accent-gold: #C9A84C;
+    --ot-crimson: #8B2942;
+    --ot-crimson-light: #C0392B;
+    --ot-purple: #6B3FA0;
+    --nt-olive: #5D7A3E;
+
+    /* Neutral Colors - Clean White/Gray Tones */
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #F8FAFC;
+    --bg-tertiary: #F1F5F9;
+    --text-primary: #1E293B;
+    --text-secondary: #475569;
+    --text-muted: #94A3B8;
+    --border-color: #E2E8F0;
+
+    /* White-Blueish Gradients - Softened for better clarity */
+    --gradient-primary: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 100%);
+    --gradient-button: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+    --gradient-button-hover: linear-gradient(135deg, #64B5F6 0%, #4A90E2 100%);
+    --gradient-hero: linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 20, 60, 0.70) 100%);
+    --gradient-ocean: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+
+    /* Shadows with warm neutral tones */
+    --shadow-sm: 0 1px 2px 0 rgba(45, 52, 54, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(45, 52, 54, 0.08);
+    --shadow-lg: 0 10px 15px -3px rgba(45, 52, 54, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(45, 52, 54, 0.12);
+    --shadow-2xl: 0 25px 50px -12px rgba(45, 52, 54, 0.15);
+    --shadow-gold: 0 4px 20px rgba(206, 157, 52, 0.15);
+    --shadow-crimson: 0 4px 20px rgba(158, 42, 43, 0.1);
+
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+    --spacing-2xl: 4rem;
+
+    /* Border Radius */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-full: 9999px;
+
+    /* Typography - Classic & Reverent */
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-display: 'Outfit', sans-serif;
+    --font-heading: 'Merriweather', serif; /* Warmer, less AI looking */
+
+    /* Transitions */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Add Google Font for the warmer look */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&display=swap');
+
+/* Subtle Paper Texture Overlay - Global */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: multiply;
+}
+
+/* ========== GLOBAL RESET & BASE STYLES ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: var(--font-primary);
+    color: var(--text-primary);
+    background-color: var(--bg-secondary);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* ========== TYPOGRAPHY ========== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: var(--spacing-md);
+}
+
+h1 {
+    font-size: 3.5rem;
+}
+
+h2 {
+    font-size: 2.5rem;
+}
+
+h3 {
+    font-size: 2rem;
+}
+
+h4 {
+    font-size: 1.5rem;
+}
+
+h5 {
+    font-size: 1.25rem;
+}
+
+h6 {
+    font-size: 1rem;
+}
+
+p {
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-secondary);
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+    transition: color var(--transition-fast);
+}
+
+a:hover {
+    color: var(--primary-dark);
+}
+
+/* ========== HEADER & NAVIGATION ========== */
+.header {
+    background: rgba(255, 254, 248, 0.97);
+    padding: 0;
+    box-shadow: 0 1px 12px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.nav-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 68px;
+    gap: 1rem;
+}
+
+.logo {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #1E293B 0%, #357ABD 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+    white-space: nowrap;
+    flex-shrink: 0;
+    line-height: 1.2;
+}
+
+.nav-links {
+    display: flex;
+    gap: 0.25rem;
+    list-style: none;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.nav-links a {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.875rem;
+    padding: 0.4rem 0.65rem;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+    position: relative;
+    white-space: nowrap;
+}
+
+.nav-links a:hover {
+    color: var(--primary-color);
+    background: rgba(74,144,226,0.06);
+}
+
+.nav-links a.active {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 2px;
+    background: var(--primary-color);
+    border-radius: 1px;
+}
+
+/* ========== MOBILE MENU TOGGLE ========== */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    border: none;
+    background: transparent;
+    gap: 4px;
+    z-index: 1001;
+}
+
+.mobile-menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transition: all var(--transition-base);
+}
+
+.mobile-menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.mobile-menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* ========== HERO SECTION - FRESH WHITE-BLUEISH THEME ========== */
+.hero {
+    /* Updated to use fresh white-blueish gradient and new background */
+    background: 
+        var(--gradient-hero),
+        url('images/hero-background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    padding: var(--spacing-2xl) var(--spacing-md);
+    padding-bottom: calc(var(--spacing-2xl) + 100px);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Cheerful floating elements inspired by children's joy */
+.hero::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 120px;
+    background:
+        /* Playful wave pattern at bottom */
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 200" preserveAspectRatio="none"><path fill="%2387CEEB" fill-opacity="0.3" d="M0,200 L0,120 Q360,60 720,120 Q1080,180 1440,120 L1440,200 Z"/></svg>') bottom center / 100% 60px no-repeat,
+        /* Secondary wave */
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 200" preserveAspectRatio="none"><path fill="%23FFD700" fill-opacity="0.2" d="M0,200 L0,140 Q240,80 480,140 Q720,200 960,140 Q1200,80 1440,140 L1440,200 Z"/></svg>') bottom center / 100% 80px no-repeat;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Subtle heart accent for children's ministry */
+.hero::after {
+    content: '♥';
+    position: absolute;
+    top: 20%;
+    right: 15%;
+    font-size: 2rem;
+    color: rgba(255, 105, 180, 0.3);
+    animation: float 3s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Sun/joy glow effect */
+.hero .hero-content::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: 10%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle,
+            rgba(255, 215, 0, 0.3) 0%,
+            rgba(255, 165, 0, 0.2) 30%,
+            rgba(255, 140, 0, 0.1) 60%,
+            transparent 80%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    animation: glow 4s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    0% { opacity: 0.3; transform: scale(1); }
+    100% { opacity: 0.6; transform: scale(1.1); }
+}
+
+/* Hero Ministry Logo */
+.hero-logo {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 8px;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        0 2px 8px rgba(0, 0, 0, 0.1),
+        0 0 0 4px rgba(255, 255, 255, 0.5);
+    margin-bottom: var(--spacing-lg);
+    animation: logoFadeIn 1s ease-out 0.1s both;
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.hero-logo:hover {
+    transform: scale(1.05);
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.25),
+        0 4px 12px rgba(0, 0, 0, 0.15),
+        0 0 0 6px rgba(255, 255, 255, 0.6);
+}
+
+@keyframes logoFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.hero-content {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+}
+
+/* Warm Heading Style */
+.hero h1 {
+    font-family: var(--font-heading);
+    font-size: 4.5rem;
+    margin-bottom: var(--spacing-md);
+    background: linear-gradient(135deg, #ffffff 0%, #e0f0ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 900;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.hero p {
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 1.25rem;
+    max-width: 700px;
+    margin: 0 auto var(--spacing-xl);
+    font-weight: 500;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========== SEARCH BAR ========== */
+.search-section {
+    max-width: 1280px;
+    margin: calc(var(--spacing-xl) * -1) auto var(--spacing-xl);
+    padding: 0 var(--spacing-md);
+    position: relative;
+    z-index: 10;
+}
+
+.search-container {
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    padding: var(--spacing-lg);
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+    border: 1px solid var(--border-color);
+}
+
+.search-input {
+    flex: 1;
+    padding: var(--spacing-md);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    font-size: 1rem;
+    font-family: var(--font-primary);
+    transition: all var(--transition-base);
+    background: var(--bg-secondary);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+    background: var(--bg-primary);
+}
+
+.search-button {
+    background: var(--gradient-button);
+    color: white;
+    border: none;
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow:
+        0 4px 15px rgba(74, 109, 140, 0.3),
+        0 2px 4px rgba(58, 86, 110, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.search-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.search-button:hover {
+    background: var(--gradient-button-hover);
+    transform: translateY(-3px);
+    box-shadow:
+        0 8px 25px rgba(74, 109, 140, 0.35),
+        0 4px 10px rgba(58, 86, 110, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.search-button:hover::before {
+    left: 100%;
+}
+
+.search-button:active {
+    transform: translateY(-1px);
+    box-shadow:
+        0 2px 10px rgba(74, 109, 140, 0.3),
+        0 1px 3px rgba(58, 86, 110, 0.2);
+}
+
+/* ========== FILTER TABS ========== */
+.filter-section {
+    max-width: 1280px;
+    margin: 0 auto var(--spacing-xl);
+    padding: 0 var(--spacing-md);
+}
+
+.filter-tabs {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    justify-content: center;
+    list-style: none;
+}
+
+.filter-tab {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all var(--transition-base);
+    color: var(--text-secondary);
+}
+
+.filter-tab:hover {
+    border-color: var(--primary-light);
+    color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.filter-tab.active {
+    background: var(--gradient-button);
+    border-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 15px rgba(74, 109, 140, 0.3), 0 2px 4px rgba(58, 86, 110, 0.2);
+}
+
+/* Testament-specific tab styling */
+.filter-tab[data-testament="old"] {
+    border-left: 3px solid var(--ot-crimson);
+}
+
+.filter-tab[data-testament="new"] {
+    border-left: 3px solid var(--secondary-color);
+}
+
+/* ========== LESSON CARDS GRID ========== */
+.lessons-section {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md) var(--spacing-2xl);
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.lessons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--spacing-lg);
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ========== LESSON CARD COMPONENT ========== */
+.lesson-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+    cursor: pointer;
+    position: relative;
+    animation: fadeInUp 0.6s ease-out both;
+    border: 1px solid var(--border-color);
+}
+
+.btn-primary {
+    background: var(--gradient-button);
+    color: white;
+    border-radius: 12px 24px 12px 24px; /* Organic shape */
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-md);
+    border: 2px solid transparent;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: var(--shadow-lg);
+    border-radius: 24px 12px 24px 12px; /* Subtle organic morph */
+}
+
+.btn-secondary {
+    background: white;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 24px 12px 24px 12px; /* Organic shape */
+}
+
+.btn-secondary:hover {
+    background: var(--primary-color);
+    color: white;
+    border-radius: 12px 24px 12px 24px;
+}
+
+.lesson-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-2xl);
+}
+
+.card-header {
+    height: 180px;
+    background: linear-gradient(135deg, #4A90E2, #357ABD);
+    position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    padding: 0.75rem 1rem;
+    transition: transform var(--transition-base);
+}
+
+/* Card Background Variants — homepage quick-link cards */
+.card-header-lessons {
+    background: linear-gradient(180deg,rgba(0,0,0,.50) 0%,rgba(0,30,60,.75) 100%),
+        url('images/card-lessons.png') center/cover no-repeat;
+}
+
+.card-header-about {
+    background: linear-gradient(180deg,rgba(0,0,0,.50) 0%,rgba(0,30,60,.75) 100%),
+        url('images/card-about.png') center/cover no-repeat;
+}
+
+.card-header-admin {
+    background: linear-gradient(180deg,rgba(0,0,0,.50) 0%,rgba(30,0,60,.75) 100%),
+        url('images/card-admin.png') center/cover no-repeat;
+}
+
+.card-header-contact {
+    background: linear-gradient(180deg,rgba(0,0,0,.50) 0%,rgba(0,40,20,.75) 100%),
+        url('images/card-contact.png') center/cover no-repeat;
+}
+
+/* Lesson card header backgrounds — used in lessons.html */
+.lesson-header-creation {
+    background: linear-gradient(180deg,rgba(0,0,0,.50) 0%,rgba(0,30,60,.70) 100%),
+        url('images/lessons-background.png') center/cover no-repeat;
+}
+.lesson-header-children {
+    background: linear-gradient(180deg,rgba(0,0,0,.50) 0%,rgba(0,30,60,.70) 100%),
+        url('images/children-hero-bg.png') center/cover no-repeat;
+}
+.lesson-header-purpose {
+    background: linear-gradient(180deg,rgba(0,0,0,.50) 0%,rgba(30,0,60,.70) 100%),
+        url('images/lesson-faith.png') center/cover no-repeat;
+}
+.lesson-header-samaritan {
+    background: linear-gradient(180deg,rgba(0,0,0,.50) 0%,rgba(0,40,20,.70) 100%),
+        url('images/card-contact.png') center/cover no-repeat;
+}
+.lesson-header-noah {
+    background: linear-gradient(180deg,rgba(0,0,0,.50) 0%,rgba(0,20,60,.70) 100%),
+        url('images/lesson-noah.png') center/cover no-repeat;
+}
+.lesson-header-faith {
+    background: linear-gradient(180deg,rgba(0,0,0,.50) 0%,rgba(60,20,0,.70) 100%),
+        url('images/lesson-faith.png') center/cover no-repeat;
+}
+
+.card-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.card-category {
+    position: relative;
+    z-index: 1;
+    background: rgba(255,255,255,0.92);
+    padding: 0.2rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    backdrop-filter: blur(8px);
+    white-space: nowrap;
+}
+
+.card-date {
+    position: relative;
+    z-index: 1;
+    margin-left: auto;
+    background: rgba(0,0,0,0.35);
+    padding: 0.2rem 0.65rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.9);
+    backdrop-filter: blur(8px);
+    white-space: nowrap;
+}
+
+.card-body {
+    padding: var(--spacing-lg);
+}
+
+.card-title {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+    font-family: var(--font-display);
+}
+
+.card-scripture {
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-md);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+
+.card-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-md);
+}
+
+.card-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+}
+
+.card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--primary-color);
+    font-weight: 600;
+    transition: all var(--transition-base);
+}
+
+.card-link:hover {
+    gap: var(--spacing-sm);
+}
+
+.card-link::after {
+    content: '→';
+    font-size: 1.2rem;
+}
+
+/* ========== TESTAMENT BADGE STYLES ========== */
+.testament-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.testament-badge.old-testament {
+    background: linear-gradient(135deg, var(--ot-crimson) 0%, var(--ot-purple) 100%);
+    color: white;
+}
+
+.testament-badge.new-testament {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--nt-olive) 100%);
+    color: white;
+}
+
+/* ========== FOOTER ========== */
+.footer {
+    background: var(--text-primary);
+    color: white;
+    padding: var(--spacing-xl) var(--spacing-md);
+    margin-top: var(--spacing-2xl);
+    position: relative;
+    overflow: hidden;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+}
+
+.footer-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-content p {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+/* Mobile Navigation Improvements */
+@media (max-width: 1024px) {
+    .nav-container {
+        flex-wrap: wrap;
+        padding: var(--spacing-md);
+    }
+
+    .logo {
+        font-size: 1.5rem;
+    }
+
+    .mobile-menu-toggle {
+        display: flex;
+        order: 3;
+    }
+
+    .nav-links {
+        order: 4;
+        width: 100%;
+        flex-direction: column;
+        background: white;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        box-shadow: var(--shadow-lg);
+        border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        padding: var(--spacing-md);
+        transform: translateY(-10px);
+        opacity: 0;
+        visibility: hidden;
+        transition: all var(--transition-base);
+        z-index: 1000;
+    }
+
+    .nav-links.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .nav-links li {
+        width: 100%;
+        margin-bottom: var(--spacing-xs);
+    }
+
+    .nav-links a {
+        display: block;
+        width: 100%;
+        padding: var(--spacing-md);
+        text-align: center;
+        border-radius: var(--radius-md);
+        background: var(--bg-secondary);
+        transition: all var(--transition-base);
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+        background: var(--primary-color);
+        color: white;
+        transform: translateX(4px);
+    }
+
+    .nav-links a.active::after {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Typography adjustments */
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    h2 {
+        font-size: 2rem;
+    }
+
+    /* Header improvements */
+    .header {
+        padding: var(--spacing-sm) 0;
+    }
+
+    .nav-container {
+        padding: 0 var(--spacing-sm);
+    }
+
+    .nav-links {
+        gap: var(--spacing-xs);
+        font-size: 0.875rem;
+    }
+
+    .nav-links a {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        white-space: nowrap;
+    }
+
+    /* Hero section mobile optimization */
+    .hero {
+        min-height: 450px;
+        padding: var(--spacing-xl) var(--spacing-sm);
+        padding-bottom: calc(var(--spacing-xl) + 80px);
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+        line-height: 1.1;
+        margin-bottom: var(--spacing-md);
+    }
+
+    .hero p {
+        font-size: 1.125rem;
+        line-height: 1.5;
+        margin-bottom: var(--spacing-lg);
+    }
+
+    /* Search container mobile */
+    .search-section {
+        margin: calc(var(--spacing-lg) * -1) auto var(--spacing-lg);
+        padding: 0 var(--spacing-sm);
+    }
+
+    .search-container {
+        flex-direction: column;
+        padding: var(--spacing-md);
+    }
+
+    .search-input {
+        width: 100%;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .search-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Filter tabs mobile */
+    .filter-tabs {
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: var(--spacing-sm);
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .filter-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .filter-tab {
+        flex-shrink: 0;
+        font-size: 0.875rem;
+        padding: var(--spacing-xs) var(--spacing-md);
+    }
+
+    /* Lessons grid mobile */
+    .lessons-section {
+        padding: 0 var(--spacing-sm) var(--spacing-xl);
+    }
+
+    .lessons-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    /* Card improvements for mobile */
+    .lesson-card {
+        margin: 0 auto;
+        max-width: 100%;
+    }
+
+    .card-header {
+        height: 140px;
+    }
+
+    .card-body {
+        padding: var(--spacing-md);
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+    }
+
+    .card-description {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    /* Footer mobile */
+    .footer {
+        padding: var(--spacing-lg) var(--spacing-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra small mobile devices */
+    .nav-container {
+        padding: var(--spacing-xs);
+    }
+
+    .logo {
+        font-size: 1.25rem;
+        line-height: 1.2;
+        text-align: center;
+    }
+
+    .nav-links.active {
+        padding: var(--spacing-sm);
+    }
+
+    .nav-links a {
+        padding: var(--spacing-md);
+        font-size: 1rem;
+        border-radius: var(--radius-lg);
+    }
+
+    .hero {
+        padding: var(--spacing-lg) var(--spacing-xs);
+        padding-bottom: calc(var(--spacing-lg) + 60px);
+        min-height: 380px;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+        line-height: 1.1;
+    }
+
+    .hero p {
+        font-size: 1rem;
+        line-height: 1.4;
+    }
+
+    /* Button improvements */
+    .hero a {
+        display: block !important;
+        text-align: center;
+        width: 100%;
+        max-width: 280px;
+        margin: 0 auto;
+        padding: var(--spacing-md) var(--spacing-lg) !important;
+        font-size: 1rem;
+    }
+
+    .search-container {
+        padding: var(--spacing-sm);
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .search-input {
+        font-size: 16px; /* Prevents zoom on iOS */
+        padding: var(--spacing-md);
+    }
+
+    .search-button {
+        width: 100%;
+        padding: var(--spacing-md);
+        font-size: 1rem;
+    }
+
+    .lessons-section {
+        padding: 0 var(--spacing-xs) var(--spacing-lg);
+    }
+
+    .section-title {
+        font-size: 1.75rem;
+        margin-bottom: var(--spacing-lg);
+        text-align: center;
+        padding: 0 var(--spacing-sm);
+    }
+
+    .lessons-grid {
+        gap: var(--spacing-md);
+    }
+
+    .lesson-card {
+        margin: 0;
+        border-radius: var(--radius-lg);
+    }
+
+    .card-header {
+        height: 120px;
+    }
+
+    .card-body {
+        padding: var(--spacing-sm);
+    }
+
+    .card-title {
+        font-size: 1.125rem;
+        margin-bottom: var(--spacing-xs);
+        line-height: 1.3;
+    }
+
+    .card-scripture {
+        font-size: 0.8rem;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .card-description {
+        font-size: 0.875rem;
+        margin-bottom: var(--spacing-sm);
+        line-height: 1.4;
+    }
+
+    .card-category,
+    .card-date {
+        font-size: 0.75rem;
+        padding: 4px var(--spacing-xs);
+    }
+
+    .filter-tabs {
+        padding: 0 var(--spacing-xs);
+        gap: var(--spacing-xs);
+    }
+
+    .filter-tab {
+        font-size: 0.8rem;
+        padding: var(--spacing-xs) var(--spacing-sm);
+        white-space: nowrap;
+    }
+
+    /* Footer mobile improvements */
+    .footer {
+        padding: var(--spacing-md) var(--spacing-xs);
+        text-align: center;
+    }
+
+    .footer h3 {
+        font-size: 1.25rem;
+    }
+
+    .footer p {
+        font-size: 0.875rem;
+        line-height: 1.4;
+    }
+}
+
+/* Landscape mobile orientation */
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero {
+        min-height: 320px;
+        padding: var(--spacing-md) var(--spacing-sm);
+        padding-bottom: calc(var(--spacing-md) + 40px);
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+}
+
+/* ========== UTILITY CLASSES ========== */
+.text-center {
+    text-align: center;
+}
+
+.text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Testament-specific text colors */
+.text-old-testament {
+    color: var(--ot-crimson);
+}
+
+.text-new-testament {
+    color: var(--secondary-color);
+}
+
+.mt-xl {
+    margin-top: var(--spacing-xl);
+}
+
+.mb-xl {
+    margin-bottom: var(--spacing-xl);
+}
+
+/* ========== SPECIAL BIBLICAL ELEMENTS ========== */
+
+/* Scripture verse highlight box */
+.scripture-highlight {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(139, 41, 66, 0.05) 100%);
+    border-left: 4px solid var(--primary-color);
+    padding: var(--spacing-md);
+    margin: var(--spacing-md) 0;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    font-style: italic;
+}
+
+/* Cross divider */
+.cross-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin: var(--spacing-xl) 0;
+    color: var(--text-muted);
+}
+
+.cross-divider::before,
+.cross-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+}
+
+.cross-divider span {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+/* Covenant connection visual */
+.covenant-link {
+    background: var(--gradient-testament);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+}
+
+
+/* ========== TEXT VISIBILITY FIXES ========== */
+/* Ensure all hero/page-header text is white and readable over dark overlays */
+
+/* Page-specific hero headings */
+.about-hero h1,
+.about-hero p,
+.bible-study-hero h1,
+.bible-study-hero p,
+.contact-hero h1,
+.contact-hero p,
+.events-hero h1,
+.events-hero p,
+.blog-hero h1,
+.blog-hero p,
+.resources-hero h1,
+.resources-hero p,
+.post-hero h1,
+.post-hero p,
+.post-meta,
+.post-meta span {
+    color: #ffffff !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+/* Lesson detail page header text */
+.lesson-header h1,
+.lesson-header h2,
+.lesson-header p,
+.lesson-header .lesson-meta,
+.lesson-header .meta-item,
+.lesson-header .testament-badge {
+    color: #ffffff !important;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+}
+
+/* Card header text (category badge and date) */
+.card-header .card-category {
+    color: var(--primary-dark) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+}
+
+.card-header .card-date {
+    color: #ffffff !important;
+    background: rgba(0, 0, 0, 0.55) !important;
+}
+
+/* Section titles on white/light backgrounds */
+.section-title {
+    color: var(--text-primary) !important;
+}
+
+/* Card body text — ensure strong contrast */
+.card-title {
+    color: var(--text-primary) !important;
+}
+
+.card-description {
+    color: var(--text-secondary) !important;
+}
+
+.card-scripture {
+    color: var(--primary-dark) !important;
+    opacity: 1 !important;
+}
+
+/* Footer text */
+.footer-content h3,
+.footer-content p {
+    color: rgba(255, 255, 255, 0.92) !important;
+}
+
+/* Testimonial text */
+.testimonial-text,
+.testimonial-author {
+    color: var(--text-secondary) !important;
+}
+
+/* Newsletter / CTA sections with dark backgrounds */
+.cta-section h2,
+.cta-section p {
+    color: #ffffff !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Stats section text (dark background) */
+.stats-section .stat-item h3,
+.stats-section .stat-item p {
+    color: #ffffff !important;
+}

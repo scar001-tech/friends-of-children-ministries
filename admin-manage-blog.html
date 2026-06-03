@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Blog Posts | Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+    <aside class="admin-sidebar" id="adminSidebar"></aside>
+    <main class="admin-main">
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+        <div class="admin-topbar">
+            <div class="topbar-title"><h1>Manage Blog Posts</h1><p>Create, edit and publish articles</p></div>
+            <div class="topbar-actions">
+                <button class="btn btn-primary" id="btnNew"><i class="fas fa-plus"></i> New Post</button>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-header">
+                <h2>All Posts</h2>
+                <div class="search-filter-bar">
+                    <input type="text" class="search-field" id="searchField" placeholder="Search posts...">
+                </div>
+            </div>
+            <div class="panel-body" style="padding:0;">
+                <table class="data-table">
+                    <thead><tr><th>Title</th><th>Author</th><th>Category</th><th>Premium</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
+                    <tbody id="tableBody"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);">Loading…</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Edit / Create Modal -->
+<div class="modal-overlay" id="formModal" style="display:none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="modalTitle">New Blog Post</h2>
+            <button class="modal-close" id="btnCloseModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="editId">
+            <div class="form-group">
+                <label>Title <span class="required">*</span></label>
+                <input type="text" id="fTitle" class="form-control" placeholder="Post title" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Author <span class="required">*</span></label>
+                    <input type="text" id="fAuthor" class="form-control" placeholder="Author name" required>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="fCategory" class="form-control">
+                        <option value="teaching">Teaching</option>
+                        <option value="methodology">Methodology</option>
+                        <option value="safety">Safety</option>
+                        <option value="devotional">Devotional</option>
+                        <option value="news">News</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Excerpt</label>
+                <textarea id="fExcerpt" class="form-control" rows="3" placeholder="Short summary of the post"></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="fStatus" class="form-control">
+                        <option value="published">Published</option>
+                        <option value="draft">Draft</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Premium Content</label>
+                    <select id="fPremium" class="form-control">
+                        <option value="false">Free</option>
+                        <option value="true">Premium</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancel">Cancel</button>
+            <button class="btn btn-primary" id="btnSave">Save Post</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-overlay" id="deleteModal" style="display:none;">
+    <div class="modal modal-sm">
+        <div class="modal-header">
+            <h2>Delete Post</h2>
+            <button class="modal-close" id="btnCloseDelete">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="color:var(--text-secondary);">Delete "<strong id="deleteTitle"></strong>"? This cannot be undone.</p>
+            <input type="hidden" id="deleteId">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancelDelete">Cancel</button>
+            <button class="btn btn-danger-outline" id="btnConfirmDelete">Delete</button>
+        </div>
+    </div>
+</div>
+
+<script src="admin-shared.js"></script>
+<script>
+(function () {
+    if (!checkAuth()) return;
+    renderSidebar('blog');
+
+    const ENDPOINT = '/api/blog';
+    const STORAGE  = 'blogPosts';
+    const ENTITY   = 'Blog Post';
+
+    let items = [];
+
+    function openModal(id)  { document.getElementById(id).style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none';  document.body.style.overflow = ''; }
+
+    async function load() {
+        try {
+            const r = await fetch(ENDPOINT, { headers:{'x-admin-role':sessionStorage.getItem('adminRole')||'system_admin'} });
+            items = r.ok ? await r.json() : getData(STORAGE);
+        } catch { items = getData(STORAGE); }
+        if (!Array.isArray(items)) items = getData(STORAGE);
+        setData(STORAGE, items);
+        render();
+    }
+
+    function render(filter) {
+        filter = (filter || document.getElementById('searchField').value).toLowerCase();
+        const rows = filter ? items.filter(d => (d.title+d.author+d.category).toLowerCase().includes(filter)) : items;
+        const tbody = document.getElementById('tableBody');
+        if (!rows.length) { tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="empty-icon"><i class="fas fa-newspaper"></i></div><p>No blog posts found</p></div></td></tr>'; return; }
+        tbody.innerHTML = rows.map(d => `
+            <tr>
+                <td style="font-weight:600">${d.title}</td>
+                <td>${d.author}</td>
+                <td><span class="badge badge-info">${d.category}</span></td>
+                <td>${(d.premium||d.isPremium)?'<span class="badge badge-purple">Premium</span>':'<span class="badge badge-muted">Free</span>'}</td>
+                <td><span class="badge ${d.status==='published'?'badge-success':'badge-warning'}">${d.status}</span></td>
+                <td>${formatDate(d.createdAt)}</td>
+                <td>
+                    <div style="display:flex;gap:.4rem">
+                        <button class="btn btn-sm btn-outline" data-action="edit" data-id="${d.id}">Edit</button>
+                        <button class="btn btn-sm btn-danger-outline" data-action="delete" data-id="${d.id}">Delete</button>
+                    </div>
+                </td>
+            </tr>`).join('');
+    }
+
+    function openCreate() {
+        document.getElementById('modalTitle').textContent = 'New ' + ENTITY;
+        document.getElementById('btnSave').textContent = 'Create Post';
+        document.getElementById('editId').value = '';
+        document.getElementById('fTitle').value = '';
+        document.getElementById('fAuthor').value = '';
+        document.getElementById('fCategory').value = 'teaching';
+        document.getElementById('fExcerpt').value = '';
+        document.getElementById('fStatus').value = 'published';
+        document.getElementById('fPremium').value = 'false';
+        openModal('formModal');
+        document.getElementById('fTitle').focus();
+    }
+
+    function openEdit(id) {
+        const d = items.find(x => x.id === id || x.id === parseInt(id));
+        if (!d) return;
+        document.getElementById('modalTitle').textContent = 'Edit ' + ENTITY;
+        document.getElementById('btnSave').textContent = 'Save Changes';
+        document.getElementById('editId').value = d.id;
+        document.getElementById('fTitle').value = d.title;
+        document.getElementById('fAuthor').value = d.author;
+        document.getElementById('fCategory').value = d.category;
+        document.getElementById('fExcerpt').value = d.excerpt || '';
+        document.getElementById('fStatus').value = d.status;
+        document.getElementById('fPremium').value = String(d.premium || d.isPremium || false);
+        openModal('formModal');
+        document.getElementById('fTitle').focus();
+    }
+
+    async function save() {
+        const title  = document.getElementById('fTitle').value.trim();
+        const author = document.getElementById('fAuthor').value.trim();
+        if (!title || !author) { showToast('Title and Author are required', 'error'); return; }
+
+        const editId = document.getElementById('editId').value;
+        const btn    = document.getElementById('btnSave');
+        btn.disabled = true; btn.textContent = 'Saving…';
+
+        const payload = {
+            title, author,
+            category:  document.getElementById('fCategory').value,
+            excerpt:   document.getElementById('fExcerpt').value.trim(),
+            status:    document.getElementById('fStatus').value,
+            premium:   document.getElementById('fPremium').value === 'true',
+            isPremium: document.getElementById('fPremium').value === 'true'
+        };
+
+        const headers = { 'Content-Type':'application/json', 'x-admin-role': sessionStorage.getItem('adminRole')||'system_admin' };
+
+        try {
+            let saved;
+            if (editId) {
+                const r = await fetch(`${ENDPOINT}/${editId}`, { method:'PUT', headers, body:JSON.stringify(payload) });
+                saved = r.ok ? await r.json() : null;
+                const i = items.findIndex(x => x.id === parseInt(editId));
+                if (i > -1) items[i] = { ...items[i], ...(saved || payload) };
+                addAuditEntry('UPDATE', ENTITY, `Updated: ${title}`);
+                showToast(ENTITY + ' updated!', 'success');
+            } else {
+                const r = await fetch(ENDPOINT, { method:'POST', headers, body:JSON.stringify(payload) });
+                saved = r.ok ? await r.json() : null;
+                if (saved) items.push(saved);
+                else { payload.id = nextId(items); payload.createdAt = new Date().toISOString().split('T')[0]; items.push(payload); }
+                addAuditEntry('CREATE', ENTITY, `Created: ${title}`);
+                showToast(ENTITY + ' created!', 'success');
+            }
+        } catch {
+            if (editId) { const i = items.findIndex(x=>x.id===parseInt(editId)); if(i>-1) items[i]={...items[i],...payload}; }
+            else { payload.id = nextId(items); payload.createdAt = new Date().toISOString().split('T')[0]; items.push(payload); }
+            addAuditEntry(editId?'UPDATE':'CREATE', ENTITY, `${editId?'Updated':'Created'}: ${title}`);
+            showToast(ENTITY + (editId?' updated':' created') + ' (offline)', 'success');
+        }
+
+        setData(STORAGE, items);
+        render();
+        closeModal('formModal');
+        btn.disabled = false;
+        btn.textContent = editId ? 'Save Changes' : 'Create Post';
+    }
+
+    function openDelete(id) {
+        const d = items.find(x => x.id === id || x.id === parseInt(id));
+        if (!d) return;
+        document.getElementById('deleteId').value = d.id;
+        document.getElementById('deleteTitle').textContent = d.title;
+        openModal('deleteModal');
+    }
+
+    async function confirmDelete() {
+        const id  = parseInt(document.getElementById('deleteId').value);
+        const d   = items.find(x => x.id === id);
+        const btn = document.getElementById('btnConfirmDelete');
+        btn.disabled = true; btn.textContent = 'Deleting…';
+
+        try { await fetch(`${ENDPOINT}/${id}`, { method:'DELETE', headers:{'x-admin-role':sessionStorage.getItem('adminRole')||'system_admin'} }); } catch {}
+
+        items = items.filter(x => x.id !== id);
+        setData(STORAGE, items);
+        addAuditEntry('DELETE', ENTITY, `Deleted: ${d?.title}`);
+        showToast(ENTITY + ' deleted', 'info');
+        render();
+        closeModal('deleteModal');
+        btn.disabled = false; btn.textContent = 'Delete';
+    }
+
+    document.getElementById('btnNew').addEventListener('click', openCreate);
+    document.getElementById('btnSave').addEventListener('click', save);
+    document.getElementById('btnCancel').addEventListener('click', () => closeModal('formModal'));
+    document.getElementById('btnCloseModal').addEventListener('click', () => closeModal('formModal'));
+    document.getElementById('btnConfirmDelete').addEventListener('click', confirmDelete);
+    document.getElementById('btnCancelDelete').addEventListener('click', () => closeModal('deleteModal'));
+    document.getElementById('btnCloseDelete').addEventListener('click', () => closeModal('deleteModal'));
+    document.getElementById('searchField').addEventListener('input', e => render(e.target.value));
+    document.getElementById('formModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('formModal'); });
+    document.getElementById('deleteModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('deleteModal'); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal('formModal'); closeModal('deleteModal'); } });
+    document.getElementById('tableBody').addEventListener('click', e => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        const id = parseInt(btn.dataset.id);
+        if (btn.dataset.action === 'edit')   openEdit(id);
+        if (btn.dataset.action === 'delete') openDelete(id);
+    });
+
+    load();
+}());
+</script>
+</body>
+</html>

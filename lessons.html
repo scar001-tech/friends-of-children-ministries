@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Browse our collection of Friends of Children Ministries">
+    <title>Lessons | Friends of Children Ministries</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">Friends of Children Ministries</div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="lessons.html" class="active">Lessons</a></li>
+                <li><a href="bible-study.html">Bible Study</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <section class="hero" style="background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,20,60,0.70) 100%), url('images/lessons-background.png') center/cover no-repeat fixed;">
+        <div class="hero-content">
+            <h1>Sunday School Lessons</h1>
+            <p style="color:rgba(255,255,255,0.92);text-shadow:0 1px 4px rgba(0,0,0,0.5);">Browse our growing library of carefully crafted Bible-based lessons for every age group</p>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="search-container">
+            <input type="text" class="search-input" id="searchInput"
+                placeholder="Search for lessons by title, scripture, or topic..." aria-label="Search lessons">
+            <button class="search-button" id="searchBtn">Search</button>
+        </div>
+    </section>
+
+    <!-- Filter Tabs -->
+    <section class="filter-section">
+        <ul class="filter-tabs" id="filterTabs">
+            <li class="filter-tab active" data-filter="all">All Lessons</li>
+            <li class="filter-tab" data-filter="creation">Creation Stories</li>
+            <li class="filter-tab" data-filter="parables">Parables</li>
+            <li class="filter-tab" data-filter="faith">Faith & Purpose</li>
+        </ul>
+    </section>
+
+    <!-- Lessons Section -->
+    <section class="lessons-section">
+        <h2 class="section-title">Recent Lessons</h2>
+        <div class="lessons-grid" id="lessonsGrid">
+
+            <!-- Lesson Card 1 — God's Amazing Creation -->
+            <article class="lesson-card" data-category="creation">
+                <div class="card-header" style="background: linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,30,60,.75) 100%), url('images/lessons-background.png') center/cover no-repeat; height:180px; position:relative; display:flex; align-items:flex-end; padding:1rem;">
+                    <span class="card-category" style="position:relative;z-index:1;">Creation</span>
+                    <span class="card-date" style="position:relative;z-index:1;margin-left:auto;color:rgba(255,255,255,.85);font-size:.8rem;">Dec 1, 2025</span>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">God's Amazing Creation</h3>
+                    <div class="card-scripture">Genesis 1:1-31</div>
+                    <p class="card-description">Explore the wonder of God's creation with hands-on activities and engaging discussions. Students will learn about the seven days of creation and discover their role as caretakers of God's world.</p>
+                    <div class="card-footer">
+                        <a href="lesson1.html" class="card-link">View Lesson</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Lesson Card 2 — Jesus Loves the Little Children -->
+            <article class="lesson-card" data-category="faith">
+                <div class="card-header" style="background: linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,30,60,.75) 100%), url('images/children-hero-bg.png') center/cover no-repeat; height:180px; position:relative; display:flex; align-items:flex-end; padding:1rem;">
+                    <span class="card-category" style="position:relative;z-index:1;">Faith</span>
+                    <span class="card-date" style="position:relative;z-index:1;margin-left:auto;color:rgba(255,255,255,.85);font-size:.8rem;">Nov 24, 2025</span>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Jesus Loves the Little Children</h3>
+                    <div class="card-scripture">Mark 10:13-16</div>
+                    <p class="card-description">A gentle introduction to Jesus' love for children. Through storytelling, songs, and simple crafts, discover how special each child is to Jesus.</p>
+                    <div class="card-footer">
+                        <a href="lesson2.html" class="card-link">View Lesson</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Lesson Card 3 — Living with Purpose -->
+            <article class="lesson-card" data-category="faith">
+                <div class="card-header" style="background: linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(30,0,60,.75) 100%), url('images/lesson-faith.png') center/cover no-repeat; height:180px; position:relative; display:flex; align-items:flex-end; padding:1rem;">
+                    <span class="card-category" style="position:relative;z-index:1;">Faith &amp; Purpose</span>
+                    <span class="card-date" style="position:relative;z-index:1;margin-left:auto;color:rgba(255,255,255,.85);font-size:.8rem;">Nov 17, 2025</span>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Living with Purpose</h3>
+                    <div class="card-scripture">Jeremiah 29:11</div>
+                    <p class="card-description">Discover God's plan for your life through interactive discussions and real-world applications. Explore gifts, passions, and how to live purposefully for Christ.</p>
+                    <div class="card-footer">
+                        <a href="lesson3.html" class="card-link">View Lesson</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Lesson Card 4 — The Good Samaritan -->
+            <article class="lesson-card" data-category="parables">
+                <div class="card-header" style="background: linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,40,20,.75) 100%), url('images/card-contact.png') center/cover no-repeat; height:180px; position:relative; display:flex; align-items:flex-end; padding:1rem;">
+                    <span class="card-category" style="position:relative;z-index:1;">Parables</span>
+                    <span class="card-date" style="position:relative;z-index:1;margin-left:auto;color:rgba(255,255,255,.85);font-size:.8rem;">Nov 10, 2025</span>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">The Good Samaritan</h3>
+                    <div class="card-scripture">Luke 10:25-37</div>
+                    <p class="card-description">Learn about showing kindness to everyone through the parable of the Good Samaritan. Interactive role-play and discussion help understand practical ways to love our neighbors.</p>
+                    <div class="card-footer">
+                        <a href="lesson4.html" class="card-link">View Lesson</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Lesson Card 5 — Noah's Ark Adventure -->
+            <article class="lesson-card" data-category="creation">
+                <div class="card-header" style="background: linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,20,60,.75) 100%), url('images/lesson-noah.png') center/cover no-repeat; height:180px; position:relative; display:flex; align-items:flex-end; padding:1rem;">
+                    <span class="card-category" style="position:relative;z-index:1;">Creation</span>
+                    <span class="card-date" style="position:relative;z-index:1;margin-left:auto;color:rgba(255,255,255,.85);font-size:.8rem;">Nov 3, 2025</span>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Noah's Ark Adventure</h3>
+                    <div class="card-scripture">Genesis 6-9</div>
+                    <p class="card-description">Join Noah on his amazing adventure with fun animal activities, songs, and crafts. Learn about obedience and God's promises through this beloved story.</p>
+                    <div class="card-footer">
+                        <a href="lesson5.html" class="card-link">View Lesson</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Lesson Card 6 — Faith in Action -->
+            <article class="lesson-card" data-category="faith">
+                <div class="card-header" style="background: linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(60,20,0,.75) 100%), url('images/lesson-faith.png') center/cover no-repeat; height:180px; position:relative; display:flex; align-items:flex-end; padding:1rem;">
+                    <span class="card-category" style="position:relative;z-index:1;">Faith &amp; Purpose</span>
+                    <span class="card-date" style="position:relative;z-index:1;margin-left:auto;color:rgba(255,255,255,.85);font-size:.8rem;">Oct 27, 2025</span>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">Faith in Action</h3>
+                    <div class="card-scripture">James 2:14-26</div>
+                    <p class="card-description">Challenge everyone to put their faith into action with practical service projects and discussions about living out beliefs in everyday life.</p>
+                    <div class="card-footer">
+                        <a href="lesson6.html" class="card-link">View Lesson</a>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3 style="color: white; margin-bottom: var(--spacing-md);">Friends of Children Ministries</h3>
+            <p>Empowering teachers to inspire the next generation</p>
+            <p style="margin-top: var(--spacing-md); font-size: 0.875rem;">
+                &copy; 2025 Friends of Children Ministries. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="app.js"></script>
+
+</body>
+
+</html>

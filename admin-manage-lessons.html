@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Lessons | Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+    <aside class="admin-sidebar" id="adminSidebar"></aside>
+    <main class="admin-main">
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+        <div class="admin-topbar">
+            <div class="topbar-title"><h1>Manage Lessons</h1><p>Create, edit and delete lesson content</p></div>
+            <div class="topbar-actions">
+                <button class="btn btn-primary" id="btnNewLesson"><i class="fas fa-plus"></i> New Lesson</button>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-header">
+                <h2>All Lessons</h2>
+                <div class="search-filter-bar">
+                    <input type="text" class="search-field" id="searchField" placeholder="Search lessons...">
+                </div>
+            </div>
+            <div class="panel-body" style="padding:0;">
+                <table class="data-table">
+                    <thead><tr><th>Title</th><th>Scripture</th><th>Category</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
+                    <tbody id="tableBody"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-secondary);">Loading…</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Edit / Create Modal -->
+<div class="modal-overlay" id="formModal" style="display:none;">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="modalTitle">New Lesson</h2>
+            <button class="modal-close" id="btnCloseModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="editId">
+            <div class="form-group">
+                <label>Title <span class="required">*</span></label>
+                <input type="text" id="fTitle" class="form-control" placeholder="Lesson title" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Scripture <span class="required">*</span></label>
+                    <input type="text" id="fScripture" class="form-control" placeholder="e.g. John 3:16" required>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="fCategory" class="form-control">
+                        <option value="creation">Creation Stories</option>
+                        <option value="parables">Parables</option>
+                        <option value="faith">Faith &amp; Purpose</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="fDescription" class="form-control" rows="3" placeholder="Brief description of the lesson"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select id="fStatus" class="form-control">
+                    <option value="published">Published</option>
+                    <option value="draft">Draft</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancel">Cancel</button>
+            <button class="btn btn-primary" id="btnSave">Save Lesson</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-overlay" id="deleteModal" style="display:none;">
+    <div class="modal modal-sm">
+        <div class="modal-header">
+            <h2>Delete Lesson</h2>
+            <button class="modal-close" id="btnCloseDelete">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="color:var(--text-secondary);">Delete "<strong id="deleteTitle"></strong>"? This cannot be undone.</p>
+            <input type="hidden" id="deleteId">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancelDelete">Cancel</button>
+            <button class="btn btn-danger-outline" id="btnConfirmDelete">Delete</button>
+        </div>
+    </div>
+</div>
+
+<script src="admin-shared.js"></script>
+<script>
+(function () {
+    if (!checkAuth()) return;
+    renderSidebar('lessons');
+
+    const ENDPOINT = '/api/lessons';
+    const STORAGE  = 'lessons';
+    const ENTITY   = 'Lesson';
+    const CAT      = { creation:'Creation', parables:'Parables', faith:'Faith & Purpose', other:'Other' };
+
+    let items = [];
+
+    /* ── helpers ── */
+    function openModal(id)  { document.getElementById(id).style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none';  document.body.style.overflow = ''; }
+
+    /* ── load ── */
+    async function load() {
+        try {
+            const r = await fetch(ENDPOINT);
+            items = r.ok ? await r.json() : getData(STORAGE);
+        } catch { items = getData(STORAGE); }
+        if (!Array.isArray(items)) items = getData(STORAGE);
+        setData(STORAGE, items);
+        render();
+    }
+
+    /* ── render table ── */
+    function render(filter) {
+        filter = (filter || document.getElementById('searchField').value).toLowerCase();
+        const rows = filter ? items.filter(d => (d.title+d.scripture+d.category).toLowerCase().includes(filter)) : items;
+        const tbody = document.getElementById('tableBody');
+        if (!rows.length) { tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon"><i class="fas fa-book-open"></i></div><p>No lessons found</p></div></td></tr>'; return; }
+        tbody.innerHTML = rows.map(d => `
+            <tr>
+                <td style="font-weight:600">${d.title}</td>
+                <td>${d.scripture}</td>
+                <td><span class="badge badge-info">${CAT[d.category]||d.category}</span></td>
+                <td><span class="badge ${d.status==='published'?'badge-success':'badge-warning'}">${d.status}</span></td>
+                <td>${formatDate(d.createdAt)}</td>
+                <td>
+                    <div style="display:flex;gap:.4rem">
+                        <button class="btn btn-sm btn-outline" data-action="edit" data-id="${d.id}">Edit</button>
+                        <button class="btn btn-sm btn-danger-outline" data-action="delete" data-id="${d.id}">Delete</button>
+                    </div>
+                </td>
+            </tr>`).join('');
+    }
+
+    /* ── open create ── */
+    function openCreate() {
+        document.getElementById('modalTitle').textContent = 'New ' + ENTITY;
+        document.getElementById('btnSave').textContent = 'Create Lesson';
+        document.getElementById('editId').value = '';
+        document.getElementById('fTitle').value = '';
+        document.getElementById('fScripture').value = '';
+        document.getElementById('fCategory').value = 'creation';
+        document.getElementById('fDescription').value = '';
+        document.getElementById('fStatus').value = 'published';
+        openModal('formModal');
+        document.getElementById('fTitle').focus();
+    }
+
+    /* ── open edit ── */
+    function openEdit(id) {
+        const d = items.find(x => x.id === id || x.id === parseInt(id));
+        if (!d) return;
+        document.getElementById('modalTitle').textContent = 'Edit ' + ENTITY;
+        document.getElementById('btnSave').textContent = 'Save Changes';
+        document.getElementById('editId').value = d.id;
+        document.getElementById('fTitle').value = d.title;
+        document.getElementById('fScripture').value = d.scripture;
+        document.getElementById('fCategory').value = d.category;
+        document.getElementById('fDescription').value = d.description || '';
+        document.getElementById('fStatus').value = d.status;
+        openModal('formModal');
+        document.getElementById('fTitle').focus();
+    }
+
+    /* ── save ── */
+    async function save() {
+        const title    = document.getElementById('fTitle').value.trim();
+        const scripture = document.getElementById('fScripture').value.trim();
+        if (!title || !scripture) { showToast('Title and Scripture are required', 'error'); return; }
+
+        const editId = document.getElementById('editId').value;
+        const btn    = document.getElementById('btnSave');
+        btn.disabled = true;
+        btn.textContent = 'Saving…';
+
+        const payload = {
+            title, scripture,
+            category:    document.getElementById('fCategory').value,
+            description: document.getElementById('fDescription').value.trim(),
+            status:      document.getElementById('fStatus').value
+        };
+
+        try {
+            let saved;
+            if (editId) {
+                const r = await fetch(`${ENDPOINT}/${editId}`, { method:'PUT', headers:{'Content-Type':'application/json','x-admin-role':sessionStorage.getItem('adminRole')||'system_admin'}, body:JSON.stringify(payload) });
+                saved = r.ok ? await r.json() : null;
+                if (saved) { const i = items.findIndex(x=>x.id===parseInt(editId)); if(i>-1) items[i]={...items[i],...saved}; }
+                else { const i = items.findIndex(x=>x.id===parseInt(editId)); if(i>-1) items[i]={...items[i],...payload}; }
+                addAuditEntry('UPDATE', ENTITY, `Updated: ${title}`);
+                showToast(ENTITY + ' updated!', 'success');
+            } else {
+                const r = await fetch(ENDPOINT, { method:'POST', headers:{'Content-Type':'application/json','x-admin-role':sessionStorage.getItem('adminRole')||'system_admin'}, body:JSON.stringify(payload) });
+                saved = r.ok ? await r.json() : null;
+                if (saved) items.push(saved);
+                else { payload.id = nextId(items); payload.createdAt = new Date().toISOString().split('T')[0]; items.push(payload); }
+                addAuditEntry('CREATE', ENTITY, `Created: ${title}`);
+                showToast(ENTITY + ' created!', 'success');
+            }
+        } catch {
+            if (editId) { const i = items.findIndex(x=>x.id===parseInt(editId)); if(i>-1) items[i]={...items[i],...payload}; }
+            else { payload.id = nextId(items); payload.createdAt = new Date().toISOString().split('T')[0]; items.push(payload); }
+            addAuditEntry(editId?'UPDATE':'CREATE', ENTITY, `${editId?'Updated':'Created'}: ${title}`);
+            showToast(ENTITY + (editId?' updated':' created') + ' (offline)', 'success');
+        }
+
+        setData(STORAGE, items);
+        render();
+        closeModal('formModal');
+        btn.disabled = false;
+        btn.textContent = editId ? 'Save Changes' : 'Create Lesson';
+    }
+
+    /* ── delete ── */
+    function openDelete(id) {
+        const d = items.find(x => x.id === id || x.id === parseInt(id));
+        if (!d) return;
+        document.getElementById('deleteId').value = d.id;
+        document.getElementById('deleteTitle').textContent = d.title;
+        openModal('deleteModal');
+    }
+
+    async function confirmDelete() {
+        const id  = parseInt(document.getElementById('deleteId').value);
+        const d   = items.find(x => x.id === id);
+        const btn = document.getElementById('btnConfirmDelete');
+        btn.disabled = true; btn.textContent = 'Deleting…';
+
+        try { await fetch(`${ENDPOINT}/${id}`, { method:'DELETE', headers:{'x-admin-role':sessionStorage.getItem('adminRole')||'system_admin'} }); } catch {}
+
+        items = items.filter(x => x.id !== id);
+        setData(STORAGE, items);
+        addAuditEntry('DELETE', ENTITY, `Deleted: ${d?.title}`);
+        showToast(ENTITY + ' deleted', 'info');
+        render();
+        closeModal('deleteModal');
+        btn.disabled = false; btn.textContent = 'Delete';
+    }
+
+    /* ── event wiring ── */
+    document.getElementById('btnNewLesson').addEventListener('click', openCreate);
+    document.getElementById('btnSave').addEventListener('click', save);
+    document.getElementById('btnCancel').addEventListener('click', () => closeModal('formModal'));
+    document.getElementById('btnCloseModal').addEventListener('click', () => closeModal('formModal'));
+    document.getElementById('btnConfirmDelete').addEventListener('click', confirmDelete);
+    document.getElementById('btnCancelDelete').addEventListener('click', () => closeModal('deleteModal'));
+    document.getElementById('btnCloseDelete').addEventListener('click', () => closeModal('deleteModal'));
+
+    document.getElementById('searchField').addEventListener('input', e => render(e.target.value));
+
+    // Backdrop click closes modal
+    document.getElementById('formModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('formModal'); });
+    document.getElementById('deleteModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('deleteModal'); });
+
+    // Escape key
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            closeModal('formModal');
+            closeModal('deleteModal');
+        }
+    });
+
+    // Table row action delegation
+    document.getElementById('tableBody').addEventListener('click', e => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        const id = parseInt(btn.dataset.id);
+        if (btn.dataset.action === 'edit')   openEdit(id);
+        if (btn.dataset.action === 'delete') openDelete(id);
+    });
+
+    load();
+}());
+</script>
+</body>
+</html>

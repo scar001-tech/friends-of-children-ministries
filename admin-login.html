@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin Login - Friends of Children Ministries">
+    <title>Admin Login | Friends of Children Ministries</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        body::before {
+            display: none;
+        }
+
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-primary);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('admin-login-bg.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .login-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(240, 249, 255, 0.5) 100%);
+            pointer-events: none;
+        }
+
+        /* Floating orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: orbFloat 8s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(74, 144, 226, 0.12) 0%, transparent 70%);
+            top: -80px;
+            right: -60px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(149, 117, 205, 0.1) 0%, transparent 70%);
+            bottom: -40px;
+            left: -40px;
+            animation-delay: -3s;
+        }
+
+        .orb-3 {
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(255, 213, 79, 0.12) 0%, transparent 70%);
+            top: 40%;
+            left: 20%;
+            animation-delay: -5s;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-30px) scale(1.05); }
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            padding: 3rem;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 
+                0 25px 60px rgba(0, 0, 0, 0.08),
+                0 0 0 1px rgba(255, 255, 255, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            position: relative;
+            z-index: 1;
+            animation: cardSlideIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes cardSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-logo {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 1.25rem;
+            background: var(--gradient-button);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(74, 144, 226, 0.3);
+            animation: logoGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoGlow {
+            from { box-shadow: 0 8px 24px rgba(74, 144, 226, 0.3); }
+            to { box-shadow: 0 8px 32px rgba(74, 144, 226, 0.5), 0 0 60px rgba(74, 144, 226, 0.1); }
+        }
+
+        .login-logo svg {
+            width: 36px;
+            height: 36px;
+            fill: white;
+        }
+
+        .login-header h1 {
+            color: var(--text-primary);
+            font-size: 1.75rem;
+            margin-bottom: 0.35rem;
+            font-weight: 800;
+        }
+
+        .login-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-family: var(--font-primary);
+            transition: all var(--transition-base);
+            background: rgba(248, 250, 252, 0.8);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.12);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: color var(--transition-fast);
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        /* Role selector */
+        .role-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .role-option {
+            position: relative;
+        }
+
+        .role-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .role-option label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 1rem 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-align: center;
+            background: rgba(248, 250, 252, 0.5);
+        }
+
+        .role-option label:hover {
+            border-color: var(--primary-color);
+            background: rgba(74, 144, 226, 0.04);
+        }
+
+        .role-option input:checked + label {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.08) 0%, rgba(53, 122, 189, 0.06) 100%);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+
+        .role-icon {
+            font-size: 1.5rem;
+        }
+
+        .role-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 0.02em;
+        }
+
+        .role-desc {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .remember-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .remember-me input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        .remember-me label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 1rem;
+            background: var(--gradient-button);
+            color: white;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: 0 4px 20px rgba(74, 144, 226, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-login::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(74, 144, 226, 0.45);
+        }
+
+        .btn-login:hover::after {
+            left: 100%;
+        }
+
+        .btn-login:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-login .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2.5px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        .btn-login.loading .spinner {
+            display: block;
+        }
+
+        .btn-login.loading .btn-text {
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Feedback messages */
+        .feedback-message {
+            padding: 0.875rem 1rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1.25rem;
+            font-size: 0.9rem;
+            display: none;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
+            animation: feedbackSlide 0.3s ease-out;
+        }
+
+        @keyframes feedbackSlide {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback-message.show {
+            display: flex;
+        }
+
+        .feedback-error {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border: 1px solid #fecaca;
+            color: #dc2626;
+        }
+
+        .feedback-success {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 1px solid #86efac;
+            color: #166534;
+        }
+
+        .feedback-icon {
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1.75rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color var(--transition-fast);
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            color: var(--primary-color);
+        }
+
+        .demo-credentials {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.06) 0%, rgba(149, 117, 205, 0.04) 100%);
+            border: 1px dashed rgba(74, 144, 226, 0.3);
+            border-radius: var(--radius-md);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .demo-credentials strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .demo-credentials p {
+            margin-bottom: 0.25rem;
+            font-size: 0.8rem;
+        }
+
+        .demo-credentials p:last-child {
+            margin-bottom: 0;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .login-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .role-selector {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <!-- Floating orbs -->
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                </div>
+                <h1>Admin Portal</h1>
+                <p>Sign in to manage your ministry platform</p>
+            </div>
+
+            <!-- Feedback messages -->
+            <div class="feedback-message feedback-error" id="errorMessage">
+                <span class="feedback-icon">⚠</span>
+                <span id="errorText">Invalid credentials</span>
+            </div>
+            <div class="feedback-message feedback-success" id="successMessage">
+                <span class="feedback-icon"><i class="fas fa-check-circle"></i></span>
+                <span id="successText">Login successful! Redirecting...</span>
+            </div>
+
+            <form id="loginForm" autocomplete="on">
+                <!-- Role selector -->
+                <div class="form-group">
+                    <label>Login as</label>
+                    <div class="role-selector">
+                        <div class="role-option">
+                            <input type="radio" id="roleSysAdmin" name="role" value="system_admin" checked>
+                            <label for="roleSysAdmin">
+                                <span class="role-icon"><i class="fas fa-shield-alt"></i></span>
+                                <span class="role-label">System Admin</span>
+                                <span class="role-desc">Full access</span>
+                            </label>
+                        </div>
+                        <div class="role-option">
+                            <input type="radio" id="roleEditor" name="role" value="editor">
+                            <label for="roleEditor">
+                                <span class="role-icon"><i class="fas fa-pen"></i></span>
+                                <span class="role-label">Editor</span>
+                                <span class="role-desc">Content only</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" class="form-control" placeholder="Enter your username" required
+                        autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" class="form-control" placeholder="Enter your password"
+                            required autocomplete="current-password">
+                        <button type="button" class="password-toggle" onclick="togglePassword()">Show</button>
+                    </div>
+                </div>
+
+                <div class="remember-row">
+                    <div class="remember-me">
+                        <input type="checkbox" id="rememberMe">
+                        <label for="rememberMe">Remember me</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-login" id="loginBtn">
+                    <span class="btn-text">Sign In</span>
+                    <div class="spinner"></div>
+                </button>
+            </form>
+
+            <a href="index.html" class="back-link">← Back to Home</a>
+
+            <div class="demo-credentials">
+                <p><strong>Demo Accounts:</strong></p>
+                <p>System Admin — <strong>admin</strong> / <strong>admin123</strong></p>
+                <p>Editor — <strong>editor</strong> / <strong>editor123</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+        // ============================================
+        // USERS DATABASE (simulated)
+        // ============================================
+        const USERS_DB = [
+            {
+                id: 1,
+                username: 'admin',
+                password: 'admin123',
+                fullName: 'David Kamau',
+                email: 'admin@friendsofchildren.org',
+                role: 'system_admin',
+                roleName: 'System Admin',
+                avatar: 'admin',
+                status: 'active',
+                lastLogin: null,
+                createdAt: '2025-01-15T08:00:00Z'
+            },
+            {
+                id: 2,
+                username: 'editor',
+                password: 'editor123',
+                fullName: 'Sarah Njeri',
+                email: 'editor@friendsofchildren.org',
+                role: 'editor',
+                roleName: 'Editor',
+                avatar: 'editor',
+                status: 'active',
+                lastLogin: null,
+                createdAt: '2025-03-10T10:00:00Z'
+            },
+            {
+                id: 3,
+                username: 'grace',
+                password: 'grace2025',
+                fullName: 'Grace Wanjiku',
+                email: 'grace@friendsofchildren.org',
+                role: 'editor',
+                roleName: 'Editor',
+                avatar: 'editor',
+                status: 'active',
+                lastLogin: null,
+                createdAt: '2025-06-01T12:00:00Z'
+            }
+        ];
+
+        // Persist users DB to sessionStorage for use across admin pages
+        if (!sessionStorage.getItem('usersDB')) {
+            sessionStorage.setItem('usersDB', JSON.stringify(USERS_DB));
+        }
+
+        // Check if already logged in
+        if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+            window.location.href = 'admin.html';
+        }
+
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleBtn = document.querySelector('.password-toggle');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.textContent = 'Hide';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.textContent = 'Show';
+            }
+        }
+
+        // Show feedback
+        function showError(msg) {
+            const el = document.getElementById('errorMessage');
+            document.getElementById('errorText').textContent = msg;
+            el.classList.add('show');
+            document.getElementById('successMessage').classList.remove('show');
+        }
+
+        function showSuccess(msg) {
+            const el = document.getElementById('successMessage');
+            document.getElementById('successText').textContent = msg;
+            el.classList.add('show');
+            document.getElementById('errorMessage').classList.remove('show');
+        }
+
+        function hideMessages() {
+            document.getElementById('errorMessage').classList.remove('show');
+            document.getElementById('successMessage').classList.remove('show');
+        }
+
+        // Helper to load Supabase client dynamically if configured
+        async function getSupabaseClient() {
+            const config = JSON.parse(localStorage.getItem('storageConfig') || '{}');
+            if (!config.enableSupabase || !config.supabaseUrl || !config.supabaseKey) return null;
+            if (window.supabaseClient) return window.supabaseClient;
+            if (window.supabase) {
+                window.supabaseClient = window.supabase.createClient(config.supabaseUrl, config.supabaseKey);
+                return window.supabaseClient;
+            }
+            return new Promise((resolve) => {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+                script.onload = () => {
+                    const client = window.supabase.createClient(config.supabaseUrl, config.supabaseKey);
+                    window.supabaseClient = client;
+                    resolve(client);
+                };
+                script.onerror = () => resolve(null);
+                document.head.appendChild(script);
+            });
+        }
+
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const selectedRole = document.querySelector('input[name="role"]:checked').value;
+            const loginBtn = document.getElementById('loginBtn');
+
+            // Show loading state
+            loginBtn.classList.add('loading');
+            loginBtn.disabled = true;
+            hideMessages();
+
+            try {
+                // Load latest users database from API if running, else use sessionStorage fallback
+                let users = [];
+                const apiActive = window.API && await API.checkHealth();
+                if (apiActive) {
+                    users = await API.getUsers();
+                } else {
+                    users = JSON.parse(sessionStorage.getItem('usersDB')) || USERS_DB;
+                }
+
+                let user = null;
+                const supabaseClient = await getSupabaseClient();
+
+                if (supabaseClient) {
+                    // 1. Resolve email if user entered a username
+                    let resolvedEmail = username;
+                    if (!resolvedEmail.includes('@')) {
+                        const localRec = users.find(u => u.username.toLowerCase() === username.toLowerCase());
+                        if (localRec) {
+                            resolvedEmail = localRec.email;
+                        } else {
+                            throw new Error('Username not found in authorization database.');
+                        }
+                    }
+
+                    // 2. Authenticate credentials with Supabase Auth
+                    const { data, error } = await supabaseClient.auth.signInWithPassword({
+                        email: resolvedEmail,
+                        password: password
+                    });
+
+                    if (error) {
+                        throw new Error('Supabase Auth: ' + error.message);
+                    }
+
+                    // 3. Authorize via local user table (authorization source)
+                    if (apiActive) {
+                        user = await API.loginUser({
+                            email: resolvedEmail,
+                            supabaseUid: data.user.id
+                        });
+                    } else {
+                        // Fallback local check
+                        user = users.find(u => u.email.toLowerCase() === resolvedEmail.toLowerCase());
+                    }
+                } else {
+                    // Local fallback auth
+                    if (apiActive) {
+                        user = await API.loginUser({
+                            username: username,
+                            password: password
+                        });
+                    } else {
+                        user = users.find(u => u.username === username && u.password === password);
+                    }
+                }
+
+                // 4. Validate role and status
+                if (!user) {
+                    throw new Error('Authentication succeeded, but no matching user account was found.');
+                }
+                if (user.role !== selectedRole) {
+                    throw new Error(`Access Denied: This account is authorized as ${user.roleName || user.role}, not the selected role.`);
+                }
+                if (user.status !== 'active') {
+                    throw new Error('Access Denied: This account is currently deactivated.');
+                }
+
+                // Update last login locally
+                user.lastLogin = new Date().toISOString();
+                if (!apiActive) {
+                    const updatedUsers = users.map(u => u.id === user.id ? user : u);
+                    sessionStorage.setItem('usersDB', JSON.stringify(updatedUsers));
+                }
+
+                // Store session details
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                sessionStorage.setItem('adminUsername', user.fullName);
+                sessionStorage.setItem('adminRole', user.role);
+                sessionStorage.setItem('adminRoleName', user.roleName || (user.role === 'system_admin' ? 'System Admin' : 'Editor'));
+                sessionStorage.setItem('adminEmail', user.email);
+                sessionStorage.setItem('adminUserId', user.id);
+                sessionStorage.setItem('adminAvatar', user.role === 'system_admin' ? 'admin' : 'editor');
+
+                // Log audit entry
+                const auditLog = JSON.parse(sessionStorage.getItem('auditLog') || '[]');
+                auditLog.unshift({
+                    id: Date.now(),
+                    timestamp: new Date().toISOString(),
+                    user: user.fullName,
+                    role: user.roleName || (user.role === 'system_admin' ? 'System Admin' : 'Editor'),
+                    action: 'LOGIN',
+                    entity: 'Session',
+                    detail: `${user.fullName} logged in as ${user.roleName || user.role} (Supabase Active: ${!!supabaseClient})`,
+                    ip: '192.168.1.' + Math.floor(Math.random() * 255)
+                });
+                sessionStorage.setItem('auditLog', JSON.stringify(auditLog));
+
+                // Remember me
+                if (document.getElementById('rememberMe').checked) {
+                    localStorage.setItem('adminRemember', 'true');
+                }
+
+                showSuccess(`Welcome back, ${user.fullName}! Redirecting...`);
+                setTimeout(() => {
+                    window.location.href = 'admin.html';
+                }, 800);
+
+            } catch (err) {
+                showError(err.message || 'Invalid credentials. Please try again.');
+                loginBtn.classList.remove('loading');
+                loginBtn.disabled = false;
+
+                // Shake effect
+                document.querySelector('.login-card').style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    document.querySelector('.login-card').style.animation = '';
+                }, 500);
+            }
+        });
+    </script>
+</body>
+
+</html>

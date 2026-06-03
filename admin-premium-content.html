@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Content & Payments | Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* ── Tabs ── */
+        .tab-bar { display:flex; gap:0; border-bottom:2px solid var(--border-color); margin-bottom:1.5rem; }
+        .tab-btn { padding:.85rem 1.75rem; background:none; border:none; border-bottom:3px solid transparent; margin-bottom:-2px; cursor:pointer; font-weight:600; font-size:.9rem; color:var(--text-secondary); transition:all .2s; }
+        .tab-btn:hover { color:var(--primary-color); }
+        .tab-btn.active { color:var(--primary-color); border-bottom-color:var(--primary-color); }
+        .tab-pane { display:none; }
+        .tab-pane.active { display:block; }
+
+        /* ── Payment provider badges ── */
+        .badge-mpesa  { background:#00a651;color:white; }
+        .badge-airtel { background:#e40000;color:white; }
+
+        /* ── Config card ── */
+        .config-card { background:var(--bg-primary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1.5rem; margin-bottom:1.5rem; }
+        .config-card h3 { margin:0 0 1rem; font-size:1rem; display:flex; align-items:center; gap:.5rem; }
+        .config-status { display:inline-flex; align-items:center; gap:.4rem; padding:.25rem .75rem; border-radius:20px; font-size:.75rem; font-weight:700; }
+        .config-status.live    { background:#dcfce7; color:#16a34a; }
+        .config-status.sandbox { background:#fef9c3; color:#ca8a04; }
+        .config-status.off     { background:#fee2e2; color:#dc2626; }
+
+        /* ── Push payment modal ── */
+        .push-steps { display:flex; flex-direction:column; gap:1rem; }
+        .push-step { display:flex; gap:1rem; align-items:flex-start; }
+        .push-step-num { width:28px; height:28px; border-radius:50%; background:var(--primary-color); color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.8rem; flex-shrink:0; }
+        .push-step-body { flex:1; }
+        .push-step-body p { margin:0; font-size:.875rem; color:var(--text-secondary); }
+        .push-step-body strong { color:var(--text-primary); }
+
+        /* ── STK status indicator ── */
+        .stk-status { padding:1rem; border-radius:var(--radius-md); text-align:center; margin-top:1rem; display:none; }
+        .stk-status.pending  { background:#fef9c3; color:#92400e; }
+        .stk-status.success  { background:#dcfce7; color:#166534; }
+        .stk-status.failed   { background:#fee2e2; color:#991b1b; }
+        .stk-status i { font-size:1.5rem; margin-bottom:.5rem; display:block; }
+    </style>
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+    <aside class="admin-sidebar" id="adminSidebar"></aside>
+    <main class="admin-main">
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+
+        <div class="admin-topbar">
+            <div class="topbar-title">
+                <h1>Premium Content &amp; Payments</h1>
+                <p>Manage premium blog posts, payment transactions, and access tokens</p>
+            </div>
+            <div class="topbar-actions">
+                <button class="btn btn-primary" id="btnNewPost">
+                    <i class="fas fa-plus"></i> New Blog Post
+                </button>
+            </div>
+        </div>
+
+        <!-- Revenue stats -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem;">
+            <div class="panel" style="padding:1.25rem;text-align:center;">
+                <div style="font-size:1.6rem;font-weight:800;color:#16a34a;" id="statRevenue">KES 0</div>
+                <div style="font-size:.85rem;color:var(--text-secondary);">Total Revenue</div>
+            </div>
+            <div class="panel" style="padding:1.25rem;text-align:center;">
+                <div style="font-size:1.6rem;font-weight:800;color:var(--primary-color);" id="statCompleted">0</div>
+                <div style="font-size:.85rem;color:var(--text-secondary);">Completed</div>
+            </div>
+            <div class="panel" style="padding:1.25rem;text-align:center;">
+                <div style="font-size:1.6rem;font-weight:800;color:#ca8a04;" id="statPending">0</div>
+                <div style="font-size:.85rem;color:var(--text-secondary);">Pending</div>
+            </div>
+            <div class="panel" style="padding:1.25rem;text-align:center;">
+                <div style="font-size:1.6rem;font-weight:800;color:#dc2626;" id="statFailed">0</div>
+                <div style="font-size:.85rem;color:var(--text-secondary);">Failed</div>
+            </div>
+            <div class="panel" style="padding:1.25rem;text-align:center;">
+                <div style="font-size:1.6rem;font-weight:800;color:#8e44ad;" id="statTokens">0</div>
+                <div style="font-size:.85rem;color:var(--text-secondary);">Active Tokens</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="panel">
+            <div class="panel-body">
+                <div class="tab-bar">
+                    <button class="tab-btn active" data-tab="posts">
+                        <i class="fas fa-crown"></i> Premium Posts
+                    </button>
+                    <button class="tab-btn" data-tab="payments">
+                        <i class="fas fa-money-bill-wave"></i> Payments
+                    </button>
+                    <button class="tab-btn" data-tab="tokens">
+                        <i class="fas fa-key"></i> Access Tokens
+                    </button>
+                    <button class="tab-btn" data-tab="config">
+                        <i class="fas fa-cog"></i> Payment Config
+                    </button>
+                </div>
+
+                <!-- Posts tab -->
+                <div class="tab-pane active" id="tab-posts">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+                        <input type="text" class="search-field" id="postSearch" placeholder="Search posts…" style="max-width:300px;">
+                        <select class="form-control" id="postFilter" style="width:auto;margin:0;">
+                            <option value="all">All Posts</option>
+                            <option value="premium">Premium Only</option>
+                            <option value="free">Free Only</option>
+                        </select>
+                    </div>
+                    <table class="data-table">
+                        <thead><tr><th>Title</th><th>Author</th><th>Category</th><th>Status</th><th>Premium</th><th>Price</th><th>Actions</th></tr></thead>
+                        <tbody id="postsTable"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);">Loading…</td></tr></tbody>
+                    </table>
+                </div>
+
+                <!-- Payments tab -->
+                <div class="tab-pane" id="tab-payments">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem;">
+                        <input type="text" class="search-field" id="paySearch" placeholder="Search by email or transaction ID…" style="max-width:320px;">
+                        <div style="display:flex;gap:.5rem;">
+                            <select class="form-control" id="payStatusFilter" style="width:auto;margin:0;">
+                                <option value="all">All Status</option>
+                                <option value="completed">Completed</option>
+                                <option value="pending">Pending</option>
+                                <option value="failed">Failed</option>
+                            </select>
+                            <select class="form-control" id="payProviderFilter" style="width:auto;margin:0;">
+                                <option value="all">All Providers</option>
+                                <option value="mpesa">M-Pesa</option>
+                                <option value="airtel">Airtel</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table class="data-table">
+                        <thead><tr><th>Transaction ID</th><th>Email</th><th>Amount</th><th>Provider</th><th>Article</th><th>Status</th><th>Date</th></tr></thead>
+                        <tbody id="paymentsTable"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);">Loading…</td></tr></tbody>
+                    </table>
+                </div>
+
+                <!-- Tokens tab -->
+                <div class="tab-pane" id="tab-tokens">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem;">
+                        <input type="text" class="search-field" id="tokenSearch" placeholder="Search by email…" style="max-width:300px;">
+                        <button class="btn btn-outline" id="btnCleanup">
+                            <i class="fas fa-broom"></i> Cleanup Expired
+                        </button>
+                    </div>
+                    <table class="data-table">
+                        <thead><tr><th>ID</th><th>Email</th><th>Article</th><th>Expires</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody id="tokensTable"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-secondary);">Loading…</td></tr></tbody>
+                    </table>
+                </div>
+
+                <!-- Config tab -->
+                <div class="tab-pane" id="tab-config">
+                    <div style="max-width:700px;">
+                        <!-- M-Pesa Config -->
+                        <div class="config-card">
+                            <h3>
+                                <span style="color:#00a651;font-size:1.2rem;">M</span> M-Pesa (Safaricom) STK Push
+                                <span class="config-status sandbox" id="mpesaStatus">Sandbox</span>
+                            </h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Consumer Key</label>
+                                    <input type="text" id="mpesaConsumerKey" class="form-control" placeholder="From Safaricom Developer Portal">
+                                </div>
+                                <div class="form-group">
+                                    <label>Consumer Secret</label>
+                                    <input type="password" id="mpesaConsumerSecret" class="form-control" placeholder="••••••••">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Business Shortcode (Paybill/Till)</label>
+                                    <input type="text" id="mpesaShortcode" class="form-control" placeholder="e.g. 174379">
+                                </div>
+                                <div class="form-group">
+                                    <label>Passkey</label>
+                                    <input type="password" id="mpesaPasskey" class="form-control" placeholder="STK Push passkey">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Callback URL</label>
+                                <input type="url" id="mpesaCallbackUrl" class="form-control" placeholder="https://yourdomain.com/api/payments/mpesa/callback">
+                                <small style="color:var(--text-muted);">Must be a publicly accessible HTTPS URL. Use ngrok for local testing.</small>
+                            </div>
+                            <div class="form-group">
+                                <label>Environment</label>
+                                <select id="mpesaEnv" class="form-control">
+                                    <option value="sandbox">Sandbox (Testing)</option>
+                                    <option value="production">Production (Live)</option>
+                                </select>
+                            </div>
+                            <div style="display:flex;gap:.75rem;margin-top:.5rem;">
+                                <button class="btn btn-primary" id="btnSaveMpesa">
+                                    <i class="fas fa-save"></i> Save M-Pesa Config
+                                </button>
+                                <button class="btn btn-outline" id="btnTestMpesa">
+                                    <i class="fas fa-vial"></i> Test STK Push
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Airtel Config -->
+                        <div class="config-card">
+                            <h3>
+                                <span style="color:#e40000;font-size:1.2rem;">A</span> Airtel Money
+                                <span class="config-status off" id="airtelStatus">Not Configured</span>
+                            </h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Client ID</label>
+                                    <input type="text" id="airtelClientId" class="form-control" placeholder="Airtel API Client ID">
+                                </div>
+                                <div class="form-group">
+                                    <label>Client Secret</label>
+                                    <input type="password" id="airtelClientSecret" class="form-control" placeholder="••••••••">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Merchant PIN</label>
+                                    <input type="password" id="airtelPin" class="form-control" placeholder="Merchant PIN">
+                                </div>
+                                <div class="form-group">
+                                    <label>Country Code</label>
+                                    <select id="airtelCountry" class="form-control">
+                                        <option value="KE">Kenya (KE)</option>
+                                        <option value="TZ">Tanzania (TZ)</option>
+                                        <option value="UG">Uganda (UG)</option>
+                                        <option value="RW">Rwanda (RW)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Callback URL</label>
+                                <input type="url" id="airtelCallbackUrl" class="form-control" placeholder="https://yourdomain.com/api/payments/airtel/callback">
+                            </div>
+                            <div class="form-group">
+                                <label>Environment</label>
+                                <select id="airtelEnv" class="form-control">
+                                    <option value="sandbox">Sandbox (Testing)</option>
+                                    <option value="production">Production (Live)</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary" id="btnSaveAirtel">
+                                <i class="fas fa-save"></i> Save Airtel Config
+                            </button>
+                        </div>
+
+                        <!-- Webhook info -->
+                        <div class="config-card" style="background:#f0f9ff;border-color:#bae6fd;">
+                            <h3><i class="fas fa-info-circle" style="color:#0284c7;"></i> Webhook Endpoints</h3>
+                            <p style="font-size:.875rem;color:var(--text-secondary);margin-bottom:1rem;">Register these URLs in your payment provider dashboards:</p>
+                            <div style="display:flex;flex-direction:column;gap:.75rem;">
+                                <div>
+                                    <label style="font-size:.8rem;font-weight:600;color:var(--text-muted);">M-PESA CALLBACK</label>
+                                    <div style="display:flex;gap:.5rem;align-items:center;">
+                                        <code id="mpesaWebhook" style="flex:1;padding:.5rem .75rem;background:white;border:1px solid var(--border-color);border-radius:var(--radius-md);font-size:.85rem;word-break:break-all;"></code>
+                                        <button class="btn btn-sm btn-outline" onclick="copyWebhook('mpesaWebhook')"><i class="fas fa-copy"></i></button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label style="font-size:.8rem;font-weight:600;color:var(--text-muted);">AIRTEL CALLBACK</label>
+                                    <div style="display:flex;gap:.5rem;align-items:center;">
+                                        <code id="airtelWebhook" style="flex:1;padding:.5rem .75rem;background:white;border:1px solid var(--border-color);border-radius:var(--radius-md);font-size:.85rem;word-break:break-all;"></code>
+                                        <button class="btn btn-sm btn-outline" onclick="copyWebhook('airtelWebhook')"><i class="fas fa-copy"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- ── Blog Post Modal ── -->
+<div class="modal-overlay" id="postModal" style="display:none;">
+    <div class="modal" style="max-width:720px;">
+        <div class="modal-header">
+            <h2 id="postModalTitle">New Blog Post</h2>
+            <button class="modal-close" id="btnClosePostModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="editPostId">
+            <div class="form-group">
+                <label>Title <span class="required">*</span></label>
+                <input type="text" id="fPostTitle" class="form-control" placeholder="Post title">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Author</label>
+                    <input type="text" id="fPostAuthor" class="form-control" value="Admin">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="fPostCategory" class="form-control">
+                        <option value="teaching">Teaching Tips</option>
+                        <option value="spiritual-growth">Spiritual Growth</option>
+                        <option value="classroom-management">Classroom Management</option>
+                        <option value="activities">Activities</option>
+                        <option value="devotional">Devotional</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Excerpt</label>
+                <textarea id="fPostExcerpt" class="form-control" rows="2" placeholder="Short summary shown in listings"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Content</label>
+                <textarea id="fPostContent" class="form-control" rows="8" placeholder="Full article content…"></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="fPostStatus" class="form-control">
+                        <option value="draft">Draft</option>
+                        <option value="published">Published</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Content Type</label>
+                    <select id="fPostPremium" class="form-control">
+                        <option value="false">Free</option>
+                        <option value="true">Premium (Paid)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" id="priceGroup" style="display:none;">
+                <label>Price (KES) <span class="required">*</span></label>
+                <input type="number" id="fPostPrice" class="form-control" value="499" min="1" step="1" placeholder="e.g. 499">
+                <small style="color:var(--text-muted);">Amount in Kenyan Shillings</small>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancelPost">Cancel</button>
+            <button class="btn btn-primary" id="btnSavePost">Save Post</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── Delete Post Modal ── -->
+<div class="modal-overlay" id="deletePostModal" style="display:none;">
+    <div class="modal modal-sm">
+        <div class="modal-header">
+            <h2>Delete Post</h2>
+            <button class="modal-close" id="btnCloseDeletePost">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="color:var(--text-secondary);">Delete "<strong id="deletePostTitle"></strong>"? This cannot be undone.</p>
+            <input type="hidden" id="deletePostId">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancelDeletePost">Cancel</button>
+            <button class="btn btn-danger-outline" id="btnConfirmDeletePost">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── STK Push Test Modal ── -->
+<div class="modal-overlay" id="stkModal" style="display:none;">
+    <div class="modal modal-sm">
+        <div class="modal-header">
+            <h2><i class="fas fa-mobile-alt"></i> Test STK Push</h2>
+            <button class="modal-close" id="btnCloseStkModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="color:var(--text-secondary);margin-bottom:1rem;font-size:.9rem;">Send a test STK Push prompt to a phone number to verify your M-Pesa configuration.</p>
+            <div class="form-group">
+                <label>Phone Number <span class="required">*</span></label>
+                <input type="tel" id="stkPhone" class="form-control" placeholder="e.g. 0712345678 or 254712345678">
+            </div>
+            <div class="form-group">
+                <label>Amount (KES)</label>
+                <input type="number" id="stkAmount" class="form-control" value="1" min="1">
+                <small style="color:var(--text-muted);">Use KES 1 for testing</small>
+            </div>
+            <div class="stk-status" id="stkStatusBox">
+                <i class="fas fa-spinner fa-spin" id="stkStatusIcon"></i>
+                <div id="stkStatusText">Sending STK Push…</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancelStk">Cancel</button>
+            <button class="btn btn-primary" id="btnSendStk">
+                <i class="fas fa-paper-plane"></i> Send STK Push
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ── Revoke Token Modal ── -->
+<div class="modal-overlay" id="revokeModal" style="display:none;">
+    <div class="modal modal-sm">
+        <div class="modal-header">
+            <h2>Revoke Token</h2>
+            <button class="modal-close" id="btnCloseRevoke">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="color:var(--text-secondary);">Revoke access token for <strong id="revokeEmail"></strong>? The user will lose access immediately.</p>
+            <input type="hidden" id="revokeTokenId">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="btnCancelRevoke">Cancel</button>
+            <button class="btn btn-danger-outline" id="btnConfirmRevoke">Revoke</button>
+        </div>
+    </div>
+</div>
+
+<script src="admin-shared.js"></script>
+<script>
+(function () {
+    if (!checkAuth()) return;
+    renderSidebar('premium-content');
+
+    const ADMIN_H = () => ({ 'Content-Type':'application/json', 'x-admin-role': sessionStorage.getItem('adminRole')||'system_admin' });
+
+    /* ── modal helpers ── */
+    function openModal(id)  { document.getElementById(id).style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none';  document.body.style.overflow = ''; }
+
+    /* ── tabs ── */
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+        });
+    });
+
+    /* ── state ── */
+    let posts = [], payments = [], tokens = [];
+
+    /* ── load all ── */
+    async function loadAll() {
+        await Promise.all([loadPosts(), loadPayments(), loadTokens()]);
+        updateStats();
+    }
+
+    function updateStats() {
+        const completed = payments.filter(p => p.status === 'completed');
+        const revenue   = completed.reduce((s, p) => s + (p.amount||0), 0);
+        document.getElementById('statRevenue').textContent   = 'KES ' + revenue.toLocaleString();
+        document.getElementById('statCompleted').textContent = completed.length;
+        document.getElementById('statPending').textContent   = payments.filter(p => p.status === 'pending').length;
+        document.getElementById('statFailed').textContent    = payments.filter(p => p.status === 'failed').length;
+        document.getElementById('statTokens').textContent    = tokens.filter(t => t.isActive && new Date(t.expiresAt) > new Date()).length;
+    }
+
+    /* ══════════════════════════════════════════
+       BLOG POSTS
+    ══════════════════════════════════════════ */
+    async function loadPosts() {
+        try {
+            const r = await fetch('/api/blog', { headers: ADMIN_H() });
+            posts = r.ok ? await r.json() : [];
+        } catch { posts = []; }
+        renderPosts();
+    }
+
+    function renderPosts() {
+        const search  = document.getElementById('postSearch').value.toLowerCase();
+        const filter  = document.getElementById('postFilter').value;
+        let rows = posts;
+        if (search) rows = rows.filter(p => (p.title+p.author+p.category).toLowerCase().includes(search));
+        if (filter === 'premium') rows = rows.filter(p => p.isPremium || p.premium);
+        if (filter === 'free')    rows = rows.filter(p => !p.isPremium && !p.premium);
+
+        const tbody = document.getElementById('postsTable');
+        if (!rows.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);">No posts found</td></tr>'; return; }
+        tbody.innerHTML = rows.map(p => `
+            <tr>
+                <td style="font-weight:600;max-width:220px;">${p.title}</td>
+                <td>${p.author||'—'}</td>
+                <td><span class="badge badge-info">${p.category||'—'}</span></td>
+                <td><span class="badge ${p.status==='published'?'badge-success':'badge-warning'}">${p.status}</span></td>
+                <td>${(p.isPremium||p.premium)?'<i class="fas fa-crown" style="color:#f59e0b;"></i> Premium':'<span style="color:var(--text-muted);">Free</span>'}</td>
+                <td>${(p.isPremium||p.premium)?'KES '+(p.price||'—'):'—'}</td>
+                <td>
+                    <div style="display:flex;gap:.4rem;">
+                        <button class="btn btn-sm btn-outline" data-action="edit-post" data-id="${p.id}"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="btn btn-sm btn-danger-outline" data-action="del-post" data-id="${p.id}"><i class="fas fa-trash"></i></button>
+                    </div>
+                </td>
+            </tr>`).join('');
+    }
+
+    document.getElementById('postSearch').addEventListener('input', renderPosts);
+    document.getElementById('postFilter').addEventListener('change', renderPosts);
+
+    /* open create */
+    function openCreatePost() {
+        document.getElementById('postModalTitle').textContent = 'New Blog Post';
+        document.getElementById('btnSavePost').textContent = 'Create Post';
+        document.getElementById('editPostId').value = '';
+        document.getElementById('fPostTitle').value = '';
+        document.getElementById('fPostAuthor').value = 'Admin';
+        document.getElementById('fPostCategory').value = 'teaching';
+        document.getElementById('fPostExcerpt').value = '';
+        document.getElementById('fPostContent').value = '';
+        document.getElementById('fPostStatus').value = 'draft';
+        document.getElementById('fPostPremium').value = 'false';
+        document.getElementById('fPostPrice').value = '499';
+        document.getElementById('priceGroup').style.display = 'none';
+        openModal('postModal');
+        document.getElementById('fPostTitle').focus();
+    }
+
+    /* open edit */
+    async function openEditPost(id) {
+        const p = posts.find(x => x.id === id || x.id === parseInt(id));
+        if (!p) return;
+        document.getElementById('postModalTitle').textContent = 'Edit Blog Post';
+        document.getElementById('btnSavePost').textContent = 'Save Changes';
+        document.getElementById('editPostId').value = p.id;
+        document.getElementById('fPostTitle').value = p.title;
+        document.getElementById('fPostAuthor').value = p.author || 'Admin';
+        document.getElementById('fPostCategory').value = p.category || 'teaching';
+        document.getElementById('fPostExcerpt').value = p.excerpt || '';
+        document.getElementById('fPostContent').value = p.content || '';
+        document.getElementById('fPostStatus').value = p.status;
+        document.getElementById('fPostPremium').value = String(p.isPremium || p.premium || false);
+        document.getElementById('fPostPrice').value = p.price || 499;
+        document.getElementById('priceGroup').style.display = (p.isPremium || p.premium) ? '' : 'none';
+        openModal('postModal');
+        document.getElementById('fPostTitle').focus();
+    }
+
+    document.getElementById('fPostPremium').addEventListener('change', function () {
+        document.getElementById('priceGroup').style.display = this.value === 'true' ? '' : 'none';
+    });
+
+    /* save post */
+    async function savePost() {
+        const title = document.getElementById('fPostTitle').value.trim();
+        if (!title) { showToast('Title is required', 'error'); return; }
+
+        const editId  = document.getElementById('editPostId').value;
+        const btn     = document.getElementById('btnSavePost');
+        btn.disabled  = true; btn.textContent = 'Saving…';
+
+        const isPremium = document.getElementById('fPostPremium').value === 'true';
+        const payload = {
+            title,
+            author:    document.getElementById('fPostAuthor').value.trim(),
+            category:  document.getElementById('fPostCategory').value,
+            excerpt:   document.getElementById('fPostExcerpt').value.trim(),
+            content:   document.getElementById('fPostContent').value.trim(),
+            status:    document.getElementById('fPostStatus').value,
+            isPremium, premium: isPremium,
+            price:     isPremium ? parseFloat(document.getElementById('fPostPrice').value)||499 : null
+        };
+
+        try {
+            const url = editId ? `/api/blog/${editId}` : '/api/blog';
+            const r   = await fetch(url, { method: editId ? 'PUT' : 'POST', headers: ADMIN_H(), body: JSON.stringify(payload) });
+            if (r.ok) {
+                addAuditEntry(editId?'UPDATE':'CREATE', 'Blog Post', `${editId?'Updated':'Created'}: ${title}`);
+                showToast('Post ' + (editId?'updated':'created') + '!', 'success');
+                closeModal('postModal');
+                await loadPosts();
+            } else {
+                const e = await r.json();
+                showToast(e.error || 'Save failed', 'error');
+            }
+        } catch {
+            showToast('Server offline — post saved locally', 'info');
+            closeModal('postModal');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = editId ? 'Save Changes' : 'Create Post';
+        }
+    }
+
+    /* delete post */
+    function openDeletePost(id) {
+        const p = posts.find(x => x.id === id || x.id === parseInt(id));
+        if (!p) return;
+        document.getElementById('deletePostId').value = p.id;
+        document.getElementById('deletePostTitle').textContent = p.title;
+        openModal('deletePostModal');
+    }
+
+    async function confirmDeletePost() {
+        const id  = parseInt(document.getElementById('deletePostId').value);
+        const btn = document.getElementById('btnConfirmDeletePost');
+        btn.disabled = true; btn.textContent = 'Deleting…';
+        try {
+            const r = await fetch(`/api/blog/${id}`, { method:'DELETE', headers: ADMIN_H() });
+            if (r.ok) { showToast('Post deleted', 'info'); closeModal('deletePostModal'); await loadPosts(); }
+            else { const e = await r.json(); showToast(e.error||'Delete failed','error'); }
+        } catch { showToast('Server offline','error'); }
+        finally { btn.disabled = false; btn.textContent = 'Delete'; }
+    }
+
+    document.getElementById('btnNewPost').addEventListener('click', openCreatePost);
+    document.getElementById('btnSavePost').addEventListener('click', savePost);
+    document.getElementById('btnCancelPost').addEventListener('click', () => closeModal('postModal'));
+    document.getElementById('btnClosePostModal').addEventListener('click', () => closeModal('postModal'));
+    document.getElementById('btnConfirmDeletePost').addEventListener('click', confirmDeletePost);
+    document.getElementById('btnCancelDeletePost').addEventListener('click', () => closeModal('deletePostModal'));
+    document.getElementById('btnCloseDeletePost').addEventListener('click', () => closeModal('deletePostModal'));
+
+    /* ══════════════════════════════════════════
+       PAYMENTS
+    ══════════════════════════════════════════ */
+    async function loadPayments() {
+        try {
+            const r = await fetch('/api/payments', { headers: ADMIN_H() });
+            payments = r.ok ? await r.json() : [];
+        } catch { payments = []; }
+        renderPayments();
+    }
+
+    function renderPayments() {
+        const search   = document.getElementById('paySearch').value.toLowerCase();
+        const status   = document.getElementById('payStatusFilter').value;
+        const provider = document.getElementById('payProviderFilter').value;
+        let rows = payments;
+        if (search)   rows = rows.filter(p => (p.transactionId+p.email).toLowerCase().includes(search));
+        if (status   !== 'all') rows = rows.filter(p => p.status   === status);
+        if (provider !== 'all') rows = rows.filter(p => p.provider === provider);
+
+        const tbody = document.getElementById('paymentsTable');
+        if (!rows.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-secondary);">No payments found</td></tr>'; return; }
+        tbody.innerHTML = rows.map(p => `
+            <tr>
+                <td style="font-family:monospace;font-size:.8rem;">${p.transactionId}</td>
+                <td>${p.email||'—'}</td>
+                <td style="font-weight:600;">KES ${(p.amount||0).toLocaleString()}</td>
+                <td><span class="badge badge-${p.provider==='mpesa'?'mpesa':'airtel'}">${(p.provider||'').toUpperCase()}</span></td>
+                <td>#${p.articleId||'—'}</td>
+                <td><span class="badge ${p.status==='completed'?'badge-success':p.status==='pending'?'badge-warning':'badge-danger'}">${p.status}</span></td>
+                <td>${p.createdAt ? new Date(p.createdAt).toLocaleDateString() : '—'}</td>
+            </tr>`).join('');
+    }
+
+    document.getElementById('paySearch').addEventListener('input', renderPayments);
+    document.getElementById('payStatusFilter').addEventListener('change', renderPayments);
+    document.getElementById('payProviderFilter').addEventListener('change', renderPayments);
+
+    /* ══════════════════════════════════════════
+       ACCESS TOKENS
+    ══════════════════════════════════════════ */
+    async function loadTokens() {
+        try {
+            const r = await fetch('/api/payments/tokens/list', { headers: ADMIN_H() });
+            tokens = r.ok ? await r.json() : [];
+        } catch { tokens = []; }
+        renderTokens();
+    }
+
+    function renderTokens() {
+        const search = document.getElementById('tokenSearch').value.toLowerCase();
+        let rows = tokens;
+        if (search) rows = rows.filter(t => (t.email||'').toLowerCase().includes(search));
+
+        const tbody = document.getElementById('tokensTable');
+        if (!rows.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text-secondary);">No tokens found</td></tr>'; return; }
+        const now = new Date();
+        tbody.innerHTML = rows.map(t => {
+            const expired = new Date(t.expiresAt) < now;
+            const active  = t.isActive && !expired;
+            return `<tr>
+                <td>#${t.id}</td>
+                <td>${t.email}</td>
+                <td>#${t.articleId}</td>
+                <td>${t.expiresAt ? new Date(t.expiresAt).toLocaleDateString() : '—'}</td>
+                <td><span class="badge ${active?'badge-success':expired?'badge-danger':'badge-muted'}">${active?'Active':expired?'Expired':'Revoked'}</span></td>
+                <td>
+                    ${active ? `<button class="btn btn-sm btn-danger-outline" data-action="revoke" data-id="${t.id}" data-email="${t.email}"><i class="fas fa-ban"></i> Revoke</button>` : '—'}
+                </td>
+            </tr>`;
+        }).join('');
+    }
+
+    document.getElementById('tokenSearch').addEventListener('input', renderTokens);
+
+    document.getElementById('btnCleanup').addEventListener('click', async () => {
+        const btn = document.getElementById('btnCleanup');
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cleaning…';
+        try {
+            const r = await fetch('/api/payments/tokens/cleanup', { method:'POST', headers: ADMIN_H() });
+            const d = await r.json();
+            showToast(d.message || 'Cleanup complete', 'success');
+            await loadTokens();
+            updateStats();
+        } catch { showToast('Cleanup failed', 'error'); }
+        finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-broom"></i> Cleanup Expired'; }
+    });
+
+    function openRevokeToken(id, email) {
+        document.getElementById('revokeTokenId').value = id;
+        document.getElementById('revokeEmail').textContent = email;
+        openModal('revokeModal');
+    }
+
+    async function confirmRevoke() {
+        const id  = parseInt(document.getElementById('revokeTokenId').value);
+        const btn = document.getElementById('btnConfirmRevoke');
+        btn.disabled = true; btn.textContent = 'Revoking…';
+        try {
+            const r = await fetch(`/api/payments/tokens/${id}`, { method:'DELETE', headers: ADMIN_H() });
+            if (r.ok) { showToast('Token revoked', 'info'); closeModal('revokeModal'); await loadTokens(); updateStats(); }
+            else { const e = await r.json(); showToast(e.error||'Revoke failed','error'); }
+        } catch { showToast('Server offline','error'); }
+        finally { btn.disabled = false; btn.textContent = 'Revoke'; }
+    }
+
+    document.getElementById('btnConfirmRevoke').addEventListener('click', confirmRevoke);
+    document.getElementById('btnCancelRevoke').addEventListener('click', () => closeModal('revokeModal'));
+    document.getElementById('btnCloseRevoke').addEventListener('click', () => closeModal('revokeModal'));
+
+    /* ══════════════════════════════════════════
+       PAYMENT CONFIG (localStorage persistence)
+    ══════════════════════════════════════════ */
+    const CFG_KEY = 'paymentConfig';
+
+    function loadConfig() {
+        const cfg = JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
+        if (cfg.mpesaConsumerKey)    document.getElementById('mpesaConsumerKey').value    = cfg.mpesaConsumerKey;
+        if (cfg.mpesaConsumerSecret) document.getElementById('mpesaConsumerSecret').value = cfg.mpesaConsumerSecret;
+        if (cfg.mpesaShortcode)      document.getElementById('mpesaShortcode').value      = cfg.mpesaShortcode;
+        if (cfg.mpesaPasskey)        document.getElementById('mpesaPasskey').value        = cfg.mpesaPasskey;
+        if (cfg.mpesaCallbackUrl)    document.getElementById('mpesaCallbackUrl').value    = cfg.mpesaCallbackUrl;
+        if (cfg.mpesaEnv)            document.getElementById('mpesaEnv').value            = cfg.mpesaEnv;
+        if (cfg.airtelClientId)      document.getElementById('airtelClientId').value      = cfg.airtelClientId;
+        if (cfg.airtelClientSecret)  document.getElementById('airtelClientSecret').value  = cfg.airtelClientSecret;
+        if (cfg.airtelPin)           document.getElementById('airtelPin').value           = cfg.airtelPin;
+        if (cfg.airtelCountry)       document.getElementById('airtelCountry').value       = cfg.airtelCountry;
+        if (cfg.airtelCallbackUrl)   document.getElementById('airtelCallbackUrl').value   = cfg.airtelCallbackUrl;
+        if (cfg.airtelEnv)           document.getElementById('airtelEnv').value           = cfg.airtelEnv;
+
+        // Update status badges
+        const mpesaConfigured = cfg.mpesaConsumerKey && cfg.mpesaShortcode;
+        const mpesaBadge = document.getElementById('mpesaStatus');
+        if (mpesaConfigured) {
+            mpesaBadge.textContent = cfg.mpesaEnv === 'production' ? 'Live' : 'Sandbox';
+            mpesaBadge.className   = 'config-status ' + (cfg.mpesaEnv === 'production' ? 'live' : 'sandbox');
+        }
+        const airtelConfigured = cfg.airtelClientId && cfg.airtelClientSecret;
+        const airtelBadge = document.getElementById('airtelStatus');
+        if (airtelConfigured) {
+            airtelBadge.textContent = cfg.airtelEnv === 'production' ? 'Live' : 'Sandbox';
+            airtelBadge.className   = 'config-status ' + (cfg.airtelEnv === 'production' ? 'live' : 'sandbox');
+        }
+
+        // Webhook URLs
+        const base = window.location.origin;
+        document.getElementById('mpesaWebhook').textContent  = base + '/api/payments/mpesa/callback';
+        document.getElementById('airtelWebhook').textContent = base + '/api/payments/airtel/callback';
+    }
+
+    document.getElementById('btnSaveMpesa').addEventListener('click', () => {
+        const cfg = JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
+        cfg.mpesaConsumerKey    = document.getElementById('mpesaConsumerKey').value.trim();
+        cfg.mpesaConsumerSecret = document.getElementById('mpesaConsumerSecret').value.trim();
+        cfg.mpesaShortcode      = document.getElementById('mpesaShortcode').value.trim();
+        cfg.mpesaPasskey        = document.getElementById('mpesaPasskey').value.trim();
+        cfg.mpesaCallbackUrl    = document.getElementById('mpesaCallbackUrl').value.trim();
+        cfg.mpesaEnv            = document.getElementById('mpesaEnv').value;
+        localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+        showToast('M-Pesa configuration saved!', 'success');
+        loadConfig();
+    });
+
+    document.getElementById('btnSaveAirtel').addEventListener('click', () => {
+        const cfg = JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
+        cfg.airtelClientId     = document.getElementById('airtelClientId').value.trim();
+        cfg.airtelClientSecret = document.getElementById('airtelClientSecret').value.trim();
+        cfg.airtelPin          = document.getElementById('airtelPin').value.trim();
+        cfg.airtelCountry      = document.getElementById('airtelCountry').value;
+        cfg.airtelCallbackUrl  = document.getElementById('airtelCallbackUrl').value.trim();
+        cfg.airtelEnv          = document.getElementById('airtelEnv').value;
+        localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+        showToast('Airtel Money configuration saved!', 'success');
+        loadConfig();
+    });
+
+    /* ══════════════════════════════════════════
+       M-PESA STK PUSH SDK
+       Safaricom Daraja API — STK Push (Lipa Na M-Pesa Online)
+    ══════════════════════════════════════════ */
+    const MpesaSDK = {
+        /* Get OAuth access token from Safaricom */
+        async getAccessToken(consumerKey, consumerSecret, env) {
+            const baseUrl = env === 'production'
+                ? 'https://api.safaricom.co.ke'
+                : 'https://sandbox.safaricom.co.ke';
+            const credentials = btoa(`${consumerKey}:${consumerSecret}`);
+            const r = await fetch(`${baseUrl}/oauth/v1/generate?grant_type=client_credentials`, {
+                headers: { 'Authorization': `Basic ${credentials}` }
+            });
+            if (!r.ok) throw new Error('Failed to get M-Pesa access token');
+            const d = await r.json();
+            return d.access_token;
+        },
+
+        /* Initiate STK Push */
+        async stkPush({ consumerKey, consumerSecret, shortcode, passkey, callbackUrl, phone, amount, accountRef, description, env }) {
+            const baseUrl = env === 'production'
+                ? 'https://api.safaricom.co.ke'
+                : 'https://sandbox.safaricom.co.ke';
+
+            const token     = await this.getAccessToken(consumerKey, consumerSecret, env);
+            const timestamp = new Date().toISOString().replace(/[-T:.Z]/g, '').slice(0, 14);
+            const password  = btoa(`${shortcode}${passkey}${timestamp}`);
+
+            // Normalize phone: 0712345678 → 254712345678
+            const normalizedPhone = phone.startsWith('0')
+                ? '254' + phone.slice(1)
+                : phone.startsWith('+')
+                ? phone.slice(1)
+                : phone;
+
+            const payload = {
+                BusinessShortCode: shortcode,
+                Password:          password,
+                Timestamp:         timestamp,
+                TransactionType:   'CustomerPayBillOnline',
+                Amount:            Math.ceil(amount),
+                PartyA:            normalizedPhone,
+                PartyB:            shortcode,
+                PhoneNumber:       normalizedPhone,
+                CallBackURL:       callbackUrl,
+                AccountReference:  accountRef || 'FCM Premium',
+                TransactionDesc:   description || 'Premium Content Access'
+            };
+
+            const r = await fetch(`${baseUrl}/mpesa/stkpush/v1/processrequest`, {
+                method:  'POST',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body:    JSON.stringify(payload)
+            });
+
+            const result = await r.json();
+            if (result.ResponseCode !== '0') throw new Error(result.ResponseDescription || 'STK Push failed');
+            return result; // Contains CheckoutRequestID for polling
+        },
+
+        /* Query STK Push status */
+        async queryStatus({ consumerKey, consumerSecret, shortcode, passkey, checkoutRequestId, env }) {
+            const baseUrl = env === 'production'
+                ? 'https://api.safaricom.co.ke'
+                : 'https://sandbox.safaricom.co.ke';
+
+            const token     = await this.getAccessToken(consumerKey, consumerSecret, env);
+            const timestamp = new Date().toISOString().replace(/[-T:.Z]/g, '').slice(0, 14);
+            const password  = btoa(`${shortcode}${passkey}${timestamp}`);
+
+            const r = await fetch(`${baseUrl}/mpesa/stkpushquery/v1/query`, {
+                method:  'POST',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body:    JSON.stringify({ BusinessShortCode: shortcode, Password: password, Timestamp: timestamp, CheckoutRequestID: checkoutRequestId })
+            });
+            return await r.json();
+        }
+    };
+
+    /* ══════════════════════════════════════════
+       AIRTEL MONEY SDK
+       Airtel Africa API — Collections (Push Payment)
+    ══════════════════════════════════════════ */
+    const AirtelSDK = {
+        /* Get OAuth token */
+        async getAccessToken(clientId, clientSecret, env) {
+            const baseUrl = env === 'production'
+                ? 'https://openapi.airtel.africa'
+                : 'https://openapiuat.airtel.africa';
+            const r = await fetch(`${baseUrl}/auth/oauth2/token`, {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({ client_id: clientId, client_secret: clientSecret, grant_type: 'client_credentials' })
+            });
+            if (!r.ok) throw new Error('Failed to get Airtel access token');
+            const d = await r.json();
+            return d.access_token;
+        },
+
+        /* Initiate collection (push payment) */
+        async collect({ clientId, clientSecret, pin, country, callbackUrl, phone, amount, reference, env }) {
+            const baseUrl = env === 'production'
+                ? 'https://openapi.airtel.africa'
+                : 'https://openapiuat.airtel.africa';
+
+            const token = await this.getAccessToken(clientId, clientSecret, env);
+
+            // Normalize phone
+            const normalizedPhone = phone.startsWith('0') ? phone.slice(1) : phone.replace(/^\+/, '');
+
+            const payload = {
+                reference,
+                subscriber: { country, currency: country === 'KE' ? 'KES' : country === 'TZ' ? 'TZS' : country === 'UG' ? 'UGX' : 'RWF', msisdn: normalizedPhone },
+                transaction: { amount, id: reference, country, currency: country === 'KE' ? 'KES' : 'USD' }
+            };
+
+            const r = await fetch(`${baseUrl}/merchant/v1/payments/`, {
+                method:  'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type':  'application/json',
+                    'X-Country':     country,
+                    'X-Currency':    country === 'KE' ? 'KES' : 'USD'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await r.json();
+            if (result.status?.code !== '200') throw new Error(result.status?.message || 'Airtel push failed');
+            return result;
+        }
+    };
+
+    /* ── STK Push test modal ── */
+    document.getElementById('btnTestMpesa').addEventListener('click', () => {
+        document.getElementById('stkStatusBox').style.display = 'none';
+        document.getElementById('stkPhone').value  = '';
+        document.getElementById('stkAmount').value = '1';
+        openModal('stkModal');
+    });
+
+    document.getElementById('btnSendStk').addEventListener('click', async () => {
+        const phone  = document.getElementById('stkPhone').value.trim();
+        const amount = parseFloat(document.getElementById('stkAmount').value) || 1;
+        if (!phone) { showToast('Phone number is required', 'error'); return; }
+
+        const cfg = JSON.parse(localStorage.getItem(CFG_KEY) || '{}');
+        if (!cfg.mpesaConsumerKey || !cfg.mpesaShortcode || !cfg.mpesaPasskey) {
+            showToast('Please save M-Pesa configuration first', 'error');
+            return;
+        }
+
+        const btn = document.getElementById('btnSendStk');
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
+
+        const statusBox  = document.getElementById('stkStatusBox');
+        const statusIcon = document.getElementById('stkStatusIcon');
+        const statusText = document.getElementById('stkStatusText');
+
+        statusBox.className  = 'stk-status pending';
+        statusBox.style.display = 'block';
+        statusIcon.className = 'fas fa-spinner fa-spin';
+        statusText.textContent = 'Sending STK Push to ' + phone + '…';
+
+        try {
+            const result = await MpesaSDK.stkPush({
+                consumerKey:    cfg.mpesaConsumerKey,
+                consumerSecret: cfg.mpesaConsumerSecret,
+                shortcode:      cfg.mpesaShortcode,
+                passkey:        cfg.mpesaPasskey,
+                callbackUrl:    cfg.mpesaCallbackUrl || window.location.origin + '/api/payments/mpesa/callback',
+                phone, amount,
+                accountRef:  'FCM-TEST',
+                description: 'Test STK Push',
+                env:         cfg.mpesaEnv || 'sandbox'
+            });
+
+            statusBox.className  = 'stk-status success';
+            statusIcon.className = 'fas fa-check-circle';
+            statusText.innerHTML = `<strong>STK Push sent!</strong><br>Check your phone for the M-Pesa prompt.<br><small>Checkout ID: ${result.CheckoutRequestID}</small>`;
+            showToast('STK Push sent successfully!', 'success');
+        } catch (err) {
+            statusBox.className  = 'stk-status failed';
+            statusIcon.className = 'fas fa-times-circle';
+            statusText.innerHTML = `<strong>STK Push failed</strong><br>${err.message}`;
+            showToast('STK Push failed: ' + err.message, 'error');
+        } finally {
+            btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send STK Push';
+        }
+    });
+
+    document.getElementById('btnCancelStk').addEventListener('click', () => closeModal('stkModal'));
+    document.getElementById('btnCloseStkModal').addEventListener('click', () => closeModal('stkModal'));
+
+    /* ── Copy webhook URL ── */
+    window.copyWebhook = function (id) {
+        const text = document.getElementById(id).textContent;
+        navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard!', 'success'));
+    };
+
+    /* ── Table delegation ── */
+    document.getElementById('postsTable').addEventListener('click', e => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        const id = parseInt(btn.dataset.id);
+        if (btn.dataset.action === 'edit-post') openEditPost(id);
+        if (btn.dataset.action === 'del-post')  openDeletePost(id);
+    });
+
+    document.getElementById('tokensTable').addEventListener('click', e => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        if (btn.dataset.action === 'revoke') openRevokeToken(parseInt(btn.dataset.id), btn.dataset.email);
+    });
+
+    /* ── Escape key ── */
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            ['postModal','deletePostModal','stkModal','revokeModal'].forEach(id => closeModal(id));
+        }
+    });
+    ['postModal','deletePostModal','stkModal','revokeModal'].forEach(id => {
+        document.getElementById(id).addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(id); });
+    });
+
+    /* ── Init ── */
+    loadConfig();
+    loadAll();
+}());
+</script>
+</body>
+</html>

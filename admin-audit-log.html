@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Log | Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .log-action { font-family: 'Inter', monospace; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; }
+        .action-CREATE { color: #16A34A; }
+        .action-UPDATE { color: #2563EB; }
+        .action-DELETE { color: #DC2626; }
+        .action-LOGIN { color: #7C3AED; }
+        .action-LOGOUT { color: #64748B; }
+    </style>
+</head>
+<body class="admin-body">
+    <div class="admin-shell">
+        <aside class="admin-sidebar" id="adminSidebar"></aside>
+        <main class="admin-main">
+            <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+            <div class="admin-topbar">
+                <div class="topbar-title"><h1>Audit Log</h1><p>Track all administrative actions</p></div>
+                <div class="topbar-actions">
+                    <button class="btn btn-outline" onclick="clearLog()">Clear Log</button>
+                </div>
+            </div>
+
+            <!-- Filter bar -->
+            <div class="panel" style="margin-bottom:1rem;">
+                <div class="panel-body" style="padding:1rem 1.5rem;">
+                    <div class="search-filter-bar">
+                        <input type="text" class="search-field" id="searchField" placeholder="Search by action, user, entity, or detail...">
+                        <select class="form-control" id="actionFilter" style="width:auto;min-width:140px;">
+                            <option value="">All Actions</option>
+                            <option value="CREATE">Create</option>
+                            <option value="UPDATE">Update</option>
+                            <option value="DELETE">Delete</option>
+                            <option value="LOGIN">Login</option>
+                            <option value="LOGOUT">Logout</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Activity History</h2>
+                    <span style="font-size:0.85rem;color:var(--text-muted);" id="logCount">0 entries</span>
+                </div>
+                <div class="panel-body" style="padding:0;">
+                    <table class="data-table">
+                        <thead><tr><th style="width:160px;">Timestamp</th><th>Action</th><th>Entity</th><th>Detail</th><th>User</th><th>Role</th><th style="width:110px;">IP</th></tr></thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="admin-shared.js"></script>
+    <script>
+        if (!checkAuth(true)) throw new Error('Not authorized');
+        renderSidebar('audit');
+
+        function renderTable() {
+            const log = getAuditLog();
+            const search = document.getElementById('searchField').value.toLowerCase();
+            const actionFilter = document.getElementById('actionFilter').value;
+
+            let filtered = log;
+            if (search) filtered = filtered.filter(e => (e.action + e.entity + e.detail + e.user).toLowerCase().includes(search));
+            if (actionFilter) filtered = filtered.filter(e => e.action === actionFilter);
+
+            document.getElementById('logCount').textContent = filtered.length + ' entries';
+            const tbody = document.getElementById('tableBody');
+
+            if (!filtered.length) {
+                tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="empty-icon"><i class="fas fa-clipboard-list"></i></div><p>No audit entries found</p></div></td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(e => `<tr>
+                <td style="font-size:0.82rem;color:var(--text-muted);white-space:nowrap;">${formatDateTime(e.timestamp)}</td>
+                <td><span class="log-action action-${e.action}">${e.action}</span></td>
+                <td><span class="badge badge-muted">${e.entity}</span></td>
+                <td style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${e.detail}</td>
+                <td style="font-weight:500;">${e.user}</td>
+                <td><span class="badge ${e.role === 'System Admin' ? 'badge-purple' : 'badge-info'}">${e.role}</span></td>
+                <td style="font-size:0.8rem;color:var(--text-muted);font-family:monospace;">${e.ip || '—'}</td>
+            </tr>`).join('');
+        }
+
+        document.getElementById('searchField').addEventListener('input', renderTable);
+        document.getElementById('actionFilter').addEventListener('change', renderTable);
+
+        function clearLog() {
+            if (!confirm('Clear all audit log entries? This cannot be undone.')) return;
+            sessionStorage.setItem('auditLog', '[]');
+            showToast('Audit log cleared', 'info');
+            renderTable();
+        }
+
+        renderTable();
+    </script>
+</body>
+</html>
